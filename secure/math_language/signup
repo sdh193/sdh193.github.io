@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+background:rgb(37.5,125,37.5)}
+</style>
+</head>
+<body>
+<div align=center>
+<b style=font-size:30px>Math language site-signup</b>
+<br>
+<br>
+New username:<input type=text maxlength=10>
+<br>
+<br>
+New password:<input type=password maxlength=15>
+<script src='Javascript.js'>
+</script>
+</div>
+</body>
+</html>
+	

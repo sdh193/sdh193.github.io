@@ -8,7 +8,7 @@ function s() {
 	if (b>2051 && b<2053) {
 		document.getElementById('lesdialog').innerText = "Success! You have entered in the PIN correctly.";}else{document.getElementById('lesdialog').innerText = 'You have entered in the PIN incorrectly. Please try again.';}
 	if (b>2051 && b<2053 && document.getElementById('input').value>Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)-1) && document.getElementById('input').value<Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)+1)) {
-		document.getElementById('link').href= "file:///C:/Users/start_dhzj9kj/OneDrive/Desktop/Benjamin%20Code%20Files/Text%20and%20test%20files/html%20documents/sa.html"}else{document.getElementById('link').href=''}
+		document.getElementById('link').href= "signup.html"}else{document.getElementById('link').href=''}
 	if (document.getElementById('input').value>Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)-1) && document.getElementById('input').value<Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)+1)) {
 		document.getElementById('captchac').innerText = 'Captcha completed';}else{document.getElementById('captchac').innerText = 'Verification failed';}
 	if (b>2051 && b<2053 && document.getElementById('input').value>Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)-1) && document.getElementById('input').value<Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)+1))
@@ -24,7 +24,7 @@ setInterval(function() {
 	if (b>2051 && b<2053) {
 		document.getElementById('lesdialog').innerText = "You have entered in the PIN correctly.";}else{document.getElementById('lesdialog').innerText = 'You have entered in the PIN incorrectly. Please try again.';}
 	if (b>2051 && b<2053 && document.getElementById('input').value>Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)-1) && document.getElementById('input').value<Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)+1)) {
-		document.getElementById('link').href= "1.html"}else{document.getElementById('link').href=''}
+		document.getElementById('link').href= "signup.html"}else{document.getElementById('link').href=''}
 	if (document.getElementById('input').value>Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)-1) && document.getElementById('input').value<Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)+1)) {
 		document.getElementById('captchac').innerText = 'Captcha completed';}else{document.getElementById('captchac').innerText = 'Verification failed';}
 Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)-1) && document.getElementById('input').value<Math.round((d.getMinutes()*39103.18)+(d.getHours()*8992301.61)+(d.getDay()*1023198.79)+1) 

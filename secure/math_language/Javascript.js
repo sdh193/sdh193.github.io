@@ -2,5 +2,5 @@ addEventListener('contextmenu', function(e){e.preventDefault(); document.onkeydo
 var a = localStorage.getItem('password') 
 var b = localStorage.getItem('captchaa')
 var d=new Date()
-if (a>2051 && a<2053 && b>(((d.getMinutes()*39103.18)*d.getHours()*8992301.61)+(d.getDay()*1023198.79)-1)) && b<(((d.getMinutes()*39103.18)*d.getHours()*8992301.61)+(d.getDay()*1023198.79)+1))) {
-}else{window.location = "/secure/math_language"}
+if (a>2051 && a<2053 && b>(((d.getHours()*8992301.61)+(d.getDay()*1023198.79)-1) && b<((d.getHours()*8992301.61)+(d.getDay()*1023198.79)+1))) {
+}else{window.location = "sdh193.github.io/secure/math_language"}

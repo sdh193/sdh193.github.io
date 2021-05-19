@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html id=html>
 <head>
+ <style>
+  #dangerbtn{
+   background-color:red;
+   color:red;
+   font-size:20px;}
 </head>
 <body>
 <div align=center>
@@ -17,7 +22,7 @@
  <button id="mult1" class=allbtn>1st level x<a id=multiplier1>1</a></button>
  <button class=allbtn>Cost to buy 1 sublevel:<a id=cost1st>1</a>. </button>
  <button id="timesboughtbtn" class=allbtn onclick=multiply2()> Click to purchase a sublevel.</button>
- <button id="1stbtn" class=allbtn><div>You have <a id="amount1">0</a>Sublevels</div>
+ <button id="1stbtn" class=allbtn><div>You have <a id="amount1">0</a> Sublevels</div>
 <br>
 <br>
 <button id="allpointbtn" class=allbtn onclick=multiply8()>Total points earned:<a id=allpoints>0</a>.</button>
@@ -38,13 +43,19 @@ Click any button to update it. Your goal in this game is to get as many points a
 <script type="text/javascript" src="Javascript.js">
 </script>
 <script>
+ function delete() {
+  document.getElementById('warning').style.display = 'block';
+  document.getElementById('dangerbtn').style.display = 'block';}
 </script>
 <link rel="stylesheet" type="text/css" href="Stylesheet.css">
 <body>
-<div id='x'></div>
-<script src='file:///C:/Users/start_dhzj9kj/OneDrive/Desktop/Benjamin%20Code%20Files/HTML%20files/round.js'></script>
+ <div id='x'></div>
+ <br>
+ <div id='warning' style=display:'none'>Warning: You will not be able to undo this action. All of the progress you have made will be erased. If you want this to happen, click the accept button below.</div>
+ <button id=dangerbtn style=display:'none' 
+<script src='round.js'></script>
 <div align=center>
-<button id=removebtn class=allbtn onclick=remove()>Delete your progress</button>
+<button id=removebtn style=color:red style=background:red class=allbtn onclick=delete()>Delete your progress</button>
 </body>
 </html>
 

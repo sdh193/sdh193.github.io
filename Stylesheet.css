@@ -1,0 +1,24 @@
+#html {
+	background:black;
+	border:solid white;
+}
+.allbtn {
+	background:white;
+	border:5px dull white;
+	font-family:Arial;
+	font-size:23px;
+	cursor:pointer;
+}
+.text {
+	font-size:20px;
+	font-family:Arial;
+	background:white;
+}
+.pointtotalbtn {
+	font-size:40px;
+	font-family:Arial;
+	cursor:pointer;
+	background:white;
+	border:10px solid white
+}
+	

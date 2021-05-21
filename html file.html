@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html id=html>
+<head>
+<style>
+.greenbtn {
+background-color:limegreen;
+border-color:green;
+border-width:5px
+font-family:Arial;
+font-size:23px;
+cursor:pointer;}
+.redbtn {
+background-color:red;
+border-color:grey;
+border-width:2px;
+font-family:Arial;
+font-size:23px;
+cursor:pointer;}
+</style>
+</head>
+<body>
+<div align=center>
+<button id="totalpoints"  class=pointtotalbtn>You have <a id="pointtotal">1</a> points</button>
+</div>
+<br>
+<div align=center>
+<button id=pointsperclick class=allbtn>You are gaining <a id="pointseveryclick">0</a> points per second. </button>
+</div>
+<div align=center>
+<div style=display:none id="totalclicks" class=allbtn>You are earning <div id=pointspersec>0</div> points per second.
+</div>
+<br>
+ <button id="mult1" class=allbtn onclick=1()>1st level x<a id=multiplier1>1</a></button>
+ <button class=allbtn>Cost to buy 1 sublevel:<a id=cost1st>1</a>. </button>
+  <button id="1stbtn" class=allbtn>You have <a id="amount1">0</a> 1st sublevels.</button>
+ <input type=button value='Click to purchase a sublevel' id="timesboughtbtn" class=allbtn onclick=multiply2()></button>
+<br>
+<button id="allpointbtn" class=allbtn onclick=multiply8() style=display:none>Total points earned:<a id=allpoints>0</a>.</button>
+<br>
+<button id=mult2 class=allbtn onclick=mult()>2nd level x<a id=multiplier2>1</a></button>
+<button id="timesboughtbtn2" class=allbtn onclick=multiply9()>Click to buy a sublevel</button>
+<button class=allbtn id=cost2 onclick=multiply10()>Cost to buy one sublevel:<a id="cost2nd">1</a>.</button>
+<br>
+<br>
+<button onclick=save() class=allbtn align=center>Save your game</button>
+<br>
+<script type="text/javascript" src="Javascript.js">
+</script>
+<script>
+</script>
+<link rel="stylesheet" type="text/css" href="Stylesheet.css">
+<div id='x'></div>
+<script src='file:///C:/Users/start_dhzj9kj/OneDrive/Desktop/Benjamin%20Code%20Files/HTML%20files/round.js'></script>
+<div align=center>
+<button id=removebtn class=allbtn onclick=warning()>Delete your progress</button>
+<br>
+<div id=warning style=display:none>Warning: You will not be able to undo this action. All of the progress you made in this game will be lost. If you want this to happen, click the clear progress button. If you don't want this to happen, click the save button</div>
+<button onclick=remove() id=acceptbtn class=allbtn style=display:none>I understand the consequences, clear progress</button></div>
+<button onclick=view() class=allbtn style=display:none>Settings</button>
+<div id=div style=display:none>
+<font style=font-size:20px style=color:white>Update rate (in ms). 20-50 ms is recommended.</font><input id=input type=text size=5 maxlength=5></input>
+<br>
+<button onclick=update() class=allbtn>Save changes</button>
+</div>
+</div>
+</body>
+</html>
+
+

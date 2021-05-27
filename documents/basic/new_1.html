@@ -72,6 +72,13 @@ localStorage.removeItem('text1')
 localStorage.removeItem('text2')
 document.getElementById('b').style.setProperty("display", "none", "important");
 }
+setInterval(function () {
+a = document.getElementById('body').value;
+localStorage.setItem(('text'),a)
+b=document.getElementById('name').value;
+localStorage.setItem(('text1'),b)
+c=document.getElementById('title').value;
+localStorage.setItem(('text2'),c)},10000)
 </script>
 <div align=center>
 <button id=dangerbtn align=center onclick=y() style=color:red>Clear save</button>

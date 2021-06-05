@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body style=background:deepskyblue>
+<style>
+style>
+body{
+margin:0px}
+#basket{
+position:fixed;
+bottom:0px;}
+</style>
+<script>
+var y=0
+var b=0
+var score=0
+var a=0
+var time=60
+var x=Math.random()*1250
+setInterval(function(){
+y += 4.5},10)
+setInterval(function(){
+document.getElementById('img1').style.position='absolute';
+document.getElementById('img1').style.top=y+'px';
+document.getElementById('img1').style.left=x+'px';
+document.getElementById('basket').style.left=b+'px';
+if(y>583){
+y=0
+x=Math.random()*1250
+}
+if(y<1200 && x>b && x<b+75){
+score += .75
+time += .01
+if(time<0){
+score += -.75}
+time += -.01}
+if(y>579 && x>b && x<b+75){
+score += time
+score += 100
+time += 1
+if(time<0){
+score += -100
+time += -1
+score += -time}}
+if(y>579){
+score += -50
+time += -1
+if(time<0){
+score += 50
+time += 1}}
+document.getElementById('score').innerText='Score: '+Math.round(score);
+time += -.01
+if (time<0){
+document.getElementById('endgame').style.display='block';
+document.getElementById('body').style.display='none';
+document.getElementById('end').innerText='Final score: '+Math.round(score);}
+document.getElementById('time').innerText='Time remaining: '+Math.round(time);
+},10)
+document.onkeydown=function (e){
+if(e.shiftKey){
+b += 40
+score += .4
+if(time<0){
+score += -.4}
+if (b>1220){
+b += -40
+}}
+if(e.ctrlKey){
+b += -40 
+score += .4
+if(time<0){
+score += -.4}
+if (b<0){
+b += 40}}}
+function ads(){
+window.open('falling coconuts.html')}
+function superpoint(){
+time=60;
+document.getElementById('endgame').style.display='none';
+document.getElementById('body').style.display='block';
+score=0;
+}
+</script>
+<div id=body>
+<div id=score style='text-align:center; font-size:30px; position:absolute; left:620px;'></div>
+<div id=time style='text-align:center; font-size:30px; position:absolute; top:50px; left:565px;'></div>
+<div style=position:absolute>
+<img src=124.png id=img1 width=70 height=75 style=position:absolute;>
+<div id=basket style='background-color:beige; width:150px; height:75px;'>
+<div align=center style=font-size:20px>Basket</div>
+</div>
+</div>
+</div>
+<div id=endgame style=display:none>
+<div style='text-align:center; font-size:50px;'>GAME OVER</div>
+<br>
+<div id=end style='text-align:center; font-size:35px;'>Score:0</div>
+<br>
+<br>
+<div align=center>
+<button style='font-size:20px; background:lime' onclick=superpoint()>Play again</button>
+<br>
+<br>
+<button onclick=ads() style='font-size:20px; background:lime'>Play normal version</button>
+</div>
+</div>
+</body>
+</html>

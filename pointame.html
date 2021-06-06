@@ -72,9 +72,13 @@ font-size:23px}
 <br>
 <div id=level2nd>
 <button id=mult2 class=allbtn onclick=mult()>2nd level x<a id=multiplier2>1</a></button>
-<button class=allbtn id=cost2>Cost to buy one sublevel: <a id="cost2nd">1</a>.</button>
-<button id=button1 class=allbtn>You have 0 2nd sublevels</button>
+<button class=allbtn id=cost2>Cost to buy 1 sublevel: <a id="cost2nd">1</a>.</button>
+<button id=button1 class=allbtn>You have 0 2nd sublevels.</button>
 <button class=allbtn id=timesboughtbtn2 onclick=multiply9()>Click to purchase a sublevel</button>
+</div>
+<div id=level3rd>
+<br>
+<Br>
 </div>
 <br>
 <br>
@@ -86,7 +90,7 @@ font-size:23px}
 </script>
 <link rel="stylesheet" type="text/css" href="Stylesheet.css">
 <div id='x'></div>
-<script src='file:///C:/Users/start_dhzj9kj/OneDrive/Desktop/Benjamin%20Code%20Files/HTML%20files/round.js'></script>
+<script></script>
 <div align=center>
 <button id=removebtn class=allbtn onclick=warning()>Delete your progress</button>
 <br>
@@ -106,7 +110,6 @@ font-size:23px}
 <table class=table style=text-indent:50px>
 <tr class=font>
 <td>Name:</td>
-<td>Description:</td>
 <td>Requirement:</td>
 <td>Reward:</td>
 
@@ -114,12 +117,13 @@ font-size:23px}
 </b>
 <tr style=font-size:18px>
 	<td id=ach1name></td>
-	<td id=ach1desc></td>
 	<td id=ach1req></td>
 	<td id=ach1reward></td>
 </tr>
-<tr class=font>
-<td></td>
+<tr style=font-size:18px>
+<td id=ach2name></td>
+<td id=ach2req></td>
+<td id=ach2reward></td>
 </tr>
 </table>
 </div>
@@ -224,6 +228,7 @@ var cost1st = 1
 var multiplier1a=0
 var multiplier1b=0
 var num0=0
+var interval0=0
 var m=0
 var p=0
 var pointstorage=0
@@ -316,7 +321,7 @@ setInterval(function () {
 		amount2 = 1+timesbought2+boughtstorage2;}
 	cost2nd =1000*Math.pow(3,timesbought2+boughtstorage2)
 	document.getElementById('multiplier2') .innerHTML = multiplier2;
-	document.getElementById('button1') .innerHTML = 'You have '+ amount2 + ' sublevels';
+	document.getElementById('button1') .innerHTML = 'You have '+ amount2 + ' 2nd sublevels.';
 		},updaterate)
 var sudasd=0
 setInterval(function() {
@@ -329,19 +334,23 @@ setInterval(function() {
 	amount1 = timesbought1+boughtstorage;
 	sudasd=Math.pow(3,timesbought2+boughtstorage2)
 	document.getElementById("cost2nd") .innerHTML = sudasd.toFixed(2)+' k';
+	if(sudasd>1000){
+	document.getElementById("cost2nd").innerHTML = (sudasd/1000).toFixed(2)+' m';}
 	document.getElementById("pointseveryclick") .innerHTML = round2(pointseveryclick);
 	document.getElementById("amount1") .innerHTML = amount1;
 	document.getElementById("multiplier1") .innerHTML = multiplier1;
 	if (amount1>25) {
 		amount1 = timesbought1+boughtstorage+Math.floor((timesbought1+boughtstorage)/10);}
 	pointseveryclick = multiplier1*amount1*multiplier2*amount2;
+	if(amount1+amount2>24.5){
+		pointseveryclick += sqrt(pointsa*(cost1st))/(8000)
+}
 	cost1st = Math.pow(2,(timesbought1+boughtstorage))
 	document.getElementById("cost1st") .innerHTML = cost1st;
 	if (cost1st>1000) {
 	document.getElementById("cost1st") .innerHTML = (cost1st/1000).toFixed(2)+' k';}
-	if (cost2nd>1000000) {
-	document.getElement
-	}
+	if (cost1st>1000000) {
+document.getElementById('cost1st').innerHTML = (cost1st/1000000).toFixed(2)+' m';	}
 	document.getElementById("pointseveryclick") .innerHTML = pointseveryclick.toFixed(2);
 	if (pointseveryclick>1000) {
 	document.getElementById('pointseveryclick') .innerHTML = (pointseveryclick/1000).toFixed(2)+' k';}
@@ -370,10 +379,14 @@ updaterate=document.getElementById('input').value}
 setInterval(function () {
 	if (timesbought2+boughtstorage2>0) {
 document.getElementById('ach1name').innerText="You've reached the second level"
-document.getElementById('ach1desc').innerText="Reach the second level"
 document.getElementById('ach1req').innerText="Purchase the second level at least once"
-	document.getElementById('ach1reward').innerText="2x multiplier on 1st level"}
-
+	document.getElementById('ach1reward').innerText="2x multiplier on 1st level"}},10)
+interval0=setInterval(function(){
+	if(amount1+amount2>24.5){
+	document.getElementById('ach2name').innerText='Lots of sublevels'
+	document.getElementById('ach2req').innerText='Purchase the 1st and second sublevels 25 times or more'
+	document.getElementById('ach2reward').innerText='Points per second increase based on cost of 1st level and points'
+	}
 },10)
  
 </script>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <script src="script.js"></script>
+    <div align=center>
+      <input style=font-size:20px maxlength=15 placeholder='Enter a verb ending in ing' id=verb type=text/>
+      <br>
+      <br>
+      <input style=font-size:20px maxlength=15 placeholder='Enter an adjective' id=adjective    type=text/>
+      <br>
+      <Br>
+      <input maxlength=15 style='font-size:20px;'placeholder='Enter a noun' id=noun type=text/>
+      <br>
+      <br>
+      <input maxlength=15 style='font-size:20px' placeholder='Enter a noun' id=noun1 type=text/>
+      <br>
+      <br>
+      <button onclick=generateMadLib() style=font-size:20px>Get your Math lib</button>
+      <br>
+      <br>
+      <div id=madlibtext align=center style=font-size:20px></div>
+    </div>
+    <script>
+      var d=0
+var e=0
+var f=0
+var g=0
+let b=document.createElement('h1')
+b.innerText='Mad libs project'
+b.align='center'
+document.body.appendChild(b)
+let c=document.createElement('br')
+document.body.appendChild(c)
+function generateMadLib(){
+d=document.getElementById('verb').value;
+e=document.getElementById('adjective').value;
+f=document.getElementById('noun').value;
+g=document.getElementById('noun1').value;
+document.getElementById('madlibtext').innerText='I saw a '+d+' '+e+' '+f+' along the '+g
+
+}
+</script>
+  </body>
+</html>

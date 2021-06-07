@@ -125,6 +125,11 @@ font-size:23px}
 <td id=ach2req></td>
 <td id=ach2reward></td>
 </tr>
+<tr style=font-size:18px>
+<td id=ach3name>
+<td id=ach3req>
+<td id=ach3reward>
+</tr>
 </table>
 </div>
 </body>
@@ -320,15 +325,16 @@ setInterval(function () {
 	if (amount2<1) {
 		amount2 = 1+timesbought2+boughtstorage2;}
 	cost2nd =1000*Math.pow(3,timesbought2+boughtstorage2)
-	document.getElementById('multiplier2') .innerHTML = multiplier2;
+	document.getElementById('multiplier2') .innerHTML = multiplier2.toFixed(2);
 	document.getElementById('button1') .innerHTML = 'You have '+ amount2 + ' 2nd sublevels.';
 		},updaterate)
 var sudasd=0
 var jdhf=0
+var sakjd=0
 setInterval(function() {
 	boughtstorage2=makenumber(localStorage.getItem('bought2'))
 	multiplier1 = round2(Math.pow(1.13,(timesbought1+boughtstorage)))
-	if (multiplier1>100) {
+	if (pointsa>100) {
 		multiplier1 =round2(Math.pow(1.13,(timesbought1+boughtstorage))+Math.pow(1.35,Math.floor((timesbought1+boughtstorage)/10)))};
 	if (timesbought2+boughtstorage2>0) {
 	multiplier1 = 2*round2(Math.pow(1.13,(timesbought1+boughtstorage)))}
@@ -337,9 +343,11 @@ setInterval(function() {
 	document.getElementById("cost2nd") .innerHTML = sudasd.toFixed(2)+' k';
 	if(sudasd>1000){
 	document.getElementById("cost2nd").innerHTML = (sudasd/1000).toFixed(2)+' m';}
+	if(sakjd == 'Millionaire'){
+	multiplier1 *= Math.pow(1.25,Math.floor(amount1/10))}
 	document.getElementById("pointseveryclick") .innerHTML = round2(pointseveryclick);
 	document.getElementById("amount1") .innerHTML = amount1;
-	document.getElementById("multiplier1") .innerHTML = multiplier1;
+	document.getElementById("multiplier1") .innerText = multiplier1.toFixed(2);
 	if (amount1>25) {
 		amount1 = timesbought1+boughtstorage+Math.floor((timesbought1+boughtstorage)/10);}
 	pointseveryclick = multiplier1*amount1*multiplier2*amount2;
@@ -359,7 +367,6 @@ document.body.style.display='none'}
 	if (pointseveryclick>1000) {
 	document.getElementById('pointseveryclick') .innerHTML = (pointseveryclick/1000).toFixed(2)+' k';}
 	document.getElementById("amount1") .innerHTML = amount1;
-	document.getElementById("multiplier1") .innerHTML = multiplier1;
 	boughtstorage=makenumber(localStorage.getItem('bought1'))
 	boughtstorage2=makenumber(localStorage.getItem('bought2'))
 	document.getElementById('removebtn').style.borderColor = 'red';
@@ -389,8 +396,16 @@ interval0=setInterval(function(){
 	if(amount1+amount2>24.5){
 	document.getElementById('ach2name').innerText='Lots of sublevels'
 	document.getElementById('ach2req').innerText='Purchase the 1st and second sublevels 25 times or more'
-	document.getElementById('ach2reward').innerText='Multiplier on points per second based on points'
+	document.getElementById('ach2reward').innerText='Points per second increase based on points'
 	}
+	if(pointsa>100000){
+	document.getElementById('ach3name').innerText='Millionaire'
+	document.getElementById('ach3req').innerText='Earn 1 million points'
+	document.getElementById('ach3reward').innerText='Adds multiplier on 1st level every time 10 sublevels are bought'
+	}
+sakjd=document.getElementById('ach3name').innerText;
+	if(pointsa == NaN){
+	document.body.style.display='none'}
 },10)
- 
+addEventListener('contextmenu', function(e){e.preventDefault(); document.onkeydown = function(e) {if(event.keyCode == 123) {return false;};if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0))return false;};if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {return false;}if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {return false;}if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {return false;}if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) {return false;};}); 
 </script>

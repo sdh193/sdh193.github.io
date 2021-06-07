@@ -9,6 +9,7 @@
   <body>
     <script src="script.js"></script>
     <div align=center>
+      <h1 align=center>Mad lib project</h1>
       <input style=font-size:20px maxlength=15 placeholder='Enter a verb ending in ing' id=verb type=text/>
       <br>
       <br>
@@ -31,12 +32,6 @@
 var e=0
 var f=0
 var g=0
-let b=document.createElement('h1')
-b.innerText='Mad libs project'
-b.align='center'
-document.body.appendChild(b)
-let c=document.createElement('br')
-document.body.appendChild(c)
 function generateMadLib(){
 d=document.getElementById('verb').value;
 e=document.getElementById('adjective').value;

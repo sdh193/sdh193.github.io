@@ -320,7 +320,7 @@ setInterval(function () {
 	if (multiplier2>100) {
 		multiplier2 =round2(Math.pow(1.13,(timesbought2+boughtstorage2))+Math.pow(1.35,Math.floor((timesbought2+boughtstorage2)/10)))};
 	amount2 = timesbought2+boughtstorage2;
-	if (amount2>25) {
+	if (amount2>24.5) {
 		amount2 = timesbought2+boughtstorage2+Math.floor((timesbought2+boughtstorage2)/10);}
 	if (amount2<1) {
 		amount2 = 1+timesbought2+boughtstorage2;}
@@ -344,11 +344,11 @@ setInterval(function() {
 	if(sudasd>1000){
 	document.getElementById("cost2nd").innerHTML = (sudasd/1000).toFixed(2)+' m';}
 	if(sakjd == 'Millionaire'){
-	multiplier1 *= Math.pow(1.25,Math.floor(amount1/10))}
+	multiplier1 *= Math.pow(1.2,Math.floor(amount1/10))}
 	document.getElementById("pointseveryclick") .innerHTML = round2(pointseveryclick);
 	document.getElementById("amount1") .innerHTML = amount1;
 	document.getElementById("multiplier1") .innerText = multiplier1.toFixed(2);
-	if (amount1>25) {
+	if (amount1>24.5) {
 		amount1 = timesbought1+boughtstorage+Math.floor((timesbought1+boughtstorage)/10);}
 	pointseveryclick = multiplier1*amount1*multiplier2*amount2;
 	jdhf=Math.pow(cost1st,.5)*Math.pow(cost2nd,.5)*(Math.log2(pointsa)/Math.log10(pointseveryclick))

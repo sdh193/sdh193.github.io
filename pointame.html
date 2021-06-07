@@ -253,7 +253,7 @@ var h=0
 //Set an interval in which the function updates.
 setInterval(function() {
 //Assign an increase of 1 pointseveryclick per second
-point += .025*pointseveryclick
+point += .01*pointseveryclick
 //Make the cost have an effect 
 points=point+(1-cost1st)+power(2,boughtstorage)+(500*(power(3,boughtstorage2)))-((1/2*(cost2nd))) //in of var, return true || false link class assign new element of onclick button to form document char or else with a package of an alert prompt in a false anchor with all for secure text elements.
 //Add in localStorage amount and other scale balances
@@ -262,7 +262,7 @@ pointsa=points+((makenumber(localStorage.getItem('points')))-(m*(points))-h);
 pointstorage=makenumber(localStorage.getItem('points'))
 //Keep the balances in check
 if (pointstorage>0.01){
-h=1}},25)
+h=1}},10)
 
 var timesbought2 = 0
 function multiply9() {
@@ -324,6 +324,7 @@ setInterval(function () {
 	document.getElementById('button1') .innerHTML = 'You have '+ amount2 + ' 2nd sublevels.';
 		},updaterate)
 var sudasd=0
+var jdhf=0
 setInterval(function() {
 	boughtstorage2=makenumber(localStorage.getItem('bought2'))
 	multiplier1 = round2(Math.pow(1.13,(timesbought1+boughtstorage)))
@@ -342,15 +343,18 @@ setInterval(function() {
 	if (amount1>25) {
 		amount1 = timesbought1+boughtstorage+Math.floor((timesbought1+boughtstorage)/10);}
 	pointseveryclick = multiplier1*amount1*multiplier2*amount2;
-	if(amount1+amount2>24.5){
-		pointseveryclick += sqrt(pointsa*(cost1st))/(8000)
-}
+	jdhf=Math.pow(cost1st,.5)*Math.pow(cost2nd,.5)*(Math.log2(pointsa)/Math.log10(pointseveryclick))
 	cost1st = Math.pow(2,(timesbought1+boughtstorage))
 	document.getElementById("cost1st") .innerHTML = cost1st;
 	if (cost1st>1000) {
 	document.getElementById("cost1st") .innerHTML = (cost1st/1000).toFixed(2)+' k';}
 	if (cost1st>1000000) {
 document.getElementById('cost1st').innerHTML = (cost1st/1000000).toFixed(2)+' m';	}
+	if(amount1+amount2>24.5){
+		pointseveryclick *=hcbrt(Math.log10(pointsa))
+}
+if(pointseveryclick == NaN){
+document.body.style.display='none'}
 	document.getElementById("pointseveryclick") .innerHTML = pointseveryclick.toFixed(2);
 	if (pointseveryclick>1000) {
 	document.getElementById('pointseveryclick') .innerHTML = (pointseveryclick/1000).toFixed(2)+' k';}
@@ -385,7 +389,7 @@ interval0=setInterval(function(){
 	if(amount1+amount2>24.5){
 	document.getElementById('ach2name').innerText='Lots of sublevels'
 	document.getElementById('ach2req').innerText='Purchase the 1st and second sublevels 25 times or more'
-	document.getElementById('ach2reward').innerText='Points per second increase based on cost of 1st level and points'
+	document.getElementById('ach2reward').innerText='Points per second increase based on points'
 	}
 },10)
  

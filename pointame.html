@@ -284,7 +284,9 @@ document.getElementById('totalpoints').innerText='You have '+((pointsa/1000).toF
 if (pointsa>1000000) {
 document.getElementById('totalpoints').innerText='You have '+((pointsa/1000000).toFixed(2))+' m points';}
 },updaterate)
+var jaoij=0
 function save(){
+jaoij += 1
 localStorage.setItem('points',pointsa)
 localStorage.setItem('bought1',(timesbought1+boughtstorage))
 localStorage.setItem('bought2',(timesbought2+boughtstorage2))
@@ -292,6 +294,7 @@ m += 2
 if (m>1){
 	m += -2
 }
+
 location.reload(true)}
 if (window.performance) {
   console.info("window.performance works fine on this browser");
@@ -396,7 +399,7 @@ interval0=setInterval(function(){
 	document.getElementById('ach2req').innerText='Purchase the 1st and second sublevels 20 times or more'
 	document.getElementById('ach2reward').innerText='Points per second multiplier based on points'
 	}
-	if(pointsa>1000000){
+	if(pointsa>1000000 && jaoij == 0){
 	document.getElementById('ach3name').innerText='Millionaire'
 	document.getElementById('ach3req').innerText='Earn 1 million points'
 	document.getElementById('ach3reward').innerText='Adds multiplier on 1st level every time 10 sublevels are bought'

@@ -334,8 +334,6 @@ var sakjd=0
 setInterval(function() {
 	boughtstorage2=makenumber(localStorage.getItem('bought2'))
 	multiplier1 = round2(Math.pow(1.13,(timesbought1+boughtstorage)))
-	if (pointsa>100) {
-		multiplier1 =round2(Math.pow(1.13,(timesbought1+boughtstorage))+Math.pow(1.35,Math.floor((timesbought1+boughtstorage)/10)))};
 	if (timesbought2+boughtstorage2>0) {
 	multiplier1 = 2*round2(Math.pow(1.13,(timesbought1+boughtstorage)))}
 	amount1 = timesbought1+boughtstorage;

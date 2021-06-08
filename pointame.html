@@ -341,7 +341,7 @@ setInterval(function() {
 	document.getElementById("cost2nd") .innerHTML = sudasd.toFixed(2)+' k';
 	if(sudasd>1000){
 	document.getElementById("cost2nd").innerHTML = (sudasd/1000).toFixed(2)+' m';}
-	if(pointsa>100000){
+	if(sakjd == 'Millionaire'){
 	multiplier1 *= Math.pow(1.2,Math.floor(amount1/10))}
 	document.getElementById("pointseveryclick") .innerHTML = round2(pointseveryclick);
 	document.getElementById("amount1") .innerHTML = amount1;
@@ -356,7 +356,7 @@ setInterval(function() {
 	document.getElementById("cost1st") .innerHTML = (cost1st/1000).toFixed(2)+' k';}
 	if (cost1st>1000000) {
 document.getElementById('cost1st').innerHTML = (cost1st/1000000).toFixed(2)+' m';	}
-	if(amount1+amount2>24.5){
+	if(amount1+amount2>19.5){
 		pointseveryclick *=hcbrt(Math.log10(pointsa))
 }
 if(pointseveryclick == NaN){
@@ -391,12 +391,12 @@ document.getElementById('ach1name').innerText="You've reached the second level"
 document.getElementById('ach1req').innerText="Purchase the second level at least once"
 	document.getElementById('ach1reward').innerText="2x multiplier on 1st level"}},10)
 interval0=setInterval(function(){
-	if(amount1+amount2>24.5){
+	if(amount1+amount2>19.5){
 	document.getElementById('ach2name').innerText='Lots of sublevels'
-	document.getElementById('ach2req').innerText='Purchase the 1st and second sublevels 25 times or more'
+	document.getElementById('ach2req').innerText='Purchase the 1st and second sublevels 20 times or more'
 	document.getElementById('ach2reward').innerText='Points per second increase based on points'
 	}
-	if(pointsa>100000){
+	if(pointsa>1000000){
 	document.getElementById('ach3name').innerText='Millionaire'
 	document.getElementById('ach3req').innerText='Earn 1 million points'
 	document.getElementById('ach3reward').innerText='Adds multiplier on 1st level every time 10 sublevels are bought'

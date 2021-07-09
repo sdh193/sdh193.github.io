@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title id=htmltitle></title>
+</head>
+<body id=a>
+<style>
+#a {
+background:#999999}
+#b {
+font-size:20px;
+font-family:arial;
+border:5px solid green;
+cursor:pointer;
+display:none;}
+#dangerbtn {
+font-size:15px;
+font-family:arial;
+border:3px solid red;
+cursor:pointer;
+display:none}
+#clearbtn {
+font-size:15px;
+font-family:arial;
+border:3px solid red;
+cursor:pointer;
+display:none;}
+#title{
+resize:none}
+#name{
+resize:none}
+</style>
+<div id=header align=center>Please wait while we are fetching your save...</div>
+<div align=center>
+<textarea id=name rows=1 cols=15 style=font-size:25px></textarea>
+<textarea id=title rows=1 cols=65 style=font-size:25px></textarea>
+<br>
+<textarea id=body rows=30 cols=100 style=font-size:15px>
+
+	</textarea>
+	<br>
+	<div align=center>
+	<button id=b onclick=x() style=color:green>Save</button>
+	</div>
+</div>
+<script type='text/javascript'>
+var b=0
+function x() {
+a = document.getElementById('body').value;
+localStorage.setItem(('text'),a)
+b=document.getElementById('name').value;
+localStorage.setItem(('text1'),b)
+c=document.getElementById('title').value;
+localStorage.setItem(('text2'),c)}
+document.getElementById('htmltitle').innerText = localStorage.getItem('text20');
+setInterval(function () {
+document.getElementById('body').innerText = localStorage.getItem('text18');
+document.getElementById('name').innerText = localStorage.getItem('text19');
+document.getElementById('title').innerText = localStorage.getItem('text20');
+document.getElementById('header').innerText = 'Save fetched';
+document.getElementById('b').style.display = 'block';
+document.getElementById('dangerbtn').style.display = 'block';},3000)
+setInterval(function () {
+document.getElementById('header').style.display = 'none';},10000)
+function y() {
+document.getElementById('warning').style.display = 'block';
+document.getElementById('clearbtn').style.display = 'block';
+}
+function z() {
+localStorage.removeItem('text')
+localStorage.removeItem('text1')
+localStorage.removeItem('text2')
+document.getElementById('b').style.setProperty("display", "none", "important");
+}
+setInterval(function () {
+a = document.getElementById('body').value;
+localStorage.setItem(('text18'),a)
+b=document.getElementById('name').value;
+localStorage.setItem(('text19'),b)
+c=document.getElementById('title').value;
+localStorage.setItem(('text20'),c)},5000)
+</script>
+<div align=center>
+<button id=dangerbtn align=center onclick=y() style=color:red>Clear save</button>
+<div id=warning style=display:none>Warning: You will not be able to undo this action. All of the text you typed up will be gone forever. If you want this to happen, click the accept button below.</div>
+<button id=clearbtn onclick=z() style=color:red>Accept</button>
+</div>
+</body> 
+</html>

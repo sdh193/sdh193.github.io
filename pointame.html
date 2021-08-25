@@ -1,0 +1,438 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+td{
+border:5px transparent}
+body{
+background-color:black;font-family:lora}
+#pointamount{
+color:white}
+div[button]{
+font-size:20px;
+background-color:white;
+border:3px groove #ddd;
+width:220px;
+height:20px;
+padding-top:2px;
+padding-left:5px;
+padding-bottom:4px;
+user-select:none;
+-ms-user-select:none;
+-webkit-user-select:none;
+}
+div[button]:hover{
+background-color:#eee}
+.greenbtn{
+background-color:green !important;
+border:3px groove #fff;
+}
+.greenbtn:hover{
+background-color:rgb(50,200,50) !important;}
+
+.shopbtn{
+width:400px;
+height:20px;
+padding-top:2px;
+padding-bottom:4px;
+padding-left:5px;
+font-size:20px;
+user-select:none;
+-ms-user-select:none;
+-webkit-user-select:none;
+}
+div[nomargin]{
+margin:0px;}
+td[extraborder]{
+border-left:200px solid transparent;
+border-right:200px solid transparent;
+color:white;
+font-size:20px;}
+div[multbutton]{
+width:185px;}
+#pointspersecond{
+color:white;
+font-size:25px;
+}
+#green{
+color:green}
+.redbtn{
+background-color:red !important;
+border:3px groove #aaa !important;}
+.redbtn:hover{
+background-color:rgb(200,50,50) !important;}
+th{
+color:white;
+border:1px solid white;
+font-size:20px;
+}
+td[ach]{
+border:1px solid white; font-size:18px; padding-left: 5px;}
+tr[id *= ach]{
+display:none}
+#unlock{
+width:auto}
+</style>
+<meta charset=utf-8>
+<title id=title></title>
+<meta name=viewport content="width=device-width,height=device-height">
+<link rel="icon" href='svg.svg'>
+</head>
+<body>
+<div align=center>
+<main>
+<points id=pointamount style=font-size:40px>You have <a id=green>1.00</a> points</points></div>
+<div align=center>
+<div style="position:absolute; left:950px;  top:20px; font-size:20px; color:white" id=upgradepoints>You have 0 upgrade points</div>
+<br>
+<div id=pointspersecond>You are gaining 0 points per second</div>
+<Br>
+<table >
+<tbody>
+<tr>
+<td>
+<div  button multbutton onclick=multiplyL1() id=mult1>1st level x 1.00</div>
+</td>
+<td>
+<div button costbutton onclick=decreaseCostL1() id=cost1>Sublevel cost: 1.00</div></td>
+<td>
+<div class="greenbtn shopbtn" onclick=purchaseSublevelL1() id=btn>You have 0 sublevels. Click to purchase one.</div>
+</td>
+</tr>
+<tr id=tr2 style=display:none>
+<td>
+<div button multbutton onclick=multiplyL2() id=mult2>2nd level x 1.00</div>
+</td>
+<td>
+<div button onclick=decreaseCostL1() id=cost2>Sublevel cost: 1.00 K</div></td>
+<td>
+<div class="greenbtn shopbtn" id=btn2 onclick=purchaseSublevelL2()>You have 0 sublevels. Click to purchase one.</div>
+</td>
+</tr>
+<tr id=tr3 style=display:none>
+<td>
+<div button multbutton onclick=multiplyL3() id=mult3>3rd level x 1.00</div></td>
+<td>
+<div button onclick=decreaseCostL1() id=cost3>Sublevel cost: 1.00 M</div></td>
+<td>
+<div class="greenbtn shopbtn" onclick=purchaseSublevelL3() id=btn3>You have 0 sublevels. Click to purchase one.</div>
+</td>
+</tr>
+<tr id=tr4 style=display:none>
+<td>
+<div button multbutton id=mult4 onclick=multiplyL4()>4th level x 1.00</div>
+</td>
+<td>
+<div button id=cost4 onclick=decreaseCostL1()>Sublevel cost: 1.00 T</div></td>
+<td>
+<div class="greenbtn shopbtn" id=btn4 onclick=purchaseSublevelL4()>You have 0 sublevels. Click to purchase one.</div>
+</tr>
+</tbody>
+</table>
+<a id=unlockbtn>
+<br>
+<div button onclick=unlockLevel() id=unlock style="width:450px" class=redbtn >Unlock new level for 1.00 K points</div>
+</a>
+<Br>
+<div button id=collectOfflineGainBtn onclick="location.reload(true)">Collect offline gains</div>
+<br>
+<div button onclick="resetAll()">Reset all your progress</div>
+<br>
+<hr>
+<h2 style="color:white; font-size:30px">Bonuses</h2>
+<table style="color:white; border:1px solid white; width:95%">
+<tbody>
+<th>Name</th>
+<th>Requirement</th>
+<th>Reward</th>
+<tr id=ach1>
+<td ach>First level unlock</td>
+<td ach>Unlock the second level</td>
+<td ach>Level multiplier per sublevel purchased increases by .03</td>
+</tr>
+<tr id=ach2>
+<td ach>10 K points!</td>
+<td ach>Reach 10,000 points</td>
+<td ach>First level cost is reduced based on number of second levels.</td>
+</tr>
+<tr id=ach3>
+<td ach>More than 25</td>
+<td ach>Have the amount of your second and first sublevels be greater than 25</td>
+<td ach>Multiplier to points per second based on points ((log10(points))^.5)</td>
+</tr>
+<tr id=ach4>
+<td ach>10 M points!</td>
+<td ach>Reach 10,000,000 points</td>
+<td ach>Second level cost is reduced based on number of third levels.</td>
+</tr>
+<tr id=ach5>
+<td ach>More than 50</td>
+<td ach>Have the amount of your first, second, and third sublevels be greater than 50</td>
+<td ach>Increase multiplier to points per second (log10(points)^1)</td>
+</tr>
+<tr id=ach6 style="display:none">
+<td ach>10 T points!</td>
+<td ach>Reach 10,000,000,000,000 points</td>
+<td ach>Third level cost is reduced based on number of fourth levels.</td>
+</tr>
+</tbody>
+</table>
+<script>
+//Create user object
+if(localStorage.getItem("playerInfo") == null){
+var user=new Object();
+user.firstLevel=new Object()
+user.firstLevel.multiplier=1
+user.firstLevel.cost=1
+user.firstLevel.amount=0
+user.secondLevel=new Object()
+user.secondLevel.multiplier=1
+user.secondLevel.cost=10
+user.secondLevel.amount=1
+user.thirdLevel=new Object()
+user.thirdLevel.multiplier=1
+user.upgradePoints=0
+user.thirdLevel.cost=1e4
+user.thirdLevel.amount=1
+user.unlockLevel=new Object()
+user.unlockLevel.cost=1000
+user.unlockLevel.unlocks=0
+user.fourthLevel=new Object()
+user.fourthLevel.multiplier=1
+user.fourthLevel.amount=1
+user.fourthLevel.cost=1e10
+user.timeOnline=0
+user.multiplierIncrease=1.12
+user.pointspersecond=0;
+user.ach3Bonus=1;
+var firstdate=Number(Date.now());
+}else{var user=JSON.parse(localStorage.getItem("playerInfo"));
+user.previousTimeOffline=user.timeOffline
+user.offlineTimeThisLoad=user.timePlayed-user.timeOnline-user.timeOffline;
+user.previousPointsPerSecond=user.pointspersecond
+user.offlineBonus= user.offlineTimeThisLoad*user.pointspersecond
+user.point += user.offlineBonus
+console.log(user.offlineBonus)
+setTimeout(function(){
+user.timeOffline=user.timePlayed-user.timeOnline
+
+})
+user.ach5Bonus=0
+var copy=user.unlockLevel.unlocks;
+while(copy >= 1){
+document.getElementById("tr"+parseInt(copy+1)).style.display='table-row';
+copy --}
+if(user.timeStarted == null || user.timeStarted == undefined){
+user.timeStarted=Date.now()
+}}
+var firstdate=Number(Date.now())
+var seconddate;
+setInterval(function(){
+update()
+if(localStorage.getItem("playerInfo") == null){
+}else{user=JSON.parse(localStorage.getItem("playerInfo"));
+document.getElementById("green").innerText=format(user.points)
+user.timeOnline += .01
+}
+seconddate=Number(Date.now())},10)
+//Create function for updating the total time played by the user (online and offline)
+function updateTimePlayed(){
+user.timeOnPage=Number((seconddate-firstdate)/1000)
+user.timePlayed=Number((seconddate-user.timeStarted)/1000)
+}
+function updatePoints(){
+user.point += user.pointspersecond/100
+user.points = user.point+1
+}
+function save(){
+localStorage.setItem("playerInfo",JSON.stringify(user))}
+function update(){
+updatePoints()
+user.pointspersecond=user.firstLevel.multiplier*user.firstLevel.amount*user.secondLevel.multiplier*user.secondLevel.amount*user.ach3Bonus*user.thirdLevel.multiplier*user.thirdLevel.amount*user.fourthLevel.amount*user.fourthLevel.multiplier*(1+user.upgradePoints**(1.5*(Math.log10(user.upgradePoints)**.5)))*(1+(((user.firstLevel.amount+user.secondLevel.amount+user.thirdLevel.amount)**2)-1)/1500)
+if(Number(user.firstLevel.amount+user.secondLevel.amount) >= 25){
+user.ach3Bonus = (Math.log10(user.points))**(.5+user.ach5Bonus)
+}
+document.getElementById("mult1").innerText="1st level x "+format(user.firstLevel.multiplier)
+document.getElementById("mult2").innerText="2nd level x "+format(user.secondLevel.multiplier)
+document.getElementById("mult3").innerText="3rd level x "+format(user.thirdLevel.multiplier)
+document.getElementById("mult4").innerText="4th level x "+format(user.fourthLevel.multiplier)
+formatClasses(document.getElementById("btn2"),user.secondLevel.cost)
+formatClasses(document.getElementById("btn3"),user.thirdLevel.cost)
+formatClasses(document.getElementById("btn4"),user.fourthLevel.cost)
+formatClasses(document.getElementById("btn"),user.firstLevel.cost)
+formatClasses(document.getElementById("unlock"),user.unlockLevel.cost)
+document.getElementById("unlock").innerText="Unlock new level for "+format(user.unlockLevel.cost)+" points"
+document.getElementById("btn").innerText="You have "+user.firstLevel.amount+" sublevels. Click to purchase one."
+document.getElementById("btn2").innerText="You have "+user.secondLevel.amount+" sublevels. Click to purchase one."
+document.getElementById("btn3").innerText="You have "+user.thirdLevel.amount+" sublevels. Click to purchase one."
+document.getElementById("btn4").innerText="You have "+user.fourthLevel.amount+" sublevels. Click to purchase one."
+document.getElementById("cost1").innerText="Sublevel cost: "+format(user.firstLevel.cost)
+document.getElementById("cost2").innerText="Sublevel cost: "+format(user.secondLevel.cost)
+document.getElementById("cost3").innerText="Sublevel cost: "+format(user.thirdLevel.cost)
+document.getElementById("cost4").innerText="Sublevel cost: "+format(user.fourthLevel.cost)
+if(user.unlockLevel.unlocks > 2){
+document.getElementById("unlock").innerText="Reset your progress now for "+formatUpgrade(Math.floor(((user.points**.1)-1)/10))+" upgrade points."
+user.unlockLevel.cost = 1
+}
+document.getElementById("upgradepoints").innerText="You have "+formatUpgrade(user.upgradePoints)+" upgrade points."
+if(haveAchievement(2) == true){
+user.firstLevel.cost = ((2**user.firstLevel.amount)/1.05**user.secondLevel.amount)}else{
+user.firstLevel.cost = (2**user.firstLevel.amount)
+}
+user.firstLevel.multiplier = user.multiplierIncrease**user.firstLevel.amount
+if(haveAchievement(4) == true){
+user.secondLevel.cost = (10*(3**(user.secondLevel.amount-1)))/(1.05**user.thirdLevel.amount)
+}else{
+user.secondLevel.cost = 10*(3**(user.secondLevel.amount-1))
+}
+user.secondLevel.multiplier = user.multiplierIncrease**(user.secondLevel.amount-1)
+user.thirdLevel.multiplier = user.multiplierIncrease**(user.thirdLevel.amount-1)
+user.fourthLevel.multiplier = user.multiplierIncrease**(user.fourthLevel.amount-1)
+user.thirdLevel.cost = (4**(user.thirdLevel.amount-1))*1e4
+user.fourthLevel.cost = (5**(user.fourthLevel.amount-1))*1e10
+document.getElementById("pointspersecond").innerText="You are gaining "+format(user.pointspersecond)+" points per second"
+if(user.unlockLevel.unlocks >= 1){
+awardAchievement(1)
+user.multiplierIncrease = 1.15
+}
+if(user.points >= 10000){
+awardAchievement(2)
+
+}
+if(user.points >= 1e7){
+awardAchievement(4)
+
+}
+if(Number(user.firstLevel.amount+user.secondLevel.amount) >= 25){
+awardAchievement(3)
+}
+if(Number(user.firstLevel.amount+user.secondLevel.amount+user.thirdLevel.amount) >= 50){
+awardAchievement(5)
+user.ach5Bonus = .5
+}
+switch(user.unlockLevel.unlocks){
+case 0: user.unlockLevel.cost = 1e1
+break;
+case 1: user.unlockLevel.cost = 2e4
+break;
+case 2: user.unlockLevel.cost = 3e10
+break;
+}
+if(user.points == Infinity || user.pointspersecond == Infinity){
+alert("Hooray! You finished the game with "+user.upgradePoints+" upgrade points. Click OK to reset your progress.")
+resetAll()
+}
+updateTimePlayed()
+save()}
+document.addEventListener("keydown",function(e){if(e.ctrlKey){e.preventDefault()}});
+document.addEventListener("contetmenu",function(e){e.preventDefault()})
+function purchaseSublevelL1(){
+if(user.points >= user.firstLevel.cost){
+user.point += -user.firstLevel.cost
+user.firstLevel.amount ++;
+}}
+function purchaseSublevelL2(){
+if(user.points >= user.secondLevel.cost){
+user.point += -user.secondLevel.cost
+user.secondLevel.amount ++;
+}}
+function purchaseSublevelL3(){
+if(user.points >= user.thirdLevel.cost){
+user.point += -user.thirdLevel.cost
+user.thirdLevel.amount ++;
+}}
+function purchaseSublevelL4(){
+if(user.points >= user.fourthLevel.cost){
+user.point += -user.fourthLevel.cost
+user.fourthLevel.amount ++;
+}}
+function format(value){
+if(value >= 1e93){
+return (value/(10**Math.floor(Math.log10(value)))).toFixed(1)+"e"+(Math.floor(Math.log10(value)))}else if(value >= 1e90){return (value/1e90).toFixed(1)+" Novg"}else if(value >= 1e87){return (value/1e87).toFixed(1)+" Ocvg"}else if(value >= 1e84){return (value/1e84).toFixed(1)+" Spvg"}else if(value >= 1e81){return (value/1e81).toFixed(1)+" Sxvg"}else if(value >= 1e78){return (value/1e78).toFixed(1)+" Qtvg"}else if(value >= 1e75){return (value/1e75).toFixed(1)+" Qavg"}else if(value >= 1e72){return (value/1e72).toFixed(1)+" Tvg"}else if(value >= 1e69){return (value/1e69).toFixed(1)+" Dvg"}else if(value >= 1e66){return (value/1e66).toFixed(1)+" Uvg"}else if(value >= 1e63){return (value/1e63).toFixed(1)+" Vg"}else if(value >= 1e60){return (value/1e60).toFixed(1)+" Nodc"}else if(value >= 1e57){return (value/1e57).toFixed(1)+" Ocdc"}else if(value >= 1e54){return (value/1e54).toFixed(2)+" Spdc"}else if(value >= 1e51){return (value/1e51).toFixed(1)+" Sxdc"}else if(value >= 1e48){return (value/1e48).toFixed(1)+" Qtdc"}else if(value >= 1e45){return (value/1e45).toFixed(1)+" Qadc"}else if(value >= 1e42){return (value/1e42).toFixed(1)+" Tdc"}else if(value >= 1e39){return (value/1e39).toFixed(1)+" Ddc"}else if(value >= 1e36){return (value/1e36).toFixed(1)+" Udc"}else if(value >= 1e33){return (value/1e33).toFixed(1)+" Dc"}else if(value >= 1e30){return (value/1e30).toFixed(1)+" No"}else if(value >= 1e27){return (value/1e27).toFixed(1)+" Oc"}else if(value >= 1e24){return (value/1e24).toFixed(1)+" Sp"}else if(value >= 1e21){return (value/1e21).toFixed(1)+" Sx"}else if(value >= 1e18){return (value/1e18).toFixed(1)+" Qt"}else if(value >= 1e15){return (value/1e15).toFixed(1)+" Qa"}else if(value >= 1e12){return (value/1e12).toFixed(1)+" T"}if(value >= 1e9){return (value/1e9).toFixed(1)+" B"}else if(value >= 1e6){return (value/1e6).toFixed(1)+" M"}else if(value >= 1e3){return (value/1e3).toFixed(1)+" K"}else{return value.toFixed(1)}}
+function formatUpgrade(value){
+if(value >= 1e45){
+return (value/1e45).toFixed(2)+" Qadc"}else if(value >= 1e42){return (value/1e42).toFixed(2)+" Tdc"}else if(value >= 1e39){return (value/1e39).toFixed(2)+" Ddc"}else if(value >= 1e36){return (value/1e36).toFixed(2)+" Udc"}else if(value >= 1e33){return (value/1e33).toFixed(2)+" Dc"}else if(value >= 1e30){return (value/1e30).toFixed(2)+" No"}else if(value >= 1e27){return (value/1e27).toFixed(2)+" Oc"}else if(value >= 1e24){return (value/1e24).toFixed(2)+" Sp"}else if(value >= 1e21){return (value/1e21).toFixed(2)+" Sx"}else if(value >= 1e18){return (value/1e18).toFixed(2)+" Qt"}else if(value >= 1e15){return (value/1e15).toFixed(2)+" Qa"}else if(value >= 1e12){return (value/1e12).toFixed(2)+" T"}if(value >= 1e9){return (value/1e9).toFixed(2)+" B"}else if(value >= 1e6){return (value/1e6).toFixed(2)+" M"}else if(value >= 1e3){return (value/1e3).toFixed(2)+" K"}else{return value}}
+function formatClasses(value1,value2){
+if(value2 <= user.points){
+value1.className="shopbtn greenbtn"
+}else{value1.className="shopbtn redbtn"}}
+function unlockLevel(){
+if(user.unlockLevel.unlocks < 3){
+if(user.points >= user.unlockLevel.cost){
+document.getElementById("tr"+Number(user.unlockLevel.unlocks+2)).style.display="table-row";
+user.unlockLevel.unlocks ++;
+user.point += -user.unlockLevel.cost
+}}else{reset()
+}}
+function awardAchievement(achNum){
+document.getElementById("ach"+Number(achNum)).style.display="table-row"}
+function haveAchievement(achNum){
+if(document.getElementById("ach"+Number(achNum)).style.display == "table-row"){
+return true}else{return false}}
+function reset(){
+user.upgradePoints += Math.floor(((user.points**.1)-1)/10)
+user.firstLevel=new Object()
+user.point=0
+user.firstLevel.multiplier=1
+user.firstLevel.cost=1
+user.firstLevel.amount=0
+user.secondLevel=new Object()
+user.secondLevel.multiplier=1
+user.secondLevel.cost=10
+user.secondLevel.amount=1
+user.thirdLevel=new Object()
+user.thirdLevel.multiplier=1
+user.thirdLevel.cost=1e4
+user.thirdLevel.amount=1
+user.unlockLevel=new Object()
+user.unlockLevel.cost=1000
+user.unlockLevel.unlocks=0
+user.fourthLevel=new Object()
+user.fourthLevel.multiplier=1
+user.fourthLevel.amount=1
+user.fourthLevel.cost=1e10
+user.multiplierIncrease=1.12
+user.pointspersecond=0;
+user.ach3Bonus=1;
+var firstdate=Number(Date.now())
+location.reload(true)
+;}
+setInterval(function(){
+
+})
+
+function resetAll(){
+var c=confirm("Do you really want to erase all your progress? This cannot be undone.")
+if(c == true){
+user=new Object();
+user.firstLevel=new Object()
+user.firstLevel.multiplier=1
+user.firstLevel.cost=1
+user.firstLevel.amount=0
+user.secondLevel=new Object()
+user.secondLevel.multiplier=1
+user.secondLevel.cost=10
+user.secondLevel.amount=1
+user.thirdLevel=new Object()
+user.thirdLevel.multiplier=1
+user.upgradePoints=0
+user.thirdLevel.cost=1e4
+user.thirdLevel.amount=1
+user.unlockLevel=new Object()
+user.unlockLevel.cost=1000
+user.unlockLevel.unlocks=0
+user.fourthLevel=new Object()
+user.fourthLevel.multiplier=1
+user.fourthLevel.amount=1
+user.fourthLevel.cost=1e10
+user.timeOnline=0
+user.multiplierIncrease=1.12
+user.pointspersecond=0;
+user.ach3Bonus=1;
+var firstdate=Number(Date.now());
+location.reload(true)}
+}
+
+</script>
+</body>
+</html>

@@ -67,7 +67,7 @@ border:1px solid white;
 font-size:20px;
 }
 td[ach]{
-border:1px solid white; font-size:18px; padding-left: 5px;}
+border:1px solid white; font-size:17px; padding-left: 5px;}
 tr[id *= ach]{
 display:none}
 #unlock{
@@ -131,20 +131,27 @@ width:auto}
 </table>
 <a id=unlockbtn>
 <br>
-<div button onclick=unlockLevel() id=unlock style="width:450px" class=redbtn >Unlock new level for 1.00 K points</div>
+<div button onclick=unlockLevel() id=unlock style="width:460px" class=redbtn >Unlock new level for 1.00 K points</div>
 </a>
+<br>
+<div button id=purchaseBtn style="width:450px;" onclick="purchase()">Buy 60 s of production for  multiplier points</div>
 <Br>
-<div button id=collectOfflineGainBtn onclick="location.reload(true)">Collect offline gains</div>
+<div button id=collectOfflineGinBtn onclick="location.reload(true)">Collect offline gains</div>
+
 <br>
 <div button onclick="resetAll()">Reset all your progress</div>
 <br>
 <hr>
 <h2 style="color:white; font-size:30px">Bonuses</h2>
-<table style="color:white; border:1px solid white; width:95%">
+<table style="color:white; border:1px solid white; -webkit-user-select:none; -ms-user-select:none; user-select:none; width:100%">
 <tbody>
 <th>Name</th>
 <th>Requirement</th>
 <th>Reward</th>
+<tr id=bonus>
+<td ach>Multiplier point bonus</td>
+<td ach>None</td>
+<td ach id=multbonus></td>
 <tr id=ach1>
 <td ach>First level unlock</td>
 <td ach>Unlock the second level</td>
@@ -205,6 +212,7 @@ user.timeOnline=0
 user.multiplierIncrease=1.12
 user.pointspersecond=0;
 user.ach3Bonus=1;
+user.bonusCost=2;
 var firstdate=Number(Date.now());
 }else{var user=JSON.parse(localStorage.getItem("playerInfo"));
 user.previousTimeOffline=user.timeOffline
@@ -248,7 +256,7 @@ function save(){
 localStorage.setItem("playerInfo",JSON.stringify(user))}
 function update(){
 updatePoints()
-user.pointspersecond=user.firstLevel.multiplier*user.firstLevel.amount*user.secondLevel.multiplier*user.secondLevel.amount*user.ach3Bonus*user.thirdLevel.multiplier*user.thirdLevel.amount*user.fourthLevel.amount*user.fourthLevel.multiplier*(1+user.upgradePoints**(1.5*(Math.log10(user.upgradePoints)**.5)))*(1+(((user.firstLevel.amount+user.secondLevel.amount+user.thirdLevel.amount)**2)-1)/1500)
+user.pointspersecond=user.firstLevel.multiplier*user.firstLevel.amount*user.secondLevel.multiplier*user.secondLevel.amount*user.ach3Bonus*user.thirdLevel.multiplier*user.thirdLevel.amount*user.fourthLevel.amount*user.fourthLevel.multiplier*((1+user.upgradePoints**(1.05*(Math.log10(user.upgradePoints)**.4)))**.75)*(1+(((user.firstLevel.amount+user.secondLevel.amount+user.thirdLevel.amount)**2)-1)/1500)
 if(Number(user.firstLevel.amount+user.secondLevel.amount) >= 25){
 user.ach3Bonus = (Math.log10(user.points))**(.5+user.ach5Bonus)
 }
@@ -258,6 +266,10 @@ document.getElementById("mult3").innerText="3rd level x "+format(user.thirdLevel
 document.getElementById("mult4").innerText="4th level x "+format(user.fourthLevel.multiplier)
 formatClasses(document.getElementById("btn2"),user.secondLevel.cost)
 formatClasses(document.getElementById("btn3"),user.thirdLevel.cost)
+if(user.upgradePoints >= Math.floor(user.bonusCost)){
+document.getElementById("purchaseBtn").className="greenbtn"
+}else{document.getElementById("purchaseBtn").className="redbtn"}
+document.getElementById("purchaseBtn").innerText="Buy 1 min of production for "+formatUpgrade(Math.floor(user.bonusCost))+" multiplier points."
 formatClasses(document.getElementById("btn4"),user.fourthLevel.cost)
 formatClasses(document.getElementById("btn"),user.firstLevel.cost)
 formatClasses(document.getElementById("unlock"),user.unlockLevel.cost)
@@ -270,11 +282,12 @@ document.getElementById("cost1").innerText="Sublevel cost: "+format(user.firstLe
 document.getElementById("cost2").innerText="Sublevel cost: "+format(user.secondLevel.cost)
 document.getElementById("cost3").innerText="Sublevel cost: "+format(user.thirdLevel.cost)
 document.getElementById("cost4").innerText="Sublevel cost: "+format(user.fourthLevel.cost)
+document.getElementById("multbonus").innerText=user.upgradePoints+" multiplier points translates to a "+format((1+user.upgradePoints**(1.05*(Math.log10(user.upgradePoints)**.4)))**.75)+" x multiplier on points per second."
 if(user.unlockLevel.unlocks > 2){
-document.getElementById("unlock").innerText="Reset your progress now for "+formatUpgrade(Math.floor(((user.points**.1)-1)/10))+" upgrade points."
+document.getElementById("unlock").innerText="Reset your progress now for "+formatUpgrade(Math.floor(((user.points**.1)-1)/10))+" multiplier points."
 user.unlockLevel.cost = 1
 }
-document.getElementById("upgradepoints").innerText="You have "+formatUpgrade(user.upgradePoints)+" upgrade points."
+document.getElementById("upgradepoints").innerText="You have "+formatUpgrade(user.upgradePoints)+" multiplier points."
 if(haveAchievement(2) == true){
 user.firstLevel.cost = ((2**user.firstLevel.amount)/1.05**user.secondLevel.amount)}else{
 user.firstLevel.cost = (2**user.firstLevel.amount)
@@ -429,10 +442,17 @@ user.timeOnline=0
 user.multiplierIncrease=1.12
 user.pointspersecond=0;
 user.ach3Bonus=1;
+user.bonusCost=2;
 var firstdate=Number(Date.now());
 location.reload(true)}
 }
-
+function purchase(){
+if(user.upgradePoints >= user.bonusCost){
+user.upgradePoints -= Math.floor(user.bonusCost)
+user.point += 60*user.pointspersecond;
+user.bonusCost *= 1.2
+}
+}
 </script>
 </body>
 </html>

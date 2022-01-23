@@ -1,0 +1,42 @@
+<html>
+<body></body></html>
+<script>
+var password=prompt("Enter password");
+function encode(string){
+var ghs=string.toLowerCase().split("");
+var arr=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9","!","@","#","$","%","^","&","*","(",")","-","+","/","{","}","[","]",".","~","`",":",";","'",'"',"_","=","<",">","?",","," "];
+var newarr=['b', '\\', ']', '1', 'd', '_', 'w', 'g', '`', '5', 'k', '3', '(', 'o', 'n', '~', ' ', '7', 'i', 'p', '[', 'j', '"', 'f', 'x', 'y', '*', '0', 'l', '2', '{', '4', 't', 'c', 'v', 'r', '9', '!', '@', ':', ',', ';', '^', '>', '6', '%', ')', '-', '+', '/', 'q', '}', '#', 'a', 'e', 'h', 'z', '8', '.', "'", '&', 'm', 's', '<', '$', '?', '=', 'u'];
+var i=0;
+var valuearray=[];
+var variable;
+while(i<ghs.length){
+variable=ghs[i];
+var index=newarr.indexOf(variable),value=Number((index+((2.289)**(3.082-index/12.482)))**((index/18.48)+3));
+if(value < 1){
+valuearray.push(value.toFixed(0))}else{valuearray.push(value.toFixed(0)+".5289")}
+i++
+}
+var realarray=valuearray.join("").split(".");
+realarray.pop();
+return realarray.join("");
+}
+function decode(string){
+var array=string.split("5289");
+var newarr=['b','\\',']', '1', 'd', '_', 'w', 'g', '`', '5', 'k', '3', '(', 'o', 'n', '~', ' ', '7', 'i', 'p', '[', 'j', '"', 'f', 'x', 'y', '*', '0', 'l', '2', '{', '4', 't', 'c', 'v', 'r', '9', '!', '@', ':', ',', ';', '^', '>', '6', '%', ')', '-', '+', '/', 'q', '}', '#', 'a', 'e', 'h', 'z', '8', '.', "'", '&', 'm', 's', '<', '$', '?', '=', 'u'];
+var j=0;
+var result=[];
+var index=0,value;
+while(j < array.length){
+while(index < newarr.length){
+value=Math.round(Number((index+((2.289)**(3.082-index/12.482)))**((index/18.48)+3)));
+if(value != array[j]){
+}else{result.push(newarr[index])}
+index ++;
+}
+index=0;j++}
+return result.join("")}
+if(encode(password) == '4977325249752893771528975832124752891602952895886515652896402724'){
+
+}else{window.location="Wrong/password"}
+document.addEventListener("contextmenu",function(e){e.preventDefault(); console.log(JSON.stringify(e))}); document.addEventListener("keydown",function(e){if(e.ctrlKey){e.preventDefault}})
+</script>

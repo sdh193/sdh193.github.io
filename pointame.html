@@ -72,6 +72,8 @@ tr[id *= ach]{
 display:none}
 #unlock{
 width:auto}
+div[id *= autobuyer]{
+color:black; width:470px; }
 </style>
 <meta charset=utf-8>
 <title id=title></title>
@@ -83,7 +85,7 @@ width:auto}
 <main>
 <points id=pointamount style=font-size:40px>You have <a id=green>1.00</a> points</points></div>
 <div align=center>
-<div style="position:absolute; left:950px;  top:20px; font-size:20px; color:white" id=upgradepoints>You have 0 upgrade points</div>
+<div style="position:absolute; left:1000px;  top:20px; font-size:20px; color:white" id=upgradepoints>You have 0 upgrade points</div>
 <br>
 <div id=pointspersecond>You are gaining 0 points per second</div>
 <Br>
@@ -134,10 +136,8 @@ width:auto}
 <div button onclick=unlockLevel() id=unlock style="width:460px" class=redbtn >Unlock new level for 1.00 K points</div>
 </a>
 <br>
-<div button id=purchaseBtn style="width:450px;" onclick="purchase()">Buy 60 s of production for  multiplier points</div>
-<Br>
-<div button id=collectOfflineGinBtn onclick="location.reload(true)">Collect offline gains</div>
-
+<div button id=purchaseBtn style="width:450px;display:none" onclick="purchase()">Buy 60 s of production for  multiplier points</div>
+<div costbutton button id=inputbtn onclick=changeInput()>Change when to prestige</div>
 <br>
 <div button onclick="resetAll()">Reset all your progress</div>
 <br>
@@ -184,6 +184,48 @@ width:auto}
 </tr>
 </tbody>
 </table>
+<br>
+<hr style="color:white;font-size:30px">
+<h2 style="color:white;font-size:30px">Autobuyers</h2>
+<table style="color:white; border:1px solid white; -webkit-user-select:none; -ms-user-select:none; user-select:none; width:60%">
+<tbody>
+<tr>
+<td ach>1st level autobuyer</td>
+<td ach id=autointerval1>Not purchased</td>
+<td ach><div id=autobuyerbtn1 onclick=buyAuto1()>Increase autobuyer speed for 10 multiplier points</div></td>
+</tr>
+<tr>
+<td ach>2nd level autobuyer</td>
+<td ach id=autointerval2>Not purchased</td>
+<td ach><div id=autobuyerbtn2 onclick=buyAuto2()>Increase autobuyer speed for 10 multiplier points</div></td>
+</tr>
+<tr>
+<td ach>3rd level autobuyer</td>
+<td ach id=autointerval3>Not purchased</td>
+<td ach><div id=autobuyerbtn3 onclick=buyAuto3()>Increase autobuyer speed for 100 multiplier points</div></td></tr>
+<tr>
+<td ach>4th level autobuyer</td>
+<td ach id=autointerval4>Not purchased</td>
+<td ach><div id=autobuyerbtn4 onclick=buyAuto4()>Increase autobuyer speed for 300 multiplier points</div></td></tr>
+
+<tr>
+<td ach>Level unlock autobuyer</td>
+<td ach id=autointerval5>Not purchased</td>
+<td ach><div id=autobuyerbtn5 onclick=buyAuto5()>Increase autobuyer speed for 1.00 K multiplier points</div></td>
+</tr>
+<tr>
+<td ach>Prestige autobuyer</td>
+<td ach id=autointerval6>Not purchased</td>
+<td ach><div id=autobuyerbtn6 onclick=buyAuto6()>Increase autobuyer speed for 10.00 K multiplier points</div></td></tr>
+<div id=idlepopup style="display: none; position:fixed;left:0px;top:0px; height:816px; width:1536px; overflow: hidden; align:center">
+  <div style="display: table-cell; vertical-align: middle;">
+    <div style="width:550px; height:100px; color:white; background-color:#aaa">
+	<div id=idlegains align=center style=font-size:25px>While you were away you earned 31.6 M points</div>
+	<br>
+	<button style=font-size:20px; onclick="removeIdlePopup()">OK</button>
+    </div>
+  </div>
+</div>
 <script>
 //Create user object
 if(localStorage.getItem("playerInfo") == null){
@@ -191,7 +233,16 @@ var user=new Object();
 user.firstLevel=new Object()
 user.firstLevel.multiplier=1
 user.firstLevel.cost=1
+user.bonusPoints=0
 user.firstLevel.amount=0
+user.firstLevelAutoBuyerSpeed=1e11;
+user.firstLevelAutoBuyerSpeed=10;
+user.secondLevelAutoBuyerSpeed=1e11;
+user.secondLevelAutoBuyerCost=30;
+user.thirdLevelAutoBuyerCost=1e11;
+user.thirdLevelAutoBuyerCost=100;
+user.fourthLevelAutoBuyerSpeed=1e11;
+user.fourthLevelAutoBuyerCost=300;
 user.secondLevel=new Object()
 user.secondLevel.multiplier=1
 user.secondLevel.cost=10
@@ -219,8 +270,14 @@ user.previousTimeOffline=user.timeOffline
 user.offlineTimeThisLoad=user.timePlayed-user.timeOnline-user.timeOffline;
 user.previousPointsPerSecond=user.pointspersecond
 user.offlineBonus= user.offlineTimeThisLoad*user.pointspersecond
-user.point += user.offlineBonus
-console.log(user.offlineBonus)
+if(user.offlineBonus >= 0){
+user.point += user.offlineBonus};
+if(user.offlineBonus == 0 && user.points != 1){location.reload(true)}
+if(user.offlineTimeThisLoad>60 && user.offlineBonus != 0){
+document.getElementById("idlepopup").style.display="table";
+document.getElementById("idlegains").innerText="While you were away you earned "+format(user.offlineBonus)+" points.";
+}
+console.log(user.offlineBonus);
 setTimeout(function(){
 user.timeOffline=user.timePlayed-user.timeOnline
 
@@ -256,14 +313,34 @@ function save(){
 localStorage.setItem("playerInfo",JSON.stringify(user))}
 function update(){
 updatePoints()
-user.pointspersecond=user.firstLevel.multiplier*user.firstLevel.amount*user.secondLevel.multiplier*user.secondLevel.amount*user.ach3Bonus*user.thirdLevel.multiplier*user.thirdLevel.amount*user.fourthLevel.amount*user.fourthLevel.multiplier*((1+user.upgradePoints**(1.05*(Math.log10(user.upgradePoints)**.4)))**.75)*(1+(((user.firstLevel.amount+user.secondLevel.amount+user.thirdLevel.amount)**2)-1)/1500)
+user.pointspersecond=user.firstLevel.multiplier*user.firstLevel.amount*user.secondLevel.multiplier*user.secondLevel.amount*user.ach3Bonus*user.thirdLevel.multiplier*user.thirdLevel.amount*user.fourthLevel.amount*user.fourthLevel.multiplier*(1+(((user.firstLevel.amount+user.secondLevel.amount+user.thirdLevel.amount)**2)-1)/1500)
 if(Number(user.firstLevel.amount+user.secondLevel.amount) >= 25){
 user.ach3Bonus = (Math.log10(user.points))**(.5+user.ach5Bonus)
 }
+formatSpecialClasses(document.getElementById("autobuyerbtn1"),user.firstLevelAutoBuyerCost);
+formatSpecialClasses(document.getElementById("autobuyerbtn2"),user.secondLevelAutoBuyerCost);
+formatSpecialClasses(document.getElementById("autobuyerbtn3"),user.thirdLevelAutoBuyerCost);
+formatSpecialClasses(document.getElementById("autobuyerbtn4"),user.fourthLevelAutoBuyerCost);
+formatSpecialClasses(document.getElementById("autobuyerbtn5"),user.unlockLevelAutoBuyerCost);
+formatSpecialClasses(document.getElementById("autobuyerbtn6"),user.prestigeAutoBuyerCost);
+if(user.point <= 0){
+user.point=0}
 document.getElementById("mult1").innerText="1st level x "+format(user.firstLevel.multiplier)
 document.getElementById("mult2").innerText="2nd level x "+format(user.secondLevel.multiplier)
 document.getElementById("mult3").innerText="3rd level x "+format(user.thirdLevel.multiplier)
 document.getElementById("mult4").innerText="4th level x "+format(user.fourthLevel.multiplier)
+if(user.firstLevelAutoBuyerSpeed != 1e11){document.getElementById("autointerval1").innerText=Math.round(user.firstLevelAutoBuyerSpeed/10)/100+" s"}else{document.getElementById("autointerval1").innerText="Not purchased"}
+if(user.secondLevelAutoBuyerSpeed != 1e11){document.getElementById("autointerval2").innerText=Math.round(user.secondLevelAutoBuyerSpeed/10)/100+" s"}else{document.getElementById("autointerval2").innerText="Not purchased"}
+if(user.thirdLevelAutoBuyerSpeed != 1e11){document.getElementById("autointerval3").innerText=Math.round(user.thirdLevelAutoBuyerSpeed/10)/100+" s"}else{document.getElementById("autointerval3").innerText="Not purchased"}
+if(user.fourthLevelAutoBuyerSpeed != 1e11){document.getElementById("autointerval4").innerText=Math.round(user.fourthLevelAutoBuyerSpeed/10)/100+" s"}else{document.getElementById("autointerval4").innerText="Not purchased"}
+if(user.unlockLevelAutoBuyerSpeed != 1e11){document.getElementById("autointerval5").innerText=Math.round(user.unlockLevelAutoBuyerSpeed/10)/100+" s"}else{document.getElementById("autointerval5").innerText="Not purchased"}
+if(user.prestigeAutoBuyerSpeed != 1e11){document.getElementById("autointerval6").innerText=Math.round(user.prestigeAutoBuyerSpeed/10)/100+" s at "+formatUpgrade(user.prestigeAutoBuyerMin); document.getElementById("inputbtn").style.display="block"}else{document.getElementById("autointerval6").innerText="Not purchased"}
+document.getElementById("autobuyerbtn1").innerText="Increase autobuyer speed for "+formatUpgrade(user.firstLevelAutoBuyerCost)+" multiplier points";
+document.getElementById("autobuyerbtn2").innerText="Increase autobuyer speed for "+formatUpgrade(user.secondLevelAutoBuyerCost)+" multiplier points";
+document.getElementById("autobuyerbtn3").innerText="Increase autobuyer speed for "+formatUpgrade(user.thirdLevelAutoBuyerCost)+" multiplier points";
+document.getElementById("autobuyerbtn4").innerText="Increase autobuyer speed for "+formatUpgrade(user.fourthLevelAutoBuyerCost)+" multiplier points";
+document.getElementById("autobuyerbtn5").innerText="Increase autobuyer speed for "+formatUpgrade(user.unlockLevelAutoBuyerCost)+" multiplier points";
+document.getElementById("autobuyerbtn6").innerText="Increase autobuyer speed for "+formatUpgrade(user.prestigeAutoBuyerCost)+" multiplier points";
 formatClasses(document.getElementById("btn2"),user.secondLevel.cost)
 formatClasses(document.getElementById("btn3"),user.thirdLevel.cost)
 if(user.upgradePoints >= Math.floor(user.bonusCost)){
@@ -282,25 +359,25 @@ document.getElementById("cost1").innerText="Sublevel cost: "+format(user.firstLe
 document.getElementById("cost2").innerText="Sublevel cost: "+format(user.secondLevel.cost)
 document.getElementById("cost3").innerText="Sublevel cost: "+format(user.thirdLevel.cost)
 document.getElementById("cost4").innerText="Sublevel cost: "+format(user.fourthLevel.cost)
-document.getElementById("multbonus").innerText=user.upgradePoints+" multiplier points translates to a "+format((1+user.upgradePoints**(1.05*(Math.log10(user.upgradePoints)**.4)))**.75)+" x multiplier on points per second."
+document.getElementById("multbonus").innerText=formatUpgrade(user.upgradePoints)+" multiplier points translates to a "+format((1+user.upgradePoints**(1.05*(Math.log(user.upgradePoints)**.4)))**.25)+" x multiplier on every level."
 if(user.unlockLevel.unlocks > 2){
-document.getElementById("unlock").innerText="Reset your progress now for "+formatUpgrade(Math.floor(((user.points**.1)-1)/10))+" multiplier points."
-user.unlockLevel.cost = 1
+document.getElementById("unlock").innerText="Reset your progress now for "+formatUpgrade(Math.floor(((user.points**.1)-1)/20*(2**.5)))+" multiplier points."
+user.unlockLevel.cost = 1e12
 }
 document.getElementById("upgradepoints").innerText="You have "+formatUpgrade(user.upgradePoints)+" multiplier points."
 if(haveAchievement(2) == true){
 user.firstLevel.cost = ((2**user.firstLevel.amount)/1.05**user.secondLevel.amount)}else{
 user.firstLevel.cost = (2**user.firstLevel.amount)
 }
-user.firstLevel.multiplier = user.multiplierIncrease**user.firstLevel.amount
+user.firstLevel.multiplier = user.multiplierIncrease**user.firstLevel.amount*check(0);
 if(haveAchievement(4) == true){
 user.secondLevel.cost = (10*(3**(user.secondLevel.amount-1)))/(1.05**user.thirdLevel.amount)
 }else{
 user.secondLevel.cost = 10*(3**(user.secondLevel.amount-1))
 }
-user.secondLevel.multiplier = user.multiplierIncrease**(user.secondLevel.amount-1)
-user.thirdLevel.multiplier = user.multiplierIncrease**(user.thirdLevel.amount-1)
-user.fourthLevel.multiplier = user.multiplierIncrease**(user.fourthLevel.amount-1)
+user.secondLevel.multiplier = user.multiplierIncrease**(user.secondLevel.amount-1)*check(1);
+user.thirdLevel.multiplier = user.multiplierIncrease**(user.thirdLevel.amount-1)*check(2);
+user.fourthLevel.multiplier = user.multiplierIncrease**(user.fourthLevel.amount-1)*check(3);
 user.thirdLevel.cost = (4**(user.thirdLevel.amount-1))*1e4
 user.fourthLevel.cost = (5**(user.fourthLevel.amount-1))*1e10
 document.getElementById("pointspersecond").innerText="You are gaining "+format(user.pointspersecond)+" points per second"
@@ -383,12 +460,13 @@ function haveAchievement(achNum){
 if(document.getElementById("ach"+Number(achNum)).style.display == "table-row"){
 return true}else{return false}}
 function reset(){
-user.upgradePoints += Math.floor(((user.points**.1)-1)/10)
+user.upgradePoints += Math.floor(((user.points**.1)-1)*(2**.5)/20)
 user.firstLevel=new Object()
 user.point=0
 user.firstLevel.multiplier=1
 user.firstLevel.cost=1
 user.firstLevel.amount=0
+
 user.secondLevel=new Object()
 user.secondLevel.multiplier=1
 user.secondLevel.cost=10
@@ -422,7 +500,20 @@ user.firstLevel=new Object()
 user.firstLevel.multiplier=1
 user.firstLevel.cost=1
 user.firstLevel.amount=0
-user.secondLevel=new Object()
+user.firstLevelAutoBuyerSpeed=1e11;
+user.firstLevelAutoBuyerCost=10;
+user.secondLevelAutoBuyerSpeed=1e11;
+user.secondLevelAutoBuyerCost=30;
+user.thirdLevelAutoBuyerSpeed=1e11;
+user.thirdLevelAutoBuyerCost=100;
+user.unlockLevelAutoBuyerCost=1000;
+user.unlockLevelAutoBuyerSpeed=1e11;
+user.fourthLevelAutoBuyerSpeed=1e11;
+user.fourthLevelAutoBuyerCost=300;
+user.prestigeAutoBuyerSpeed=1e11;
+user.prestigeAutoBuyerCost=10000;
+user.prestigeAutoBuyerMin=10000;
+user.secondLevel=new Object();
 user.secondLevel.multiplier=1
 user.secondLevel.cost=10
 user.secondLevel.amount=1
@@ -432,6 +523,7 @@ user.upgradePoints=0
 user.thirdLevel.cost=1e4
 user.thirdLevel.amount=1
 user.unlockLevel=new Object()
+user.bonusPoints=0
 user.unlockLevel.cost=1000
 user.unlockLevel.unlocks=0
 user.fourthLevel=new Object()
@@ -453,6 +545,78 @@ user.point += 60*user.pointspersecond;
 user.bonusCost *= 1.2
 }
 }
+function formatSpecialClasses(object,value){
+if(value <= user.upgradePoints){
+object.className="shopbtn greenbtn"
+}else{object.className="shopbtn redbtn"}}
+function removeIdlePopup(){
+document.getElementById("idlepopup").style.display="none"}
+setInterval(function(){purchaseSublevelL1()},user.firstLevelAutoBuyerSpeed)
+setInterval(function(){if(user.unlockLevel.unlocks >= 1){purchaseSublevelL2()}},user.secondLevelAutoBuyerSpeed)
+setInterval(function(){if(user.unlockLevel.unlocks >= 2){purchaseSublevelL3()}},user.thirdLevelAutoBuyerSpeed)
+setInterval(function(){if(user.unlockLevel.unlocks >= 3){purchaseSublevelL4()}},user.fourthLevelAutoBuyerSpeed)
+setInterval(function(){if(user.unlockLevel.unlocks < 3){unlockLevel()}},user.unlockLevelAutoBuyerSpeed)
+setInterval(function(){if(user.unlockLevel.unlocks >= 3){if(Math.floor(((user.points**.1)-1)*(2**.5)/20) >= user.prestigeAutoBuyerMin){unlockLevel()}}},user.prestigeAutoBuyerSpeed)
+
+function buyAuto1(){
+if(user.upgradePoints>=user.firstLevelAutoBuyerCost && user.firstLevelAutoBuyerSpeed*(5/6)>=100){
+if(user.firstLevelAutoBuyerSpeed == 1e11){user.firstLevelAutoBuyerSpeed = 12000}
+user.upgradePoints -= user.firstLevelAutoBuyerCost;
+user.firstLevelAutoBuyerSpeed *= (5/6);
+user.firstLevelAutoBuyerCost *= 1.4;
+user.firstLevelAutoBuyerCost = Math.floor(user.firstLevelAutoBuyerCost);
+location.reload(true);
+}}
+function buyAuto2(){
+if(user.upgradePoints>=user.secondLevelAutoBuyerCost && user.secondLevelAutoBuyerSpeed*(5/6)>=100){
+if(user.secondLevelAutoBuyerSpeed == 1e11){user.secondLevelAutoBuyerSpeed = 18000}
+user.upgradePoints -= user.secondLevelAutoBuyerCost;
+user.secondLevelAutoBuyerSpeed *= (5/6);
+user.secondLevelAutoBuyerCost *= 1.5;
+user.secondLevelAutoBuyerCost = Math.floor(user.secondLevelAutoBuyerCost);
+location.reload(true);
+}}
+function buyAuto3(){
+if(user.upgradePoints>=user.thirdLevelAutoBuyerCost && user.thirdLevelAutoBuyerSpeed*(5/6)>=100){
+if(user.thirdLevelAutoBuyerSpeed == 1e11){user.thirdLevelAutoBuyerSpeed = 24000}
+user.upgradePoints -= user.thirdLevelAutoBuyerCost;
+user.thirdLevelAutoBuyerSpeed *= (5/6);
+user.thirdLevelAutoBuyerCost *= 1.6;
+user.thirdLevelAutoBuyerCost = Math.floor(user.thirdLevelAutoBuyerCost);
+location.reload(true);
+}}
+function buyAuto4(){
+if(user.upgradePoints>=user.fourthLevelAutoBuyerCost && user.fourthLevelAutoBuyerSpeed*(5/6)>=100){
+if(user.fourthLevelAutoBuyerSpeed == 1e11){user.fourthLevelAutoBuyerSpeed = 30000}
+user.upgradePoints -= user.fourthLevelAutoBuyerCost;
+user.fourthLevelAutoBuyerSpeed *= (5/6);
+user.fourthLevelAutoBuyerCost *= 1.7;
+user.fourthLevelAutoBuyerCost = Math.floor(user.fourthLevelAutoBuyerCost);
+location.reload(true);
+}}
+function buyAuto5(){
+if(user.upgradePoints>=user.unlockLevelAutoBuyerCost && user.unlockLevelAutoBuyerSpeed*(5/6)>=100){
+if(user.unlockLevelAutoBuyerSpeed == 1e11){user.unlockLevelAutoBuyerSpeed = 36000}
+user.upgradePoints -= user.unlockLevelAutoBuyerCost;
+user.unlockLevelAutoBuyerSpeed *= (5/6);
+user.unlockLevelAutoBuyerCost *= 1.8;
+user.unlockLevelAutoBuyerCost = Math.floor(user.unlockLevelAutoBuyerCost);
+location.reload(true);
+}}
+function buyAuto6(){
+if(user.upgradePoints>=user.prestigeAutoBuyerCost && user.prestigeAutoBuyerSpeed*(5/6)>=100){
+if(user.prestigeAutoBuyerSpeed == 1e11){user.prestigeAutoBuyerSpeed = 108000}
+user.upgradePoints -= user.prestigeAutoBuyerCost;
+user.prestigeAutoBuyerSpeed *= (5/6);
+user.prestigeAutoBuyerCost *= 1.9;
+user.prestigeAutoBuyerCost = Math.floor(user.prestigeAutoBuyerCost);
+location.reload(true);
+}}
+function check(val){if(user.unlockLevel.unlocks >= val){return (1+user.upgradePoints**(1.05*(Math.log(user.upgradePoints)**.4)))**.25}else{return 1}}
+function changeInput(val){
+var response=prompt("Enter in the amount you'd like the prestige autobuyer to prestige at in scientific or standard notation. Current amount: "+formatUpgrade(user.prestigeAutoBuyerMin));
+
+if(Number.isInteger(Number(response))){if(response != null){user.prestigeAutoBuyerMin = Number(response)}}else{alert("You have entered in an invalid response."); changeInput()}}
 </script>
 </body>
 </html>

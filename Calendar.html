@@ -1,5 +1,5 @@
 <html>
-<link rel="icon" href="Logo.png"></link>
+<link rel="icon" href="logo.png"></link>
 <style>
 input,button,div[button],select,textarea{
 font-size:20px;
@@ -93,7 +93,7 @@ event.push(color);
 event.push(repeattime);
 for(var i=0; i<linkarr.length; i++){
 if(linkarr.length > 1){
-string += "<a href='"+linkarr[i]+"'>Join link "+(i+1)+" </a>"}else{string += "<a onclick=function(){console.log('hi')} href='"+linkarr[i]+"'>Join </a>"}
+string += "<a href='"+linkarr[i]+"'>Join link "+(i+1)+" </a>"}else{string += "<a href='"+linkarr[i]+"'>Join </a>"}
 }
 event.push(string);
 list=list+";"+JSON.stringify(event);
@@ -197,6 +197,6 @@ for(var i=1; i<list.split(";").length; i++){if(JSON.parse(list.split(";")[i])[0]
 document.addEventListener("contextmenu",function(e){e.preventDefault()})
 function changeNotifications(a){
 if(shouldNotify == true){shouldNotify=false;a.innerText="Notifications: Off"}else{shouldNotify=true;a.innerText="Notifications: On"}}
-document.addEventListener("keydown",function(e){console.log(e.code);if(e.code == "ArrowRight"){increaseDate()}; if(e.code == "ArrowLeft"){decreaseDate()};e.preventDefault()})
+document.addEventListener("keydown",function(e){console.log(e.code);if(e.code == "ArrowRight"){increaseDate()}; if(e.code == "ArrowLeft"){decreaseDate()}if(e.ctrlKey){e.preventDefault()}})
 </script>
 </html>

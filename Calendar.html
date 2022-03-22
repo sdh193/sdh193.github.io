@@ -1,0 +1,179 @@
+<html>
+<link rel="icon" href="logo.png"></link>
+<style>
+input,button,div[button],select,textarea{
+font-size:20px;
+border:1px solid black;
+padding:3px;
+}
+div{font-size:20px;user-select:none}
+button,div[button]{
+background-color: rgba(0,0,255,.2);
+}
+div[button]{font-size:25px}
+</style>
+<body style="margin:0px;overflow-y:auto; overflow-x:hidden">
+<div id=numbers style="position:absolute; top:0px; left:0px; width:2000px; height:2000px"></div>
+<div id=schedule style="position:absolute; top:0px; left:0px; width:2000px; height:2000px"></div>
+<div align=center>
+<div id=topPanel style="height:50px;position:fixed; background-color: lightgrey; top:0px; left:0px;border:1px solid black">
+<button id=prevbtn onclick=decreaseDate() style="position:fixed; top:10px;left:400px">Previous</div><div id=datestr style="font-size:30px;position:fixed; left:600px; top:10px">Str</div><button style="position:fixed; left:800px; top:10px" onclick=increaseDate() id=nextbtn>Next</button>
+</div>
+<button onclick=showPanel() style="position:fixed; margin-top:10px;left:10px;top:0px" >+ New event</button>
+<div align=center>
+<div id=newtaskwindow align=center style="background-color:lightgrey;display:none; position:fixed; top:150px; width:600px; height:425px; border:2px solid black">
+<div style=font-size:25px align=center>Schedule new event</div>
+<br>
+<div id=controls>
+Title: <input id=title placeholder="Enter title"></input>
+<br>
+<br>
+Starting time:<input type=time id=timeinput1 placeholder="Time..."></input><a style="word-spacing:20px"> </a> Ending time:<input type=time list=timelist id=timeinput2 placeholder="Time..."><datalist id=timelist></datalist></input>
+<br>
+<br>
+Links to join: <input type=text id=links style="width:260px" placeholder="Separate with semicolons(;)"></input>
+<br>
+<br>
+Enter date: <input type=date id=dateinput placeholder="Date...">
+<br>
+<br>
+Repeat: <input type=number style=display:none value=0 oninput="if(!Number.isInteger(1*this.value)){this.value=Math.round(this.value*1)}; if(this.value*1<0){this.value=0}" id=repeatinput1 style="width:75px"></input> <select id=repeatinput2><option value="42">Never</option><option value="0">Daily</option><option value="1">Weekly</option><option value="2">Monthly</option><option value="3">Yearly</option></select>
+<br>
+<br>
+Color: <input type=color style="width:100px" id=colorinput></input>
+</input>
+<br>
+<br>
+<button onclick=submit()>Schedule event</button>
+</div>
+</div>
+</div>
+</body>
+<script>
+var submit;
+var date=new Date();
+var factor=2;
+var monthchanges=0;
+var counter=0;
+var margintop=50;
+var currentdate=[date.getDay(),date.getMonth()+1,date.getDate(),date.getFullYear()]
+if(localStorage.getItem("scheduleInfo") == null || localStorage.getItem("scheduleInfo") == undefined){
+localStorage.setItem("scheduleInfo","")}
+document.getElementById("topPanel").style.width=screen.width+"px";
+document.getElementById("schedule").style.width=screen.width+"px";
+document.getElementById("newtaskwindow").style.left=screen.width/2-300+"px"
+document.getElementById("schedule").style.height=Number(screen.height*factor+margintop)+"px";
+document.getElementById("numbers").style.height=Number(screen.height*factor+margintop)+"px";
+var list=localStorage.getItem("scheduleInfo");
+setTimeout(function(){
+submit=function(){
+var event=[];
+var string=
+event.push(document.getElementById("title").value)
+var timeStartedArr=document.getElementById("timeinput1").value.split(":");
+var timeEndedArr=document.getElementById("timeinput2").value.split(":");
+var color=document.getElementById("colorinput").value;
+event.push(timeStartedArr);
+event.push(timeEndedArr);
+var dateArr=document.getElementById("dateinput").value.split("-");
+var linkarr=document.getElementById("links").value.split(";");
+var string="";
+dateArr.push(dateArr.shift());
+event.push(dateArr);
+console.log(dateArr,event);
+var repeattime=[document.getElementById("repeatinput1").value,document.getElementById("repeatinput2").value];
+event.push(color);
+event.push(repeattime);
+for(var i=0; i<linkarr.length; i++){
+if(linkarr.length > 1){
+string += "<a href='"+linkarr[i]+"'>Join link "+(i+1)+" </a>"}else{string += "<a onclick=function(){console.log('hi')} href='"+linkarr[i]+"'>Join </a>"}
+}
+event.push(string);
+list=list+";"+JSON.stringify(event);
+localStorage.setItem("scheduleInfo",list);
+document.getElementById("newtaskwindow").style.display="none";
+}
+for(var i=0; i<24; i++){
+document.getElementById("numbers").innerHTML += "<div style='position:absolute; left:10px; top:"+(screen.height*factor*i/24+margintop)+"px'>"+i+":00</div>"
+document.getElementById("numbers").innerHTML += "<div style='position:absolute; left:10px; background-color:black; width:"+screen.width+"px;height:3px; top:"+(screen.height*factor*i/24+margintop)+"px'></div>"
+}
+},10)
+function format(val){
+if(val<10){
+return "0"+val}else{return val}}
+setInterval(function(){
+try{
+var str=""; 
+for(var i=1; i<list.split(";").length; i++){
+var title=JSON.parse(list.split(";")[i])[0]; 
+var height=screen.height;
+var eventTime = Number(Number(JSON.parse(list.split(";")[i])[1][0]*60)+Number(JSON.parse(list.split(";")[i])[1][1]));
+ var eventTime2=Number(Number(JSON.parse(list.split(";")[i])[2][0]*60)+Number(JSON.parse(list.split(";")[i])[2][1])); 
+ var color=JSON.parse(list.split(";")[i])[4];
+ var howtorepeat=Number(JSON.parse(list.split(";")[i])[5][1]);
+ var repeatsonmonths;
+ var dat=new Date(JSON.parse(list.split(";")[i])[3][2],JSON.parse(list.split(";")[i])[3][0]-1,JSON.parse(list.split(";")[i])[3][1])
+ if(howtorepeat == 2){
+ repeatsonmonths=true
+ }
+ var htmlstr=JSON.parse(list.split(";")[i])[6];
+ width=screen.width;
+ if(!isNaN(eventTime) && !isNaN(eventTime2)){
+if(JSON.parse(list.split(";")[i])[3][0] == currentdate[1] &&  JSON.parse(list.split(";")[i])[3][1] == currentdate[2] &&  JSON.parse(list.split(";")[i])[3][2] == currentdate[3] || howtorepeat == 0 || (howtorepeat == 1 && dat.getDay() == currentdate[0] % 7) || (howtorepeat == 2 && JSON.parse(list.split(";")[i])[3][1] == currentdate[2]) || (howtorepeat == 3 && JSON.parse(list.split(";")[i])[3][1] == currentdate[2] && JSON.parse(list.split(";")[i])[3][0] == currentdate[1])){
+ str += "<div style='position:absolute; left:10px; top:"+Number(height*eventTime*factor/1440+margintop)+"px; width:"+screen.width+"; height:"+(eventTime2-eventTime)*factor*screen.height/1440+"; border:1px solid black; font-size:20px;background:"+color+"' oncontextmenu=\"deleteEvent('"+title+"')\" align=left>"+title+" ("+JSON.parse(list.split(";")[i])[1][0]+":"+JSON.parse(list.split(";")[i])[1][1]+" - "+JSON.parse(list.split(";")[i])[2][0]+":"+JSON.parse(list.split(";")[i])[2][1]+") "+htmlstr+"</div>"}}}
+ document.getElementById("schedule").innerHTML=str
+ }catch(e){console.log(e)}},200)
+function showPanel(){document.getElementById("newtaskwindow").style.display="block";document.getElementById("dateinput").value=currentdate[3]+"-"+format(currentdate[1])+"-"+format(currentdate[2]);}
+setInterval(function(){
+var datestr=document.getElementById("datestr");
+var prevbtn=document.getElementById("prevbtn");
+var nextbtn=document.getElementById("nextbtn");
+var margin=100;
+datestr.style.left=Number(screen.width/2-datestr.offsetWidth/2)+"px";
+prevbtn.style.left=Number(screen.width/2-datestr.offsetWidth/2-prevbtn.offsetWidth/2-margin)+"px";
+nextbtn.style.left=Number(screen.width/2+datestr.offsetWidth/2+margin-nextbtn.offsetWidth/2)+"px";
+datestr.innerText=dayToWordForm(currentdate[0])+" "+monthToWordForm(currentdate[1])+" "+currentdate[2]+", "+currentdate[3]
+},50)
+function increaseDate(){ currentdate[0]=currentdate[0]+1;currentdate[2]=currentdate[2]+1; if(currentdate[2] > getDaysInMonth(currentdate[1])){currentdate[1]=currentdate[1]+1; currentdate[2]=1}; if(currentdate[1] > 12){currentdate[3]=currentdate[3]+1; currentdate[1]=1}}
+function decreaseDate(){currentdate[0]=currentdate[0]+6;currentdate[2]=currentdate[2]-1; if(currentdate[2] <= 0){currentdate[1]=currentdate[1]-1; currentdate[2]=getDaysInMonth(currentdate[1])}; if(currentdate[1] <= 0){currentdate[3]=currentdate[3]-1; currentdate[1]=12; currentdate[2]=getDaysInMonth(currentdate[1])}}
+function monthToWordForm(month){
+if(month == 1){return "January"}
+if(month == 2){return "Febuary"}
+if(month == 3){return "March"}
+if(month == 4){return "April"}
+if(month == 5){return "May"}
+if(month == 6){return "June"}
+if(month == 7){return "July"}
+if(month == 8){return "August"}
+if(month == 9){return "September"}
+if(month == 10){return "October"}
+if(month == 11){return "November"}
+if(month == 12){return "December"}}
+function dayToWordForm(day){
+if(day % 7 == 1){return "Monday"}
+if(day % 7 == 2){return "Tuesday"}
+if(day % 7 == 3){return "Wednesday"}
+if(day % 7 == 4){return "Thursday"}
+if(day % 7 == 5){return "Friday"}
+if(day % 7 == 6){return "Saturday"}
+if(day % 7 == 0){return "Sunday"}}
+function getDaysInMonth(month){
+if(month == 1){return 31}
+if(month == 2){if(currentdate[3] % 4 == 0){return 29}else{return 28}}
+if(month == 3){return 31}
+if(month == 4){return 30}
+if(month == 5){return 31}
+if(month == 6){return 30}
+if(month == 7){return 31}
+if(month == 8){return 31}
+if(month == 9){return 30}
+if(month == 10){return 31}
+if(month == 11){return 30}
+if(month == 12){return 31}}
+function deleteEvent(name){
+var conf=confirm('Are you sure you want to delete event "'+name+'"? This cannot be undone.')
+if(conf == true){
+for(var i=1; i<list.split(";").length; i++){if(JSON.parse(list.split(";")[i])[0] == name){list=list.split(";"+list.split(";")[i]).join("");localStorage.setItem("scheduleInfo",list)}}}}
+document.addEventListener("contextmenu",function(e){e.preventDefault()})
+</script>
+</html>

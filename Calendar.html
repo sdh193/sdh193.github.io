@@ -1,5 +1,5 @@
 <html>
-<link rel="icon" href="logo.png"></link>
+<link rel="icon" href="Logo.png"></link>
 <style>
 input,button,div[button],select,textarea{
 font-size:20px;
@@ -92,13 +92,15 @@ var repeattime=[document.getElementById("repeatinput1").value,document.getElemen
 event.push(color);
 event.push(repeattime);
 for(var i=0; i<linkarr.length; i++){
+if(linkarr[0]*1 != 0){
 if(linkarr.length > 1){
 string += "<a href='"+linkarr[i]+"'>Join link "+(i+1)+" </a>"}else{string += "<a href='"+linkarr[i]+"'>Join </a>"}
-}
+}}
 event.push(string);
 list=list+";"+JSON.stringify(event);
-localStorage.setItem("scheduleInfo",list);
 document.getElementById("newtaskwindow").style.display="none";
+localStorage.setItem("scheduleInfo",list);
+update()
 }
 for(var i=0; i<24; i++){
 document.getElementById("numbers").innerHTML += "<div style='position:absolute; left:10px; top:"+(screen.height*factor*i/24+margintop)+"px'>"+i+":00</div>"
@@ -108,7 +110,7 @@ document.getElementById("numbers").innerHTML += "<div style='position:absolute; 
 function format(val){
 if(val<10){
 return "0"+val}else{return val}}
-setInterval(function(){
+function update(){
 try{
 var str=""; 
 for(var i=1; i<list.split(";").length; i++){
@@ -126,6 +128,7 @@ var eventTime = Number(Number(JSON.parse(list.split(";")[i])[1][0]*60)+Number(JS
 
  if(eventTime<date.getHours()*60+date.getMinutes()+5 && date.getHours()*60+date.getMinutes()<eventTime2 && (dat == date || howtorepeat == 0 ||( howtorepeat == 1 && dat.getDay() == date.getDay() % 7) || (howtorepeat == 2 && JSON.parse(list.split(";")[i])[3][1] == date.getDate()) || (howtorepeat == 3 && JSON.parse(list.split(";")[i])[3][1] == date.getDate() && JSON.parse(list.split(";")[i])[3][0] == date.getMonth())) && shouldNotify && nonotificationArr.indexOf(title+eventTime+dat) < 0){
  document.querySelector("audio").play();
+ console.log("2")
   nonotificationArr.push(title+eventTime+dat)
   
  var notification=alert('Time for "'+title+"!")
@@ -141,7 +144,7 @@ if(currentdate[1] == date.getMonth()+1 && currentdate[2] == date.getDate() && cu
  document.getElementById("now").innerHTML = "<div style='width:"+screen.width+"; height:3px; background-color:blue; position:absolute; left:10px; top:"+Number(factor*screen.height*(date.getHours()*3600+date.getMinutes()*60+date.getSeconds())/86400+margintop)+"px'>Now</div>"
 }else{document.getElementById("now").innerHTML = ""}
  document.getElementById("schedule").innerHTML=str
- }catch(e){console.log(e)}},50)
+ }catch(e){console.log(e)}}
 function showPanel(){document.getElementById("newtaskwindow").style.display="block";document.getElementById("dateinput").value=currentdate[3]+"-"+format(currentdate[1])+"-"+format(currentdate[2]);}
 setInterval(function(){
 var datestr=document.getElementById("datestr");
@@ -154,8 +157,8 @@ nextbtn.style.left=Number(screen.width/2+datestr.offsetWidth/2+margin-nextbtn.of
 datestr.innerText=dayToWordForm(currentdate[0])+" "+monthToWordForm(currentdate[1])+" "+currentdate[2]+", "+currentdate[3]
 date=new Date();
 },50)
-function increaseDate(){ currentdate[0]=currentdate[0]+1;currentdate[2]=currentdate[2]+1; if(currentdate[2] > getDaysInMonth(currentdate[1])){currentdate[1]=currentdate[1]+1; currentdate[2]=1}; if(currentdate[1] > 12){currentdate[3]=currentdate[3]+1; currentdate[1]=1}}
-function decreaseDate(){currentdate[0]=currentdate[0]+6;currentdate[2]=currentdate[2]-1; if(currentdate[2] <= 0){currentdate[1]=currentdate[1]-1; currentdate[2]=getDaysInMonth(currentdate[1])}; if(currentdate[1] <= 0){currentdate[3]=currentdate[3]-1; currentdate[1]=12; currentdate[2]=getDaysInMonth(currentdate[1])}}
+function increaseDate(){ currentdate[0]=currentdate[0]+1;currentdate[2]=currentdate[2]+1; if(currentdate[2] > getDaysInMonth(currentdate[1])){currentdate[1]=currentdate[1]+1; currentdate[2]=1}; if(currentdate[1] > 12){currentdate[3]=currentdate[3]+1; currentdate[1]=1}update()}
+function decreaseDate(){currentdate[0]=currentdate[0]+6;currentdate[2]=currentdate[2]-1; if(currentdate[2] <= 0){currentdate[1]=currentdate[1]-1; currentdate[2]=getDaysInMonth(currentdate[1])}; if(currentdate[1] <= 0){currentdate[3]=currentdate[3]-1; currentdate[1]=12; currentdate[2]=getDaysInMonth(currentdate[1])}update()}
 function monthToWordForm(month){
 if(month == 1){return "January"}
 if(month == 2){return "Febuary"}
@@ -193,10 +196,12 @@ if(month == 12){return 31}}
 function deleteEvent(name){
 var conf=confirm('Are you sure you want to delete event "'+name+'"? This cannot be undone.')
 if(conf == true){
-for(var i=1; i<list.split(";").length; i++){if(JSON.parse(list.split(";")[i])[0] == name){list=list.split(";"+list.split(";")[i]).join("");localStorage.setItem("scheduleInfo",list)}}}}
+for(var i=1; i<list.split(";").length; i++){if(JSON.parse(list.split(";")[i])[0] == name){list=list.split(";"+list.split(";")[i]).join("");localStorage.setItem("scheduleInfo",list);update()}}}}
 document.addEventListener("contextmenu",function(e){e.preventDefault()})
 function changeNotifications(a){
 if(shouldNotify == true){shouldNotify=false;a.innerText="Notifications: Off"}else{shouldNotify=true;a.innerText="Notifications: On"}}
-document.addEventListener("keydown",function(e){console.log(e.code);if(e.code == "ArrowRight"){increaseDate()}; if(e.code == "ArrowLeft"){decreaseDate()}if(e.ctrlKey){e.preventDefault()}})
+document.addEventListener("keydown",function(e){console.log(e.code);if(e.code == "ArrowRight"){increaseDate()}; if(e.code == "ArrowLeft"){decreaseDate()};if(e.ctrlKey && e.shiftKey){e.preventDefault()}})
+update();
+setInterval(function(){update()},10000)
 </script>
 </html>

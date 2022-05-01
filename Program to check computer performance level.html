@@ -1,0 +1,28 @@
+<body style="font-size:20px;user-select:none;background:white">
+<button onclick=startProgram() style=font-size:20px>Check computer performance level</button>
+<br>
+<br>
+<div id=percentdone></div>
+</body>
+<script>
+startProgram()
+function startProgram(){
+var timerStart=Date.now();
+var operations=1e6;
+for(var i=0;i<operations;i++){
+document.getElementById("percentdone").innerText=(i*100/operations).toFixed(2)+"% complete"
+}
+var timerEnd=Date.now();
+var totalTime=timerEnd-timerStart;
+var index=Math.round(operations/totalTime);
+var color;
+if(index>0){color="chrimson"}
+if(index>50){color="red"}
+if(index>100){color="orange"}
+if(index>200){color="yellow"}
+if(index>400){color="green"}
+if(index>800){color="lime"}
+document.getElementById("percentdone").innerHTML="Performance index: <div style='color:"+color+";display:inline'>"+index+"</div>";
+setTimeout(function(){startProgram()},1000)
+}
+</script>

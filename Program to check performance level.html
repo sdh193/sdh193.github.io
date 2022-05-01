@@ -28,6 +28,7 @@ if(index>400){color="green"}
 if(index>800){color="lime"}
 document.getElementById("percentdone").innerHTML="Performance index: <div style='color:"+color+";display:inline'>"+index+"</div>";
 data.push([index,(Date.now()-startDate)]);
+document.title="Performance index: "+index;
 updateGraph();
 setTimeout(function(){startProgram()},50)
 }

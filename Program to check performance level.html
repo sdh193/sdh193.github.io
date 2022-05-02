@@ -1,14 +1,31 @@
-<body style="font-size:75px;user-select:none;background:white">
+<style>li{margin-left:250px;margin-right:250px}</style><body style="font-size:75px;user-select:none;background:white">
 <div align=center>
 <div id=percentdone></div>
 <svg id=graph style="font-size:20px;width:700px;height:400px;border:2px solid black">
-
+<br>
+<div style="font-size:40px;margin-bottom:10px">How to use</div>
+<div style="font-size:20px;margin-left:250px;margin-right:250px">This program displays a CPI (computer performance index) which shows how quickly your computer can complete operations. It can be helpful if you want to see if you need to close applications to improve the performance of your computer. The color of the number determines what actions you should take.</div>
+<div align=left style="font-size:20px">
+<br>
+<li><span style=color:lime>Light green</span> means that your computer is running smoothly. No need to close tabs at all.</li>
+<br>
+<li><span style=color:green>Dark green</span> means that your computer's performance is suboptimal. This is okay for the short term, but it could possibly be a bit slow. You might want to consider closing unneeded programs.</li>
+<br>
+<li><span style=color:yellow>Yellow</span> means that your computer's performance is slow. Close any unneeded apps, especially ones that are resource intensive.</li>
+<br>
+<li><span style=color:orange>Orange</span> means that your computer's performance is very slow. Close as many tabs needed to double your CPI. Consider plugging in your computer, as this might help boost its performance. If this stays consistent over long periods of time, consider taking your computer in for repairs, as its likely to have a problem.</li>
+<br>
+<li><span style=color:red>Red</span> means that your computer's performance is dangerously slow. Close everything except very important tabs and programs. Plug in your computer, as this might help boost its performance. If the CPI index color remains red, take it to a computer repair shop.</li>
+<br>
+</div>
+<div style="display:inline;background:lightgrey;border:2px solid black;font-size:30px;padding:6px" onclick="stopMeasuring()">Stop calculator</div>
 </div>
 </div>
 </body>
 <script>
 var data=[];
 var startDate=Date.now();
+var shouldMeasure=true;
 startProgram()
 function startProgram(){
 var timerStart=Date.now();
@@ -30,27 +47,25 @@ document.getElementById("percentdone").innerHTML="Performance index: <div style=
 data.push([index,(Date.now()-startDate)]);
 document.title="Performance index: "+index;
 updateGraph();
-setTimeout(function(){startProgram()},50)
+if(shouldMeasure){setTimeout(function(){updateGraph();
+startProgram()},50)}
 }
 function updateGraph(){
 var graphCanvas=document.getElementById("graph");
-var minY=Infinity;
-var maxY=-Infinity;
+var minY=0;
+var maxY=1500;
 var xLength=Date.now();
 var string="";
 var secString="";
 var width=Number(graphCanvas.style.width.split("px")[0]);
 var height=Number(graphCanvas.style.height.split("px")[0]);
 for(var i=0;i<data.length;i++){
-if(data[i][0]>maxY){
-maxY=data[i][0]}
-if(data[i][0]<minY){
-minY=data[i][0]}
 string += "<circle cx="+(data[i][1]*(width-20)/(xLength-startDate)+10)+" cy="+(height-(data[i][0])*(height-10)/maxY+10)+" r=5></circle>";
 if(data[i+1] != undefined){
 secString += "<line x1="+(data[i][1]*(width-20)/(xLength-startDate)+10)+" y1="+(height-(data[i][0])*(height-10)/maxY+10)+" x2="+(data[i+1][1]*(width-20)/(xLength-startDate)+10)+"  y2="+(height-(data[i+1][0])*(height-10)/maxY+10)+"   style='stroke:red;stroke-width:5px'></line>"
 }}
-graphCanvas.innerHTML=secString+string;
+graphCanvas.innerHTML=secString+string+"<text x=0 y='"+Number(height-5)+"' style='font-size:20px'>0</text><text x=0 y=20 style='font-size:20px'>1500</text>";
 }
-
+function stopMeasuring(){shouldMeasure=false}
+document.addEventListener("contextmenu",function(event){event.preventDefault()})
 </script>

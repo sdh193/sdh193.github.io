@@ -1,0 +1,86 @@
+<html>
+<body style=overflow:hidden>
+<div align=center  onclick=spin() style=font-size:30px>Click to spin</div>
+<button onclick=spin()>
+<canvas id=spinnerCanvas width=1000 height=1000></canvas>
+<script>
+var canvas=document.getElementById("spinnerCanvas").getContext("2d");
+canvas.canvas.width=innerWidth;
+canvas.canvas.height=innerHeight;
+var circleCenterY=(innerHeight-40)/2;
+var colorArray=[]
+for(var i=0;i<64;i++){
+var color;
+if(i<64){color="green"}
+if(i<48){color="blue"}
+if(i<36){color="red"}
+if(i<27){color="gold"}
+if(i<20){color="yellow"}
+if(i<15){color="white"}
+if(i<11){color="lavender"}
+if(i<8){color="pink"}
+if(i<6){color="orange"}
+if(i<4){color="purple"}
+if(i<3){color="black"}
+colorArray.push(color)
+}
+var circleCenterX=innerWidth/2;
+var radius=250;
+var segments=64;
+var angle=2*Math.PI/segments;
+var rotation=0;
+var lineLength=150;
+var lineAmountInSpinner=100;
+function spin(){
+var time=0;
+var random=Math.random()+1;
+setInterval(function(){
+rotation += getRotationAmount();
+time += .01;
+canvas.beginPath();
+for(var i=0;i<segments;i++){
+var end=angle*(i)+rotation;
+var start=angle*(i+1)+rotation;
+console.log(end,start);
+canvas.beginPath();
+canvas.moveTo(circleCenterX,circleCenterY);
+canvas.arc(circleCenterX,circleCenterY,radius,start,end,true);canvas.lineTo(circleCenterX,circleCenterY);
+canvas.fillStyle=colorArray[i%(colorArray.length)];
+canvas.fill();
+canvas.closePath();
+}
+canvas.beginPath();
+canvas.moveTo(circleCenterX,circleCenterY-lineLength-radius+lineAmountInSpinner);
+canvas.lineTo(circleCenterX,circleCenterY-radius+lineAmountInSpinner);
+canvas.strokeStyle="#000000";
+canvas.lineWidth="5";
+canvas.stroke();
+canvas.closePath();
+},10)
+function getRotationAmount(){
+if(4*random-time>0){return (4*random-time)/25}else{return 0}}}
+function createSpinner(){
+for(var i=0;i<segments;i++){
+var end=angle*(i)+rotation;
+var start=angle*(i+1)+rotation;
+canvas.font="20px arial"
+console.log(end,start);
+canvas.beginPath();
+canvas.moveTo(circleCenterX,circleCenterY);
+canvas.arc(circleCenterX,circleCenterY,radius,start,end,true);canvas.lineTo(circleCenterX,circleCenterY);
+canvas.fillStyle=colorArray[i%(colorArray.length)];
+canvas.fill();
+canvas.closePath();
+}
+canvas.beginPath();
+canvas.moveTo(circleCenterX,circleCenterY-lineLength-radius+lineAmountInSpinner);
+canvas.lineTo(circleCenterX,circleCenterY-radius+lineAmountInSpinner);
+canvas.strokeStyle="#000000";
+canvas.lineWidth="5";
+canvas.stroke();
+canvas.closePath();
+}
+createSpinner();
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+<head>
+</head>
+<body style=user-select:none>
+<div align=center>
+<svg id=svg style="width:600px;height:700px" onclick=spin()>
+<path d="M 50 300 H 550 V 600 H 50 V 300" style="fill:lightblue;stroke:black;stroke-width:3px"></path>
+<text x=300 y=450 style="font-size:40px;text-anchor:middle">Po-Po</text>
+</svg>
+<div id=realcard style="font-size:25px;text-align:center;display:none;width:325px;height:500px; position:absolute;background-color:lavender;border:3px solid black">
+
+</div>
+<div id=realcardpanel2 style="font-size:30px;text-align:center;display:none;width:325px;height:500px; position:absolute;background-color:lavender;border:3px solid black">
+
+</div>
+</div>
+<script>
+var svg=document.getElementById("svg");
+var spinInterval;
+var degNum=0;
+var colorArray=["red","orange","yellow","green","blue","purple"];
+function spin(){
+svg.onclick=function(){}
+spinInterval=setInterval(function(){
+degNum += 1;
+svg.style.transform="rotateY("+degNum+"deg)"
+if(degNum>89){
+svg.innerHTML='<path d="M 50 300 L 300 450 L 550 300" style="fill:lightblue"></path><path d="M 50 300 V 600 H 550 V 300 L 300 450 L 50 300 H 550" style="fill:pink; stroke:black; stroke-width:3px"></path>'
+}
+if(degNum>179){
+clearInterval(spinInterval);svg.onclick=function(){openCard();}}
+},10)}
+function openCard(){
+svg.innerHTML = '<path d="M 50 300 L 300 100 L 550 300 Z" style="fill:lightblue; stroke:black; stroke-width:3px"></path><path id="card" d="M 50 300 V 600 H 550 V 300 Z" style="fill:lavender;stroke:none"></path><path d="M 50 300 V 600 H 550 V 300" style="fill:pink; stroke:black; stroke-width:3px"></path>';
+raiseCard();
+svg.onclick=null;
+}
+function raiseCard(){
+degNum=0;
+spinInterval=setInterval(function(){
+degNum += 2;
+document.getElementById("card").setAttribute("d","M 50 "+Number(300-degNum)+" V "+Number(600-degNum)+" H 550 V "+Number(300-degNum))
+if(degNum>300){
+svg.innerHTML = '<path d="M 50 300 L 300 100 L 550 300 Z" style="fill:lightblue; stroke:black; stroke-width:3px"></path><path d="M 50 300 V 600 H 550 V 300" style="fill:pink; stroke:black; stroke-width:3px"></path>';
+document.getElementById("realcard").style.zIndex="1";
+document.getElementById("realcard").style.left=innerWidth/2-325/2+"px";
+document.getElementById("realcard").style.top=innerHeight/2-250+"px";
+document.getElementById("realcardpanel2").style.zIndex="1";
+document.getElementById("realcardpanel2").style.left=innerWidth/2-325+"px";
+document.getElementById("realcardpanel2").style.top=innerHeight/2-250+"px";
+document.getElementById("realcard").style.display="block";
+clearInterval(spinInterval);
+for(let i=0; i<26; i++){
+var elem=document.createElement("SPAN");
+elem.style.color=colorArray[i % colorArray.length];
+if(i == 0){
+elem.innerText="H"
+}
+if(i == 1){
+elem.innerText="A"
+}
+if(i == 2){
+elem.innerText="P"
+}
+if(i == 3){
+elem.innerText="P"
+}
+if(i == 4){
+elem.innerText="Y"
+}
+if(i == 5){
+elem.innerText=" M"
+}
+if(i == 6){
+elem.innerText="O"
+}
+if(i == 7){
+elem.innerText="T"
+}
+if(i == 8){
+elem.innerText="H"
+}
+if(i == 9){
+elem.innerText="E"
+}
+if(i == 10){
+elem.innerText="R"
+}
+if(i == 11){
+elem.innerText="'"
+}
+if(i == 12){
+elem.innerText="S"
+}
+if(i == 13){
+elem.innerText=" D"
+}
+if(i == 14){
+elem.innerText="A"
+}
+if(i == 15){
+elem.innerText="Y"
+}
+if(i == 16){
+elem.innerHTML="<br>P"
+}
+if(i == 17){
+elem.innerHTML="O"
+}
+if(i == 18){
+elem.innerHTML="-"
+}
+if(i == 19){
+elem.innerHTML="P"
+}
+if(i == 20){
+elem.innerHTML="O"
+}
+if(i == 21){
+elem.innerHTML="!"}
+if(i == 22){
+elem.innerHTML="<span style=font-size:20px><br><br>We are so thankful for what you do. Click to open a card that is just for you!</span>"
+}
+if(i == 23){
+elem.innerHTML="<br><br><img style='width:300px' src='file://C:/Users/start/Downloads/Gr.png'></img><br style=font-size:35px><span style='font-size:20px; display:block;margin-top:5px'>A lovely necklace for a lovely lady.</span>"
+}
+elem.style.display="none";
+elem.id=i;
+document.getElementById("realcard").appendChild(elem);
+setTimeout(function(){document.getElementById(i).style.display="inline"},i*200)
+}
+}
+},10)
+document.getElementById("realcard").onclick=function(){showCard()}
+}
+function showCard(){
+document.getElementById("realcardpanel2").style.display="block";
+document.getElementById("realcard").style.textAlign="left";
+document.getElementById("realcard").style.zIndex="1";
+document.getElementById("realcard").innerHTML="<div style='font-size:19px;margin-left:10px;line-height:27px'>Dear Po-Po,<br>Happy Mother's Day! Thank you for being so kind and caring to the entire family, and a role model to Didi and me. I have so many fond memories of talking to you, whether on the phone or eating dinner, and enjoy every conversation we have together. I hope that you are happy and feeling better, and I can see you in-person sometime. God bless you!<br>Love,<br>Benjamin</div>"
+document.getElementById("realcard").style.left=innerWidth/2+"px";
+document.getElementById("realcardpanel2").style.zIndex="1";
+document.getElementById("realcardpanel2").style.left=innerWidth/2-325+"px";
+document.getElementById("realcardpanel2").style.top=innerHeight/2-250+"px";
+document.getElementById("realcard").onclick=function(){hideCard()}
+document.getElementById("realcardpanel2").onclick=function(){hideCard()}
+}
+
+function hideCard(){
+degNum=1;
+spinInterval=setInterval(function(){degNum -= 0.01;document.getElementById("realcardpanel2").style.opacity=degNum;
+document.getElementById("realcard").style.opacity=degNum;if(degNum<0){document.getElementById("realcardpanel2").remove();document.getElementById("realcard").remove();clearInterval(spinInterval)}},10);
+
+}
+</script>

@@ -617,7 +617,6 @@ function changeInput(val){
 var response=prompt("Enter in the amount you'd like the prestige autobuyer to prestige at in scientific or standard notation. Current amount: "+formatUpgrade(user.prestigeAutoBuyerMin));
 
 if(Number.isInteger(Number(response))){if(response != null){user.prestigeAutoBuyerMin = Number(response)}}else{alert("You have entered in an invalid response."); changeInput()}}
-if(user.prestigeAutoBuyerCost == undefined){resetAll()}
 </script>
 </body>
 </html>

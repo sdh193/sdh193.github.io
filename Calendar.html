@@ -6,7 +6,7 @@ font-size:20px;
 border:1px solid black;
 padding:3px;
 }
-div{font-size:20px;user-select:none}
+div{font-size:20px}
 button,div[button]{
 background-color: rgba(0,0,255,.2);
 }
@@ -19,10 +19,11 @@ div[button]{font-size:25px}
 <div id=now></div>
 <div align=center>
 <div id=topPanel style="height:50px;position:fixed; background-color: lightgrey; top:0px; left:0px;border:1px solid black">
-<button id=prevbtn onclick=decreaseDate() style="position:fixed; top:10px;left:400px">Previous</div><div id=datestr style="font-size:30px;position:fixed; left:600px; top:10px">Str</div><button style="position:fixed; left:800px; top:10px" onclick=increaseDate() id=nextbtn>Next</button><button onclick=changeNotifications(this) style="position:fixed; margin-top:10px;right:10px;top:0px" >Notifications: Off</button>
+<button id=prevbtn onclick=decreaseDate() style="position:fixed; top:10px;left:400px">Previous</div><div id=datestr style="font-size:30px;position:fixed; left:600px; top:10px">Str</div><button style="position:fixed; left:800px; top:10px" onclick=increaseDate() id=nextbtn>Next</button><button onclick=loadData() style="position:fixed; margin-top:10px;right:180px;top:0px">Load calendar</button><button onclick=changeNotifications(this) style="position:fixed; margin-top:10px;right:10px;top:0px" >Notifications: Off</button>
 
 </div>
 <button onclick=showPanel() style="position:fixed; margin-top:10px;left:10px;top:0px" >+ New event</button>
+<button onclick=exportData() style="position:fixed; margin-top:10px;left:145px;top:0px">Export calendar</button>
 <div align=center>
 <div id=newtaskwindow align=center style="background-color:lightgrey;display:none; position:fixed; top:150px; width:600px; height:425px; border:2px solid black">
 <div style=font-size:25px align=center>Schedule new event</div>
@@ -125,13 +126,13 @@ var eventTime = Number(Number(JSON.parse(list.split(";")[i])[1][0]*60)+Number(JS
  if(howtorepeat == 2){
  repeatsonmonths=true
  }
-
- if(eventTime<date.getHours()*60+date.getMinutes()+5 && date.getHours()*60+date.getMinutes()<eventTime2 && (dat == date || howtorepeat == 0 ||( howtorepeat == 1 && dat.getDay() == date.getDay() % 7) || (howtorepeat == 2 && JSON.parse(list.split(";")[i])[3][1] == date.getDate()) || (howtorepeat == 3 && JSON.parse(list.split(";")[i])[3][1] == date.getDate() && JSON.parse(list.split(";")[i])[3][0] == date.getMonth())) && shouldNotify && nonotificationArr.indexOf(title+eventTime+dat) < 0){
+console.log(date)
+ if(eventTime<date.getHours()*60+date.getMinutes()+5 && date.getHours()*60+date.getMinutes()<eventTime2 && ((date.getMonth() == dat.getMonth() && date.getDate() == dat.getDate() && date.getFullYear() == dat.getFullYear()) || howtorepeat == 0 ||( howtorepeat == 1 && dat.getDay() == date.getDay() % 7) || (howtorepeat == 2 && JSON.parse(list.split(";")[i])[3][1] == date.getDate()) || (howtorepeat == 3 && JSON.parse(list.split(";")[i])[3][1] == date.getDate() && JSON.parse(list.split(";")[i])[3][0] == date.getMonth())) && shouldNotify && nonotificationArr.indexOf(title+eventTime+dat) < 0){
  document.querySelector("audio").play();
  console.log("2")
   nonotificationArr.push(title+eventTime+dat)
   
- var notification=alert('Time for "'+title+"!")
+ var notification=alert('Time for "'+title+'"!')
  
  }
  localStorage.notification=JSON.stringify(nonotificationArr);
@@ -197,11 +198,23 @@ function deleteEvent(name){
 var conf=confirm('Are you sure you want to delete event "'+name+'"? This cannot be undone.')
 if(conf == true){
 for(var i=1; i<list.split(";").length; i++){if(JSON.parse(list.split(";")[i])[0] == name){list=list.split(";"+list.split(";")[i]).join("");localStorage.setItem("scheduleInfo",list);update()}}}}
-document.addEventListener("contextmenu",function(e){e.preventDefault()})
+document.addEventListener("contetmenu",function(e){e.preventDefault()})
 function changeNotifications(a){
 if(shouldNotify == true){shouldNotify=false;a.innerText="Notifications: Off"}else{shouldNotify=true;a.innerText="Notifications: On"}}
 document.addEventListener("keydown",function(e){console.log(e.code);if(e.code == "ArrowRight"){increaseDate()}; if(e.code == "ArrowLeft"){decreaseDate()};if(e.ctrlKey && e.shiftKey){e.preventDefault()}})
 update();
 setInterval(function(){update()},10000)
+function exportData(){
+if(list != ""){
+prompt("Here is your calendar data. You can use it as a backup save in case the browser cookies are cleared, or to show other people your calendar.",list+"divider"+JSON.stringify(nonotificationArr))}else{alert("You currently have no calendar data. Click the '+ New Event' button to schedule a new event.")}}
+function loadData(){
+var data=prompt("Copy your exported data here. Note that you will not be able to retrieve your current calendar after this. If you want to retrieve your current calendar after viewing the new calendar, click the 'Export Calendar' button and paste the data somewhere safe.")
+var notifyArr=JSON.parse(data.split("divider")[1]);
+var mainData=data.split("divider")[0]
+list=mainData;
+localStorage.scheduleInfo=list;
+nonotificationArr=notifyArr;
+update();
+}
 </script>
 </html>

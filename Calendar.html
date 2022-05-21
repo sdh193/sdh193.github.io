@@ -6,7 +6,7 @@ font-size:20px;
 border:1px solid black;
 padding:3px;
 }
-div{font-size:20px}
+div{font-size:20px;user-select:none}
 button,div[button]{
 background-color: rgba(0,0,255,.2);
 }
@@ -200,7 +200,7 @@ function deleteEvent(name){
 var conf=confirm('Are you sure you want to delete event "'+name+'"? This cannot be undone.')
 if(conf == true){
 for(var i=1; i<list.split(";").length; i++){if(JSON.parse(list.split(";")[i])[0] == name){list=list.split(";"+list.split(";")[i]).join("");localStorage.setItem("scheduleInfo",list);update()}}}}
-document.addEventListener("contextenu",function(e){e.preventDefault()})
+document.addEventListener("contextmenu",function(e){e.preventDefault()})
 function changeNotifications(a){
 if(shouldNotify == true){shouldNotify=false;a.innerText="Notifications: Off"}else{shouldNotify=true;a.innerText="Notifications: On"}}
 document.addEventListener("keydown",function(e){console.log(e.code);if(e.code == "ArrowRight"){increaseDate()}; if(e.code == "ArrowLeft"){decreaseDate()};if(e.ctrlKey && e.shiftKey){e.preventDefault()}})

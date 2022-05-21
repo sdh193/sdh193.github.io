@@ -114,6 +114,7 @@ return "0"+val}else{return val}}
 function update(){
 try{
 var str=""; 
+document.title="Calendar: Events on "+document.getElementById("datestr").innerText;
 for(var i=1; i<list.split(";").length; i++){
 var title=JSON.parse(list.split(";")[i])[0]; 
 var height=screen.height;
@@ -203,6 +204,7 @@ function changeNotifications(a){
 if(shouldNotify == true){shouldNotify=false;a.innerText="Notifications: Off"}else{shouldNotify=true;a.innerText="Notifications: On"}}
 document.addEventListener("keydown",function(e){console.log(e.code);if(e.code == "ArrowRight"){increaseDate()}; if(e.code == "ArrowLeft"){decreaseDate()};if(e.ctrlKey && e.shiftKey){e.preventDefault()}})
 update();
+setTimeout(function(){document.title="Calendar: Events on "+document.getElementById("datestr").innerText},100)
 setInterval(function(){update()},10000)
 function exportData(){
 if(list != ""){

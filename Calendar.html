@@ -117,6 +117,7 @@ var str="";
 document.title="Calendar: Events on "+document.getElementById("datestr").innerText;
 for(var i=1; i<list.split(";").length; i++){
 var title=JSON.parse(list.split(";")[i])[0]; 
+console.log(list.split(";")[i+1]);
 var height=screen.height;
 var eventTime = Number(Number(JSON.parse(list.split(";")[i])[1][0]*60)+Number(JSON.parse(list.split(";")[i])[1][1]));
  var eventTime2=Number(Number(JSON.parse(list.split(";")[i])[2][0]*60)+Number(JSON.parse(list.split(";")[i])[2][1])); 
@@ -199,7 +200,7 @@ function deleteEvent(name){
 var conf=confirm('Are you sure you want to delete event "'+name+'"? This cannot be undone.')
 if(conf == true){
 for(var i=1; i<list.split(";").length; i++){if(JSON.parse(list.split(";")[i])[0] == name){list=list.split(";"+list.split(";")[i]).join("");localStorage.setItem("scheduleInfo",list);update()}}}}
-document.addEventListener("contxtmenu",function(e){e.preventDefault()})
+document.addEventListener("contextenu",function(e){e.preventDefault()})
 function changeNotifications(a){
 if(shouldNotify == true){shouldNotify=false;a.innerText="Notifications: Off"}else{shouldNotify=true;a.innerText="Notifications: On"}}
 document.addEventListener("keydown",function(e){console.log(e.code);if(e.code == "ArrowRight"){increaseDate()}; if(e.code == "ArrowLeft"){decreaseDate()};if(e.ctrlKey && e.shiftKey){e.preventDefault()}})
@@ -208,7 +209,13 @@ setTimeout(function(){document.title="Calendar: Events on "+document.getElementB
 setInterval(function(){update()},10000)
 function exportData(){
 if(list != ""){
-prompt("Here is your calendar data. You can use it as a backup save in case the browser cookies are cleared, or to show other people your calendar.",list+"divider"+JSON.stringify(nonotificationArr))}else{alert("You currently have no calendar data. Click the '+ New Event' button to schedule a new event.")}}
+const el = document.createElement('textarea');
+el.value = list+"divider"+JSON.stringify(nonotificationArr);	//str is your string to copy
+document.body.appendChild(el);
+el.select();
+document.execCommand('copy');
+alert("Save copied to clipboard");
+}}
 function loadData(){
 var data=prompt("Copy your exported data here. Note that you will not be able to retrieve your current calendar after this. If you want to retrieve your current calendar after viewing the new calendar, click the 'Export Calendar' button and paste the data somewhere safe.")
 var notifyArr=JSON.parse(data.split("divider")[1]);

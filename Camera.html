@@ -1,0 +1,111 @@
+<html>
+<body bgcolor=grey style=margin:0px>
+<div align=center>
+<video autoplay id="video" style="width:1206px; height:745px"></video>
+<br>
+<br>
+<button onclick=takePicture(0) style=font-size:20px>Take a picture now</button>
+<button onclick=takeVideo() id=videobutton style=font-size:20px>Take a video</button>
+<br>
+<div style=font-size:20px id="timer"></div>
+<div align=center>
+<svg width=125 height=745 style="border:2px solid black; position:fixed; top:0px; right:0px"></svg>
+<canvas id=canvas style=display:none></canvas>
+<div id=container></div>
+<div style=display:none id=values></div>
+<a id=dl style="display:none" download="file.txt">Download</a>
+</body>
+</html>
+<script>
+var recorder;
+var audiorecording=[];
+var audio;
+async function initializeCamera(){
+
+ try {
+      videoStream = await navigator.mediaDevices.getUserMedia({video:true});
+	  document.getElementById("values").innerHTML="Loading...";
+      video.srcObject = videoStream;
+    } catch (err) {
+      alert("Could not access the camera");
+    }
+	  document.getElementById("values").innerHTML = "<br>Video id: "+videoStream.id;
+	}
+
+  initializeCamera();
+  function takePicture(x){
+  setTimeout(function(){
+  const canvas = document.querySelector('#canvas')
+canvas.width = video.videoWidth
+canvas.height = video.videoHeight
+canvas.getContext('2d').drawImage(video, 0, 0);
+const img = document.createElement('img');
+img.src = canvas.toDataURL('image/jpg');
+document.getElementById("container").innerHTML = "";
+document.getElementById("container").innerHTML +="<br>"
+document.getElementById("container").appendChild(img);
+document.getElementById("container").innerHTML += "<div id=image style=font-size:20px><br>Picture name:<input id=pictureName style=font-size:18px></input><br><br><button style=font-size:20px onclick=download()>Download image</button>"
+},1000*x)
+}
+async function download(){const image = await fetch(document.querySelector("img").src)
+  const imageBlog = await image.blob()
+  const imageURL = URL.createObjectURL(imageBlog)
+  const link = document.createElement('a')
+  link.href = imageURL
+  if(document.getElementById("pictureName").value != ''){
+  link.download = document.getElementById("pictureName").value
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)}else{alert("Please specify a name for this image")}}
+   function takeVideo(){
+   var error=false;
+   var framenum=0;
+   var prom=Number(prompt("How many frames/sec would you like? (10 recommended)"));
+   if(prom >= 200){alert("Too many frames/sec.");error=true}
+   if(isNaN(prom)){alert("Your response is not a number");error=true}
+      var currentDate=Date.now();
+   var datastr="";
+   record();
+   if(!error){
+  var interval=setInterval(function(){
+  const canvas = document.querySelector('#canvas')
+canvas.width = video.videoWidth
+canvas.height = video.videoHeight
+canvas.getContext('2d').drawImage(video, 0, 0);
+datastr += canvas.toDataURL('image/jpg')+";;";
+framenum ++;
+document.getElementById("timer").innerText=Math.floor(((Date.now()/1000-currentDate/1000))/60)+":"+changeStr(Math.floor((Date.now()/1000-currentDate/1000) % 60))+", "+framenum+" frames, "+format(datastr.length);
+},1000/prom)}
+function format(val){
+if(val>1e9){return (val/1e9).toFixed(1)+" GB"}else if(val>1e6){return (val/1e6).toFixed(1)+" MB"}else if(val>1e3){return (val/1e3).toFixed(1)+" KB"}}
+document.getElementById("videobutton").innerText="Stop recording";
+document.getElementById("videobutton").onclick=function(){
+next(datastr,prom,interval);
+}};
+function next(str,promp,interva){
+recorder.stop();
+str += URL.createObjectURL(new Blob(audiorecording, { 
+      'type': 'audio/mp3' 
+    }))+";;";
+alert("A file will soon be downloaded. Open my video app to see the result!")
+var dl=document.querySelector("#dl");
+document.getElementById("videobutton").onclick=function(){takeVideo()};
+document.getElementById("videobutton").innerText="Take video";
+clearInterval(interva);
+dl.href="data:text/plain,"+encodeURIComponent(str+"&f="+promp);
+dl.click();}
+function changeStr(str){
+if(str < 10){
+return "0"+str
+}else{return str}}
+function record(){
+navigator.mediaDevices.getUserMedia({audio: true}).then( stream => {
+        recorder=new MediaRecorder(stream);
+		recorder.start();
+		audiorecording=[];
+		 recorder.addEventListener("dataavailable", event => {
+      audiorecording.push(event.data);
+	  console.log(event.data);
+    });
+    });}
+</script>

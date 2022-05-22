@@ -1,0 +1,42 @@
+<html lang=en>
+<head>
+</head>
+<body style='margin:5px; background:lightgrey'>
+ <input id=title placeholder='Enter your title here:' style=' font-size:20px; position:fixed; top:0px; left:0px;' size=30>
+ <input id=name placeholder='Enter Date here:' style=' font-size:20px; position:fixed; top:0px; left:355px;' size=12>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<textarea rows=28 placeholder='HTML code...' spellcheck=false style='font-size:18px; position:fixed; top:30px;' cols=50 id=textarea ></textarea>
+<iframe id=iframe style='position:absolute; left:530px; top:30px' srcdoc='Your webpage will appear here.' title=a width=810px height=620px>
+</iframe>
+<div class="output" style='width:100px; display:none; height:100px; background-color:green'></div><div style=display:none>
+<button style='font-size:17px; position:fixed; top:0px; left:530px; background-color:rgb(148,100,220); cursor:pointer; border: 3px solid green'>Go to the homepage</button>
+<button style='font-size:17px; position:fixed; top:0px; left:700px; background-color:rgb(148,100,220); cursor:pointer; border: 3px solid green'>Create new html document</button>
+<button style='font-size:17px; position:fixed; top:0px; left:918px; background-color:rgb(148,100,220); cursor:pointer; border: 3px solid green'>Settings</button>
+<button style='font-size:17px; position:fixed; top:0px; left:993px; background-color:rgb(148,100,220); cursor:pointer; border: 3px solid green'>Download code</button>
+<button style='font-size:17px; position:fixed; top:0px; left:1125px; background-color:rgb(148,100,220); cursor:pointer; border: 3px solid green'>Learn HTML</button>
+<button style='font-size:17px; position:fixed; top:0px; left:1233px; background-color:rgb(148,100,220); cursor:pointer; border: 3px solid green'>Open console</button></div>
+<script language=Javascript>
+ console.log=function(e){
+ document.getElementByClassName('output').innerText=e;
+
+        };
+		var b=0
+		var c=0
+var a=document.getElementById('textarea').value
+document.getElementById("textarea").value=localStorage.getItem('code')
+document.getElementById('title').value=localStorage.getItem('code1')
+document.getElementById('name').value=localStorage.getItem('code2')
+setInterval(function(){
+if(a==document.getElementById("iframe").srcdoc){}else{
+document.getElementById('iframe').srcdoc=a}},10)
+setInterval(function(){
+a=document.getElementById('textarea').value
+localStorage.setItem('code',a)
+c=document.getElementById('title').value
+localStorage.setItem('code1',c)
+b=document.getElementById('name').value
+localStorage.setItem('code2',b)},10)
+</script>
+</body>
+
+<html>

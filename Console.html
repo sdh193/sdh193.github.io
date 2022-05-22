@@ -1,0 +1,79 @@
+
+<div align=center><iframe id=iframe width=750 height=400 style="border:2px solid black;" srcdoc=' <style> #maininput:focus {outline: none;}</style><input id=maininput style="border:none; width:735px; font-family:arial; font-size:18px"></input>'></iframe>
+<br>
+<div style="font-size:20px;line-height:30px;width:900px">
+Help:
+
+How to open the console:
+<br>
+Click the inside of the bordered box. A flashing cursor should appear towards the top. If you see this you are ready to type something into the console. 
+<br>
+Why the console may not be registering when you press the enter key:
+<br>
+Before pressing the enter key you must click outside of the bordered box until the flashing cursor disappears. Once it has, pressing enter will submit the expression to the system.
+<br>
+How the console can be used:
+<br>
+The console operates just like a javascript engine would. You can type in arithmetic expressions, define variables and functions, and use all the default DOM and javascript functions on the outer document and the console in your code.
+<br>
+How it is different from a normal console:
+<br>
+1. Setting a variable using "var" will not work; Instead, pretend like the variable has already been initialized before you set the value to it. For example, instead of defining and setting a variable k to 0 by typing in "var k=0", type "k=0".
+<br>
+2. Calling a function using "function myFunction(){}" will not work. Instead, assign the function to a variable. For example, instead of typing "function log(value){console.log(value)}" type "log=function(value){console.log(value)}"
+<br>
+3. Objects will not be displayed properly. If you want to see an object that is assigned to a variable properly, make sure to put it in a JSON.stringify function. Note that this will not work for html DOM objects.
+<br>
+4. HTML-parseable content will be auto-converted when variables containing it are submitted into the system. 
+<br>
+5. Errors do not start with "Uncaught".
+</div></div>
+<script>
+!function(){var a;
+var str='';
+setTimeout(function(){
+var iframe=document.getElementById("iframe")
+var iframeWindow=iframe.contentWindow.document;
+var input=iframeWindow.getElementById("maininput");
+console.log(input);
+var mouseIsOver=false;
+document.addEventListener('keydown',function(e){console.log(e.code); if(e.code=="Enter"){submit();window.getSelection().removeAllRanges();
+}});
+
+function submit(){
+var result;
+var error="";
+var error1=" ";
+var value=document.getElementById("iframe").contentWindow.document.getElementById("maininput").value
+try{eval("result="+value)}catch(e){error=e.stack}
+console.log(result);
+iframe.srcdoc=str;
+if(error != ""){
+error="";
+try{evaluate(value.toString())}catch(err){error=err.stack}
+}
+if(error != ""){
+str += '<div style="font-size:18px; padding-bottom:2px; font-family:arial">'+value+'</div><div style="font-size:18px; margin-bottom:2px; padding-bottom:2px; padding-top:2px; font-family:arial; color:red; background-color:rgb(255,150,150); padding:3px; border:1px solid black;">'+error.split("\n")[0]+'</div>'; document.getElementById("iframe").srcdoc += '<style> #maininput:focus {outline: none;};</style><div style="font-size:18px; padding-bottom:2px; font-family:arial">'+value+'</div><div style="font-size:18px; padding-bottom:2px; padding-top:2px; font-family:arial; color:red; background-color:rgb(255,150,150); padding:3px; border:1px solid black;">'+error.split("\n")[0]+'</div><input id=maininput style="border:none; padding-top:2px; width:735px; font-family:arial; font-size:18px"></input>';}else{document.getElementById("iframe").srcdoc += '<div style="font-size:18px; padding-bottom:2px; padding-top:2px; font-family:arial">'+value+"</div><style> #maininput:focus {outline: none;};</style> <div style='border:1px solid black;font-family:arial; font-size:18px; padding-bottom:2px; padding-top:2px; background-color:rgb(230,230,230); text-align:left; margin-top:1px; padding:3px;'>"+check(result)+"</div><input id=maininput style='border:none; padding-top:2px; width:735px; font-family:arial; font-size:18px'></input>";
+}
+if(error == ""){
+str += '<div style="font-size:18px; padding-bottom:2px; font-family:arial">'+value+'</div> <div style="border:1px solid black;font-family:arial; padding-top:2px; margin-bottom:2px; font-size:18px; background-color:rgb(245,245,245); text-align:left; margin-top:1px; padding:3px;">'+check(result)+'</div>';}}
+},100)
+   function enterKeyPressed(event) {
+      if (event.keyCode == 13) {
+	        window.getSelection().removeAllRanges();
+
+         console.log("Enter key is pressed");
+         return true;
+      } else {
+         return false;
+      }
+   }
+   function check(val){
+   if(typeof val == "string"){
+var arr=val.split("");
+arr.unshift('"');
+arr.push('"');
+return arr.join("");
+}else{return val}}}()
+function evaluate(val){return eval(val)}
+</script>

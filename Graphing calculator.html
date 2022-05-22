@@ -1,0 +1,125 @@
+<style>
+</style>
+<div align=center>
+<h1>Function graphing calculator</h1>
+<div style=font-size:20px>Graph <input style=font-size:18px id=input placeholder="Enter equation here:"></input> with a scale factor of <input type=number id=factor placeholder="Enter factor:" value=1 oninput="if(this.value>1000){this.value=1000}" style="font-size:18px; width:125px"></input> <button onclick=submit() style=font-size:20px>Graph</button>
+<br>
+<br>
+<svg width=1366 id=svg style="border:1px solid black; height:500px">
+<line x1=0 y1=250 x2=1370 y2=250 style='stroke:grey; stroke-width:4px'><title style=font-size:200px>x-axis</title></line><line x1=650 y1=0 x2=650 y2=500 style='stroke:grey; stroke-width:4px'><title>y-axis</title></line>
+</svg>
+<br>
+<bR>
+<div style=font-size:20px>*For graphing two-variable equations that are not functions, visit our <a href="C:\Users\start\OneDrive\Desktop\Coding files\Calculators\Graphing calculator for all equations.html">Graphing calculator for all equations</a>.</div> 
+<script>
+function submit(){
+var input=document.getElementById("input");
+var factor=document.getElementById("factor");
+var svg=document.getElementById("svg");
+var equ=input.value;
+var e1=equ.split("^").join("**");
+var e2=e1.replace("y=","");
+var e4=e2.split("");
+var pi=Math.PI;
+var e=Math.E;
+for(var i=0; i<e4.length; i++){
+if(!isNaN(e4[i]) && e4[i+1] == "x"){
+e4.splice(i,1,e4[i]+"*");
+}
+}
+var e3=e4.join("");
+var longString="";
+var secString="";
+console.log(e3);
+var factor=Number(factor.value);
+var result;
+var yIntercept;
+var x=0;
+eval("yIntercept="+e3);
+var prevPoint;
+var y;
+for(var x=-1.5*factor; x<1.5*factor; x += .0005*factor){
+eval("result="+e3);
+if(isFinite(Number(500-result/factor*500))){
+longString += "<circle r=2 cx="+Number(x/factor*500+650)+" cy="+Number(500-result/factor*500-250)+" fill='red' class='tooltip'><title>("+Number(Math.round(x*1000)/1000)+","+Number(Math.round(result*1000)/1000)+")</title></circle>"
+
+}
+if(prevPoint != undefined && isFinite(result) && (x != 0 ||(e3.split("floor(").length > 1 || e3.split("ceil(").length > 1))){
+
+longString += "<line x1="+prevPoint[0]+" y1="+prevPoint[1]+" x2="+Number(x/factor*500+650)+" y2="+Number(500-result/factor*500-250)+" style='stroke:red;stroke-width:4px'></line>"
+}
+prevPoint=[Number((Math.round(x*1e10)/1e10)/factor*500+650),Number(500-result/factor*500-250)];
+}
+var roots=calculate();
+console.log(roots);
+//Add roots
+for(var i=0; i<roots.length; i++){
+if(!isNaN(roots[i])){secString += "<circle r=7 cx="+Number(roots[i]/factor*500+650)+" cy="+Number(500-0/factor*500-250)+" fill='grey' class='tooltip'><title>("+Number(Math.round(roots[i]*1000)/1000)+","+Number(0)+")</title></circle>"}
+}
+if(!isNaN(yIntercept)){secString += "<circle r=7 cx="+Number(0/factor*500+650)+" cy="+Number(500-yIntercept/factor*500-250)+" fill='grey' class='tooltip'><title>(0,"+Number(Math.round(yIntercept*1000)/1000)+")</title></circle>"}
+svg.innerHTML = "<line x1=0 y1=250 x2=1370 y2=250 style='stroke:grey; stroke-width:4px'><title>x-axis</title></line><line x1=650 y1=0 x2=650 y2=500 style='stroke:grey; stroke-width:4px'><title>y-axis</title></line>"+longString+secString;
+}
+function sin(val){
+return Math.sin(val);}
+function cos(val){
+return Math.cos(val);
+}
+function tan(val){
+return Math.tan(val);
+}
+function sqrt(val){
+return val**.5}
+function arccos(val){
+return Math.acos(val)}
+function arcsin(val){
+return Math.asin(val)}
+function arctan(val){
+return Math.atan(val)}
+function abs(val){
+return Math.abs(val)}
+function round(val){
+return Math.round(val)}
+function ceil(val){
+return Math.ceil(val)}
+function floor(val){
+return Math.floor(val)}
+var input=document.querySelector("input");
+function calculate(){
+var eq=input.value;
+var rootarray=[];
+var equ=eq.split("");
+for(var i=0; i<equ.length; i++){
+if(!isNaN(equ[i]) && equ[i+1] == "x"){
+equ.splice(i,1,equ[i]+"*");
+}
+}
+var equation="("+equ.join("").split("^").join("**")+")";
+var root=1;
+var x=1;
+var result;
+for(var j=0; j<10; j++){
+x=1;
+root=1;
+for(var i=0; i<10000; i++){
+x=root;
+eval("result="+equation);
+root=root-result/calculateDerivative(equation,root);
+if(isNaN(result/calculateDerivative(equation,root))){root=0};
+}
+x=root;
+eval("result="+equation);
+if(Math.round(result*1000)/1000 != 0){root="Root is not real"}else{
+equation += "/(x-("+root+"))"; equation="("+equation+")";rootarray.push(root);root=Math.round(1e5*root)/1e5}console.log(equation)}return rootarray}
+function calculateDerivative(equation,point){
+var x=point+0.00001;
+var result1;
+var result2;
+eval("result1="+equation);
+var x=point-0.00001;
+eval("result2="+equation);
+return (result2-result1)/(-0.00002)}
+function createLabel(x,txt){
+var str="<text x="+x+" y=250>"+txt+"</text>"
+document.getElementById("svg").innerHTML += str}
+</script>
+</script>

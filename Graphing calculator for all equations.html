@@ -1,0 +1,206 @@
+<style>
+</style>
+<div align=center>
+<h1>Graphing calculator</h1>
+<div style=font-size:20px>Graph <input style=font-size:18px id=input placeholder="Enter equation here:"></input> with a scale factor of <input type=number id=factor placeholder="Enter factor:" value=1 style="font-size:18px; width:125px"></input> <button onclick=submit() style=font-size:20px>Graph</button>
+<br>
+<br>
+<svg width=1366 xmlns="http://www.w3.org/2000/svg" id=svg style="border:1px solid black; height:500px">
+<line x1=0 y1=250 x2=1370 y2=250 style='stroke:grey; stroke-width:4px' id=xaxis><title style=font-size:200px>x-axis</title></line><line x1=650 y1=0 x2=650 y2=500 style='stroke:grey; stroke-width:4px' id=yaxis><title>y-axis</title></line>
+</svg>
+<br>
+<bR>
+<div style=font-size:20px>
+Graph accuracy: <input id="accinput" value=50 style=font-size:20px></input>
+<br>
+Tries: <input id="tryinput" value=5 style=font-size:20px></input>
+<br>
+Points per graph (x): <input value=1000 id="ppgxinput" style=font-size:20px></input>
+<br>
+Points per graph (y): <input value=1000 id="ppgyinput" style=font-size:20px></input>
+<br>
+Elimination factor: <input value=1e12 id="eliminput" style=font-size:20px></input>
+<br>
+<br>
+Axes: <button onclick=toggleAxes() style="font-size:20px">Toggle axes</button>
+Roots: <button onclick=toggleRoots() style="font-size:20px">Toggle roots</button>
+</div>
+<br>
+File name: <input value="Graph" id=nameinput style=font-size:20px></input><button onclick=svgToImage() style=font-size:20px>Download</button>
+<br>
+<br>
+<div id=time style=font-size:20px></div>
+<br>
+<div style=font-size:20px>*For graphing functions, especially exponential and trigonometric functions, visit our <a href="C:\Users\start\OneDrive\Desktop\Coding files\Calculators\Graphing calculator.html">Function graphing calculator</a> to obtain a better graphing precision.</div> 
+<script>
+var e3;
+var axesAreShowing=true;
+var rootsAreShowing=true;
+function submit(){
+var input=document.getElementById("input");
+var factor=document.getElementById("factor");
+var svg=document.getElementById("svg");
+var equ=input.value;
+var e1=equ.split("^").join("**");
+var e4=e1.split("");
+var pi=Math.PI;
+var e=Math.E;
+for(var i=0; i<e4.length; i++){
+if(!isNaN(e4[i]) && (e4[i+1] == "x" || e4[i+1] == "y")){
+e4.splice(i,1,e4[i]+"*");
+}
+}
+e3=e4.join("");
+var longString="";
+var secString="";
+var factor=Number(factor.value);
+var result;
+var x=0;
+var prevPoint;
+var y;
+var date1=Date.now();
+var date2;
+var totalTime;
+for(var x=-.5*factor; x<.5*factor; x += factor/Number(document.getElementById("ppgyinput").value)){
+var correct=e3.split("y").join("(y)").split("x").join("(x)")
+var array=correct.split("y").join(x).split("=");
+var polynomial=array[1]+"-("+array[0]+")";
+var rootArr=calculate(polynomial);
+for(var i=0; i<rootArr.length;i++){
+if(Math.round(x*1000)/1000 != 0){
+longString += "<circle r=2 cx="+Number(rootArr[i]/factor*500+650)+" cy="+Number(500-x/factor*500-250)+" fill='red' class='tooltip'><title>("+Number(Math.round(rootArr[i]*1000)/1000)+","+Number(Math.round(x*1000)/1000)+")</title></circle>"
+}else{secString += "<circle r=7 cx="+Number(rootArr[i]/factor*500+650)+" cy="+Number(500-x/factor*500-250)+" fill='grey' class='root'><title>("+Number(Math.round(rootArr[i]*1000)/1000)+","+Number(Math.round(x*1000)/1000)+")</title></circle>"}
+}
+}
+for(var x=-1.5*factor; x<1.5*factor; x += 3*factor/Number(document.getElementById("ppgxinput").value)){
+var correct=e3.split("y").join("(y)").split("x").join("(x)")
+var array=correct.split("x").join(x).split("=");
+var polynomial=array[1]+"-("+array[0]+")";
+var rootArr=calculate(polynomial,true);
+for(var i=0; i<rootArr.length;i++){
+if(Math.round(x*1000)/1000 != 0){
+longString += "<circle r=2 cx="+Number(x/factor*500+650)+" cy="+Number(500-rootArr[i]/factor*500-250)+" fill='red' class='tooltip'><title>("+Number(Math.round(x*1000)/1000)+","+Number(Math.round(rootArr[i]*1000)/1000)+")</title></circle>"
+}else{secString += "<circle r=7 cx="+Number(x/factor*500+650)+" cy="+Number(500-rootArr[i]/factor*500-250)+" fill='grey' class='root'><title>("+Number(Math.round(x*1000)/1000)+","+Number(Math.round(rootArr[i]*1000)/1000)+")</title></circle>"}
+}
+}
+svg.innerHTML = "<line x1=0 y1=250 x2=1370 y2=250 id='xaxis' style='stroke:grey; stroke-width:4px'><title>x-axis</title></line><line x1=650 y1=0 x2=650 y2=500 id='yaxis' style='stroke:grey; stroke-width:4px'><title>y-axis</title></line>"+longString+secString;
+date2=Date.now();
+totalTime=(date2-date1)/1000;
+document.getElementById("time").innerText="Graph time: "+totalTime+'s.';
+}
+function sin(val){
+return Math.sin(val);}
+function cos(val){
+return Math.cos(val);
+}
+function tan(val){
+return Math.tan(val);
+}
+function sqrt(val){
+return val**.5}
+function arccos(val){
+return Math.acos(val)}
+function arcsin(val){
+return Math.asin(val)}
+function arctan(val){
+return Math.atan(val)}
+function abs(val){
+return Math.abs(val)}
+function round(val){
+return Math.round(val)}
+function ceil(val){
+return Math.ceil(val)}
+function floor(val){
+return Math.floor(val)}
+var input=document.querySelector("input");
+function calculate(val){
+var eq=val;
+eq=eq.split("y").join("x")
+
+var rootarray=[];
+var equation="("+eq+")";
+var root=1;
+var x=1;
+var result;
+for(var j=0; j<Number(document.getElementById("tryinput").value); j++){
+x=1;
+root=1;
+for(var i=0; i<Number(document.getElementById("accinput").value); i++){
+x=root;
+eval("result="+equation);
+root=root-result/calculateDerivative(equation,root);
+if(isNaN(result/calculateDerivative(equation,root))){root=0};
+}
+x=root;
+eval("result="+equation);
+if(Math.round(result*Number(document.getElementById("eliminput").value))/Number(document.getElementById("eliminput").value) != 0){root="Root is not real"}else{
+equation += "/(x-("+root+"))"; equation="("+equation+")";rootarray.push(root);root=Math.round(1e5*root)/1e5}}return rootarray}
+function calculateDerivative(equation,point){
+var x=point+0.00001;
+var result1;
+var result2;
+eval("result1="+equation);
+var x=point-0.00001;
+eval("result2="+equation);
+return (result2-result1)/(-0.00002)}
+function createLabel(x,txt){
+var str="<text x="+x+" y=250>"+txt+"</text>"
+document.getElementById("svg").innerHTML += str}
+function svgToImage(){
+var svg=document.getElementById("svg").outerHTML;
+svgToPng(svg,(imgData)=>{
+});
+ function svgToPng(svg, callback) {
+    const url = getSvgUrl(svg);
+    svgUrlToPng(url, (imgData) => {
+        callback(imgData);
+        URL.revokeObjectURL(url);
+    });
+}
+function getSvgUrl(svg) {
+    return  URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+}
+function svgUrlToPng(svgUrl, callback) {
+    const svgImage = document.createElement('img');
+    document.body.appendChild(svgImage);
+    svgImage.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1366;
+        canvas.height = 500;
+        const canvasCtx = canvas.getContext('2d');
+        canvasCtx.drawImage(svgImage, 0, 0);
+        const imgData = canvas.toDataURL('image/png');
+		var anchor=document.createElement("a");
+		anchor.download=document.getElementById("nameinput").value+".png";
+		anchor.href=imgData;
+		anchor.click();
+		console.log(anchor);
+        callback(imgData);
+	
+        document.body.removeChild(svgImage);
+    };
+    svgImage.src = svgUrl;
+ }}
+ function toggleAxes(){
+ if(axesAreShowing){
+ document.getElementById("xaxis").style.display="none";
+  document.getElementById("yaxis").style.display="none";
+ }else{
+  document.getElementById("xaxis").style.display="block";
+  document.getElementById("yaxis").style.display="block";
+ }
+ axesAreShowing=!axesAreShowing;
+ }
+  function toggleRoots(){
+ if(rootsAreShowing){
+ for(var i=0;i<document.getElementsByClassName("root").length;i++){
+ document.getElementsByClassName("root")[i].style.display="none"
+ }
+ }else{
+  for(var i=0;i<document.getElementsByClassName("root").length;i++){
+ document.getElementsByClassName("root")[i].style.display="block"
+ }
+ }
+ rootsAreShowing=!rootsAreShowing;
+ }
+</script>

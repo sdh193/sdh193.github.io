@@ -1,0 +1,322 @@
+<html>
+<body>
+<center>
+<input type=file onchange="readText(this)" id=file style=font-size:20px></input>
+<audio id="audio8" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_C4.wav"></audio>
+<audio id="audio9" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_D4.wav"></audio>
+<audio id="audio10" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_E4.wav"></audio>
+<audio id="audio11" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_F4.wav"></audio>
+<audio id="audio12" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_G4.wav"></audio>
+<audio id="audio13" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_A4.wav"></audio>
+<audio id="audio14" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_B4.wav"></audio>
+<audio id="audio15" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_C5.wav"></audio>
+<audio id="audio1" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_C3.wav"></audio>
+<audio id="audio2" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_D3.wav"></audio>
+<audio id="audio3" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_E3.wav"></audio>
+<audio id="audio4" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_F3.wav"></audio>
+<audio id="audio5" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_G3.wav"></audio>
+<audio id="audio6" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_A3.wav"></audio>
+<audio id="audio7" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_B3.wav"></audio>
+<audio id="audio16" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_Cs4.wav"></audio>
+<audio id="audio17" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_Ds4.wav"></audio>
+<audio id="audio18" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_Fs4.wav"></audio>
+<audio id="audio19" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_Gs4.wav"></audio>
+<audio id="audio20" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_As4.wav"></audio>
+<audio id="audio21" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_Cs3.wav"></audio>
+<audio id="audio22" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_Ds3.wav"></audio>
+<audio id="audio23" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_Fs3.wav"></audio>
+<audio id="audio24" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_Gs3.wav"></audio>
+<audio id="audio25" src="file:///C:/Users/start/OneDrive/Desktop/Coding%20files/Tools/Music%20file%20reader%20&%20processor/Audio%20files/audiocheck.net_As3.wav"></audio>
+<br>
+<br>
+<div id=list style=font-size:17px></div>
+<br>
+<div style=font-size:20px align=center id=length></div>
+<br>
+<br>
+<div align=center>
+<button style="font-size:20px; display:none" id=replaybutton onclick=executeCommands()>Replay</button>
+<script>
+
+var audioNum=1;
+var timer;
+var currentPlayingTime=0;
+var tempo=120;
+var timer=0;
+var totalLength;
+setInterval(function(){timer += .01; if(timer>totalLength*60/tempo){getElem("replaybutton").style.display="block"; timer=0;}},10);
+var fileContent="";
+function getElem(id){
+return document.getElementById(id)}
+function play(audio){
+getElem(audio).play()}
+function pauseAfter(audio,time){
+setTimeout(function(){getElem(audio).pause(); getElem(audio).currentTime=0 },time)}
+function c(time,timepause){
+setTimeout(function(){play("audio1"); console.log(time)},time); pauseAfter("audio1",timepause)}
+function d(time,timepause){
+setTimeout(function(){play("audio2"); console.log(time)},time); pauseAfter("audio2",timepause)}
+function e(time,timepause){
+setTimeout(function(){play("audio3"); console.log(time)},time); pauseAfter("audio3",timepause)}
+function f(time,timepause){
+setTimeout(function(){play("audio4"); console.log(time)},time); pauseAfter("audio4",timepause)}
+function g(time,timepause){
+setTimeout(function(){play("audio5"); console.log(time)},time); pauseAfter("audio5",timepause)}
+function a(time,timepause){
+setTimeout(function(){play("audio6"); console.log(time)},time); pauseAfter("audio6",timepause)}
+function b(time,timepause){
+setTimeout(function(){play("audio7"); console.log(time)},time); pauseAfter("audio7",timepause)}
+function c1(time,timepause){
+setTimeout(function(){play("audio8"); console.log(time)},time); pauseAfter("audio8",timepause)}
+function d1(time,timepause){
+setTimeout(function(){play("audio9"); console.log(time)},time); pauseAfter("audio9",timepause)}
+function e1(time,timepause){
+setTimeout(function(){play("audio10"); console.log(time)},time); pauseAfter("audio10",timepause)}
+function f1(time,timepause){
+setTimeout(function(){play("audio11"); console.log(time)},time); pauseAfter("audio11",timepause)}
+function g1(time,timepause){
+setTimeout(function(){play("audio12"); console.log(time)},time); pauseAfter("audio12",timepause)}
+function a1(time,timepause){
+setTimeout(function(){play("audio13"); console.log(time)},time); pauseAfter("audio13",timepause)}
+function b1(time,timepause){
+setTimeout(function(){play("audio14"); console.log(time)},time); pauseAfter("audio14",timepause)}
+function c2(time,timepause){
+setTimeout(function(){play("audio15"); console.log(time)},time); pauseAfter("audio15",timepause)}
+function cs(time,timepause){
+setTimeout(function(){play("audio16"); console.log(time)},time); pauseAfter("audio16",timepause)}
+function ds(time,timepause){
+setTimeout(function(){play("audio17"); console.log(time)},time); pauseAfter("audio17",timepause)}
+function fs(time,timepause){
+setTimeout(function(){play("audio18"); console.log(time)},time); pauseAfter("audio18",timepause)}
+function gs(time,timepause){
+setTimeout(function(){play("audio19"); console.log(time)},time); pauseAfter("audio19",timepause)}
+function as(time,timepause){
+setTimeout(function(){play("audio20"); console.log(time)},time); pauseAfter("audio20",timepause)}
+function cs1(time,timepause){
+setTimeout(function(){play("audio21"); console.log(time)},time); pauseAfter("audio21",timepause)}
+function ds1(time,timepause){
+setTimeout(function(){play("audio22"); console.log(time)},time); pauseAfter("audio22",timepause)}
+function fs1(time,timepause){
+setTimeout(function(){play("audio23"); console.log(time)},time); pauseAfter("audio23",timepause)}
+function gs1(time,timepause){
+setTimeout(function(){play("audio24"); console.log(time)},time); pauseAfter("audio24",timepause)}
+function as1(time,timepause){
+setTimeout(function(){play("audio25"); console.log(time)},time); pauseAfter("audio25",timepause)}
+function executeCommands(){
+var arr=fileContent.split(" ");
+for(var i=0; i<arr.length; i++){
+if(arr[i].split("t").length > 1){
+tempo=Number(arr[i].split("t")[1]);
+}}
+arr.reverse();
+ totalLength=0;
+for(var i=0; i<arr.length; i++){
+var current=arr[i];
+if(current.split("c1").length > 1){
+var len=Number(current.split("c1")[1]);
+console.log(len);
+c(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("d1").length > 1){
+var len=Number(current.split("d1")[1]);
+console.log(len);
+d(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("e1").length > 1){
+var len=Number(current.split("e1")[1]);
+console.log(len);
+e(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("f1").length > 1){
+var len=Number(current.split("f1")[1]);
+console.log(len);
+f(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("g1").length > 1){
+var len=Number(current.split("g1")[1]);
+console.log(len);
+g(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("a1").length > 1){
+var len=Number(current.split("a1")[1]);
+console.log(len);
+a(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("b1").length > 1){
+var len=Number(current.split("b1")[1]);
+console.log(len);
+b(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("c2").length > 1){
+var len=Number(current.split("c2")[1]);
+console.log(len);
+c1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("d2").length > 1){
+var len=Number(current.split("d2")[1]);
+console.log(len);
+d1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("e2").length > 1){
+var len=Number(current.split("e2")[1]);
+console.log(len);
+e1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("f2").length > 1){
+var len=Number(current.split("f2")[1]);
+console.log(len);
+f1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("g2").length > 1){
+var len=Number(current.split("g2")[1]);
+console.log(len);
+g1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("a2").length > 1){
+var len=Number(current.split("a2")[1]);
+console.log(len);
+a1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("b2").length > 1){
+var len=Number(current.split("b2")[1]);
+console.log(len);
+b1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("c3").length > 1){
+var len=Number(current.split("c3")[1]);
+console.log(len);
+c2(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("c#1").length > 1){
+var len=Number(current.split("c#1")[1]);
+console.log(len);
+cs1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("d#1").length > 1){
+var len=Number(current.split("d#1")[1]);
+console.log(len);
+ds1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("f#1").length > 1){
+var len=Number(current.split("f#1")[1]);
+console.log(len);
+fs1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("g#1").length > 1){
+var len=Number(current.split("g#1")[1]);
+console.log(len);
+gs1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("a#1").length > 1){
+var len=Number(current.split("a#1")[1]);
+console.log(len);
+as1(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("c#2").length > 1){
+var len=Number(current.split("c#2")[1]);
+console.log(len);
+cs(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("d#2").length > 1){
+var len=Number(current.split("d#2")[1]);
+console.log(len);
+ds(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("f#2").length > 1){
+var len=Number(current.split("f#2")[1]);
+console.log(len);
+fs(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("g#2").length > 1){
+var len=Number(current.split("g#2")[1]);
+console.log(len);
+gs(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("a#2").length > 1){
+var len=Number(current.split("a#2")[1]);
+console.log(len);
+as(60000*totalLength/tempo,60000*totalLength/tempo+60000*len/tempo);
+totalLength += len;
+}
+if(current.split("r").length > 1){
+var len=Number(current.split("r")[1]);
+totalLength += len;
+}
+}
+getElem("length").innerText="Music piece length: ~"+ Math.round(totalLength*60/tempo)+"s";
+getElem("replaybutton").style.display="none";
+}
+    var reader; //GLOBAL File Reader object for demo purpose only
+
+    /**
+     * Check for the various File API support.
+     */
+    function checkFileAPI() {
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            reader = new FileReader();
+            return true; 
+        } else {
+            alert('The File APIs are not fully supported by your browser. Fallback required.');
+            return false;
+        }
+    }
+
+    /**
+     * read text input
+     */
+	 checkFileAPI();
+    function readText(filePath) {
+        var output = ""; //placeholder for text output
+        if(filePath.files && filePath.files[0]) {           
+            reader.onload = function (e) {
+                output = e.target.result;
+                getElem("list").innerText=output;
+				fileContent=output;
+				executeCommands();
+            };//end onload()
+            reader.readAsText(filePath.files[0]);
+        }//end if html5 filelist support
+        else if(ActiveXObject && filePath) { //fallback to IE 6-8 support via ActiveX
+            try {
+                reader = new ActiveXObject("Scripting.FileSystemObject");
+                var file = reader.OpenTextFile(filePath, 1); //ActiveX File Object
+                output = file.ReadAll(); //text contents of file
+                file.Close(); //close file "input stream"
+            } catch (e) {
+                if (e.number == -2146827859) {
+                    alert('Unable to access local files due to browser security settings. ' + 
+                     'To overcome this, go to Tools->Internet Options->Security->Custom Level. ' + 
+                     'Find the setting for "Initialize and script ActiveX controls not marked as safe" and change it to "Enable" or "Prompt"'); 
+                }
+            }       
+        }
+        else { //this is where you could fallback to Java Applet, Flash or similar
+        }
+return output;		
+    }
+	
+</script>

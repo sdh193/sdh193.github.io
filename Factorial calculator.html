@@ -1,0 +1,16 @@
+<script src="C:\Users\start\OneDrive\Desktop\Coding files\Coding libraries\bigNumber.js"></script>
+<h1 align=center>X!</h1>
+<div align=center style=font-size:25px>
+<input max=1000000 min=0 onKeyPress="if(this.value.length==6) return false;" type=number id=number style=font-size:25px></input>
+<br>
+<Br>
+<div id=number1 style=font-size:25px></div>
+<script>
+var result;
+function factorial(num){
+var resul=1;
+result=new bigNumber(1);
+if(num <= 1e6){
+for(var i=1; i <= num; i++){result.multiply(i)}
+return resul;}else{result="Sorry, the number is too big to be processed."}}
+setInterval(function(){factorial(Number(document.getElementById("number").value)); document.getElementById("number1").innerText=result.format()})</script>

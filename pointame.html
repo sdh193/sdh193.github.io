@@ -313,6 +313,7 @@ user.timePlayed=Number((seconddate-user.timeStarted)/1000)
 function updatePoints(){
 user.point += user.pointspersecond/100
 user.points = user.point+1
+document.title="You have "+user.points+" points"
 }
 function save(){
 localStorage.setItem("playerInfo",JSON.stringify(user))}

@@ -227,6 +227,7 @@ color:black; width:470px; }
   </div>
 </div>
 <script>
+document.title="Point game"
 //Create user object
 if(localStorage.getItem("playerInfo") == null){
 user=new Object();
@@ -313,7 +314,6 @@ user.timePlayed=Number((seconddate-user.timeStarted)/1000)
 function updatePoints(){
 user.point += user.pointspersecond/100
 user.points = user.point+1
-document.title="You have "+format(user.points)+" points"
 }
 function save(){
 localStorage.setItem("playerInfo",JSON.stringify(user))}

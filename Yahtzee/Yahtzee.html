@@ -1,0 +1,339 @@
+<html>
+<style>
+.diceslot{
+border: 2px solid black; 
+width:70px;
+height:70px;
+display:block;
+margin-bottom:15px;
+background:white;
+}
+input,textarea,div,button,a,table,tr,td{
+font-size:17px;
+color:black;
+margin:2px 3px 2px 3px;
+padding:2px 3px 2px 3px;
+font-family:arial;
+}
+button{
+border: 2px solid black;
+background-color:lightgrey;
+border-radius:5px;
+padding:2px 3px 2px 3px;
+}
+#rollbtn{
+font-size:21px;
+margin-left:1px;
+}
+#bottomcontainer{
+position:fixed;
+left:0px;
+bottom:0px;
+background-color:lightgreen;
+height:25px;
+width:1360px;
+}
+table{font-family:verdana; font-size:18px; border-collapse:collapse;user-select:none}
+tr{border-bottom:2px solid black;position:relative;z-index:1}
+td{border-right:2px solid black;border-left:2px solid black;padding:5px}
+td[a]{
+font-size:20px;
+font-weight:bold; 
+border-top:2px solid black;
+text-align:center;
+
+}
+td:nth-child(odd){
+width:250px}
+td:nth-child(even){
+width:125px}
+.category:hover{
+background:2px solid rgb(160,120,80);
+border:2px solid white ;
+}
+.image{
+width:15px;
+height:15px;
+border:1px solid black;
+background-color:white;
+position:relative;
+z-index:-1;
+margin-right:2px;
+top:4px;
+}
+tr[nohover]:hover{
+border:2px solid black;
+}
+</style>
+<body style=background-color:lightgrey>
+<button id=rollbtn onclick="roll()" style="margin-bottom:10px">Roll dice</button>
+<div class=diceslot id=diceslot1></div> 
+<div id=diceslot2 class=diceslot></div>
+<div class=diceslot id=diceslot3></div> 
+<div id=diceslot4 class=diceslot></div>
+<div id=diceslot5 class=diceslot></div>
+<br>
+<div style=font-size:22px id=rollsleft></div>
+<table style="position:absolute; top:0px; left:200px">
+<tr>
+<td a> Category </td>
+<td a>Benjamin</td>
+</tr>
+<tr class=category>
+<td >Ones <img src=1.svg class=image></img></td>
+<td ></td>
+</tr>
+<tr class=category>
+<td >Twos <img src=2.svg class=image></img></td>
+<td ></td>
+</tr>
+<tr class=category>
+<td >Threes <img src=3.svg class=image></img></td>
+<td ></td>
+</tr>
+<tr class=category>
+<td >Fours <img src=4.svg class=image></img></td>
+<td ></td>
+</tr>
+<tr class=category>
+<td >Fives <img src=5.svg class=image></img></td>
+<td ></td>
+</tr>
+<tr class=category>
+<td >Sixes <img src=6.svg class=image></img></td>
+<td ></td>
+</tr>
+<tr nohover class=category>
+<td >Upper score </td>
+<td ></td>
+</tr>
+<tr nohover class=category>
+<td >Upper bonus (35)</td>
+<td ></td>
+</tr>
+<tr class=category>
+<td >Three of a kind <img src=3.svg c class=image></img><img src=3.svg c class=image></img><img src=3.svg c class=image></img></td>
+<td ></td>
+
+</tr>
+<tr class=category>
+<td >Four of a kind <img src=4.svg class=image></img><img src=4.svg class=image></img><img src=4.svg class=image></img><img src=4.svg class=image></img></td>
+<td ></td>
+
+</tr>
+<tr class=category>
+<td >Full house (25) <img src=1.svg class=image></img><img src=1.svg class=image></img><img src=1.svg class=image></img><img src=2.svg class=image></img><img src=2.svg class=image></img></td>
+<td ></td>
+
+</tr>
+<tr class=category>
+<td >Small straight (30) <img src=1.svg class=image></img><img src=2.svg class=image></img><img src=3.svg class=image></img><img src=4.svg class=image></img></td>
+<td ></td>
+
+</tr>
+<tr class=category>
+<td >Large straight (40) <img src=1.svg class=image></img><img src=2.svg class=image></img><img src=3.svg class=image></img><img src=4.svg class=image></img><img src=5.svg class=image></img></td>
+<td ></td>
+
+</tr>
+<tr class=category>
+<td >Yahtzee (50) <img src=5.svg class=image></img><img src=5.svg class=image></img><img src=5.svg class=image></img><img src=5.svg class=image></img><img src=5.svg class=image></img></td>
+<td ></td>
+
+</tr>
+<tr class=category>
+<td >Chance</td>
+<td ></td>
+
+</tr>
+<tr nohover class=category>
+<td >Lower score</td>
+<td ></td>
+
+</tr>
+<tr nohover class=category>
+<td >Total score</td>
+<td ></td>
+
+</tr>
+</table>
+<div id=bottomcontainer>
+</div>
+<script>
+var dice1,dice2,dice3,dice4,dice5;
+var c1=0;
+var c2=0;
+var c3=0;
+var c4=0;
+var counter=0;
+var c5=0;
+var sel1,sel2,sel3,sel4,sel5;
+var upperScore=0;
+var upperBonus=0;
+var lowerScore=0;
+var turnnum=0;
+var t=document.getElementsByTagName("td");
+var r=document.getElementsByTagName("tr");
+function roll(){
+if(!sel1){
+dice1 = Math.ceil(Math.random()*6);}
+if(!sel2){
+dice2 = Math.ceil(Math.random()*6);}
+if(!sel3){
+dice3 = Math.ceil(Math.random()*6);}
+if(!sel4){
+dice4 = Math.ceil(Math.random()*6);}
+if(!sel5){
+dice5 = Math.ceil(Math.random()*6);}
+setTimeout(function(){document.getElementById("diceslot1").style.backgroundImage="url("+dice1+".svg)";},20);
+setTimeout(function(){document.getElementById("diceslot2").style.backgroundImage="url("+dice2+".svg)";},40);
+setTimeout(function(){document.getElementById("diceslot3").style.backgroundImage="url("+dice3+".svg)";},60);
+setTimeout(function(){document.getElementById("diceslot4").style.backgroundImage="url("+dice4+".svg)";},80);
+setTimeout(function(){document.getElementById("diceslot5").style.backgroundImage="url("+dice5+".svg)";},100);
+var len=document.getElementsByClassName("diceslot").length;
+for(var i=0; i<len; i++){
+var random=Math.floor(Math.random()*100000000);
+eval("var c"+random+"=0");
+document.getElementsByClassName("diceslot")[i].addEventListener("click",function(){var bool; eval("bool=c"+random+" % 2");if(bool == 0){selectDice(this)}else{deselectDice(this)} eval("c"+random+"++"); });
+}
+turnnum ++;
+}
+function selectDice(elem){
+elem.style.border="5px solid cyan";
+eval("sel"+elem.id.split("diceslot").join("")+"=true");
+}
+function deselectDice(elem){
+elem.style.border="2px solid black";
+eval("sel"+elem.id.split("diceslot").join("")+"=false");
+}
+function isSelected(elem){
+if(elem.style.border == "5px solid cyan"){
+return true;
+}else{return false}};
+setInterval(function(){
+if(turnnum == 3){
+document.getElementById("rollbtn").disabled = true;}
+document.getElementById("rollsleft").innerText="Rolls left: "+Number(3-turnnum);
+t[15].innerText=upperScore;
+t[33].innerText=lowerScore;
+t[35].innerText=upperScore+lowerScore+upperBonus;
+if(upperScore >= 63 && counter == 0){
+upperBonus=35;
+t[17].innerText=upperBonus;
+counter ++;
+}
+})
+r[1].addEventListener("click",function(){var result=0; document.getElementById("rollbtn").disabled = false;  turnnum=0; this.disabled=true; for(var i=1; i<6; i++){var variable; eval("variable = dice"+i); if(variable == 1){result += 1;};  t[3].innerText=result;}upperScore += result;resetPos();})
+r[2].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false;  turnnum=0; this.disabled=true; for(var i=1; i<6; i++){var variable; eval("variable = dice"+i); if(variable == 2){result += 2;};} upperScore += result; t[5].innerText=result; resetPos();})
+r[3].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false;  turnnum=0; this.disabled=true; for(var i=1; i<6; i++){var variable; eval("variable = dice"+i); if(variable == 3){result += 3;};} upperScore += result; t[7].innerText=result;resetPos();})
+r[4].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; for(var i=1; i<6; i++){var variable; eval("variable = dice"+i); if(variable == 4){result += 4;};} upperScore += result; t[9].innerText=result;resetPos();})
+r[5].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; for(var i=1; i<6; i++){var variable; eval("variable = dice"+i); if(variable == 5){result += 5;};} upperScore += result; t[11].innerText=result;resetPos();})
+r[6].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; for(var i=1; i<6; i++){var variable; eval("variable = dice"+i); if(variable == 6){result += 6;};} upperScore += result; t[13].innerText=result;resetPos();})
+r[9].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; if(getTotal(dice1,dice2,dice3,dice4,dice5) >= 3){result=dice1+dice2+dice3+dice4+dice5}else{result=0} lowerScore += result; t[19].innerText=result;resetPos();})
+r[10].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; if(getTotal(dice1,dice2,dice3,dice4,dice5) >= 4){result=dice1+dice2+dice3+dice4+dice5}else{result=0} lowerScore += result; t[21].innerText=result;resetPos();})
+r[11].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; if(checkForFullHouse(dice1,dice2,dice3,dice4,dice5)){result=25}else{result=0} lowerScore += result; t[23].innerText=result;resetPos();})
+r[12].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; if(checkForSmallStraight(dice1,dice2,dice3,dice4,dice5)){result=30}else{result=0} lowerScore += result; t[25].innerText=result;resetPos();})
+r[13].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; if(checkForLargeStraight(dice1,dice2,dice3,dice4,dice5)){result=40}else{result=0} lowerScore += result; t[27].innerText=result;resetPos();})
+r[14].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; if(getTotal(dice1,dice2,dice3,dice4,dice5) >= 5){result=50}else{result=0} lowerScore += result; t[29].innerText=result;resetPos();})
+r[15].addEventListener("click",function(){var result=0;document.getElementById("rollbtn").disabled = false; turnnum=0; this.disabled=true; result=dice1+dice2+dice3+dice4+dice5; lowerScore += result; t[31].innerText=result;resetPos();})
+
+function resetPos(){
+setTimeout(function(){
+dice1 = 0;
+dice2 = 0;
+dice3 = 0;
+dice4 = 0;
+dice5 = 0;
+var length=document.getElementsByClassName("diceslot").length;
+for(var j=0; j<length; j++){
+document.getElementsByClassName("diceslot")[j].style.background="white";
+deselectDice(document.getElementsByClassName("diceslot")[j]);
+}},100)}
+function contains(){
+var array=[];
+var quantity=0;
+for(var k=0; k<arguments.length-1; k++){
+array.push(arguments[k]);}
+for(var l=0; l<array.length; l++) {
+var num=array[l];
+if(num == arguments[arguments.length-1]) {
+quantity ++;
+}
+}
+return quantity;
+}
+function getTotal(a,b,c,d,e){
+var result1;
+var result2;
+var result3;
+var result4;
+var result5;
+var result6;
+for(var m=1; m<7; m++){
+eval("result"+m+"=contains(a,b,c,d,e,"+m+")")
+}
+return Math.max(result1,result2,result3,result4,result5,result6)
+}
+function checkForFullHouse(a,b,c,d,e){
+var result1;
+var result2;
+var result3;
+var result4;
+var result5;
+var result6;
+var arr=[];
+for(var m=1; m<7; m++){
+eval("result"+m+"=contains(a,b,c,d,e,"+m+")");
+eval("arr.push(result"+m+")");
+}
+arr.sort();
+if(arr[5] == 3 && arr[4] == 2){
+return true;
+}else{return false}}
+function checkForSmallStraight(a,b,c,d,e){
+var result1;
+var result2;
+var result3;
+var result4;
+var result5;
+var result6;
+var q=0;
+var arr=[];
+for(var m=1; m<7; m++){
+eval("result"+m+"=contains(a,b,c,d,e,"+m+")");
+eval("arr.push(result"+m+")");
+}
+arr.sort();
+for(var n=0; n<arr.length; n++){
+if(arr[n] >= 1){q ++}
+
+}
+if(q >= 4){
+return true;
+}else{return false;}
+}
+function checkForLargeStraight(a,b,c,d,e){
+var result1;
+var result2;
+var result3;
+var result4;
+var result5;
+var result6;
+var q=0;
+var arr=[];
+for(var m=1; m<7; m++){
+eval("result"+m+"=contains(a,b,c,d,e,"+m+")");
+eval("arr.push(result"+m+")");
+}
+arr.sort();
+for(var n=0; n<arr.length; n++){
+if(arr[n] >= 1){q ++}
+
+}
+if(q >= 5){
+return true;
+}else{return false;}
+}
+</script>
+</body>
+</html>

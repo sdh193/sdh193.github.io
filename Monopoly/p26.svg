@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg"  width="130" height="200">
+<rect width="130" height="40" style="fill: rgb(0, 0, 255); stroke:black; stroke-width:2px"></rect>
+<text x="20" y="80" style="font-size:21px">Boardwalk</text>
+<text x="20" y="180" style="font-size:21px">Price: $400</text>
+</svg> 

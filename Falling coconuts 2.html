@@ -59,7 +59,7 @@ document.getElementById('time').innerText='Time remaining: '+Math.round(time);
 },10)
 document.addEventListener("keydown",function (e){
 if(e.code == "ArrowLeft"){
-b += 40
+b += -40
 score += .4
 if(time<0){
 score += -.4}
@@ -68,7 +68,7 @@ b += -40
 }}
 console.log(e.code);
 if(e.code == "ArrowRight"){
-b += -40 
+b += 40 
 score += .4
 if(time<0){
 score += -.4}

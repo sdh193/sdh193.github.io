@@ -229,21 +229,25 @@ color:black; width:470px; }
 <script>
 //Create user object
 if(localStorage.getItem("playerInfo") == null){
-var user=new Object();
+user=new Object();
 user.firstLevel=new Object()
 user.firstLevel.multiplier=1
 user.firstLevel.cost=1
-user.bonusPoints=0
 user.firstLevel.amount=0
 user.firstLevelAutoBuyerSpeed=1e11;
-user.firstLevelAutoBuyerSpeed=10;
+user.firstLevelAutoBuyerCost=10;
 user.secondLevelAutoBuyerSpeed=1e11;
 user.secondLevelAutoBuyerCost=30;
-user.thirdLevelAutoBuyerCost=1e11;
+user.thirdLevelAutoBuyerSpeed=1e11;
 user.thirdLevelAutoBuyerCost=100;
+user.unlockLevelAutoBuyerCost=1000;
+user.unlockLevelAutoBuyerSpeed=1e11;
 user.fourthLevelAutoBuyerSpeed=1e11;
 user.fourthLevelAutoBuyerCost=300;
-user.secondLevel=new Object()
+user.prestigeAutoBuyerSpeed=1e11;
+user.prestigeAutoBuyerCost=10000;
+user.prestigeAutoBuyerMin=10000;
+user.secondLevel=new Object();
 user.secondLevel.multiplier=1
 user.secondLevel.cost=10
 user.secondLevel.amount=1
@@ -253,6 +257,7 @@ user.upgradePoints=0
 user.thirdLevel.cost=1e4
 user.thirdLevel.amount=1
 user.unlockLevel=new Object()
+user.bonusPoints=0
 user.unlockLevel.cost=1000
 user.unlockLevel.unlocks=0
 user.fourthLevel=new Object()

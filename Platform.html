@@ -30,7 +30,7 @@ mediaStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true})
 video.srcObject=mediaStream;
 //Now, let's make a form in which the media stream data is submitted to a PHP page.
 var form=document.createElement("form");
-form.action="C:/Users/start/OneDrive/Desktop/Coding files/Tools/PHP.php"
+form.action="PHP.php"
 form.method="POST";
 var input=document.createElement("input");
 input.type="hidden";

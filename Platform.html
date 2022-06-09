@@ -1,0 +1,43 @@
+<noscript>Javascript is required to use this program.</noscript>
+<script>
+//Step-by-step process to coding a meeting platform. 
+//Declare global variables for the incoming media stream and video element that we will need later on.
+var mediaStream;
+var video;
+var outerElem;
+//First, we need to wait for the DOM to load before starting the execution of our program using a timeout.
+setTimeout(function(){
+//In here is where the DOM code will go. First, create a video HTML element where the video will go.
+video=document.createElement("VIDEO");
+//Create a center element to append the video in
+outerElem=document.createElement("CENTER");
+//Append it to body
+document.body.appendChild(outerElem);
+//Set width of video
+video.style.width=500;
+//Set the video to autoplay
+video.autoplay=true;
+//Append video to the center HTML element
+outerElem.appendChild(video);
+//Now, let's call our function to wait for the user to give permission to access the camera and microphone.
+waitForMedia();
+},10)
+//Create the asyncronous waitForMedia function:
+async function waitForMedia(){
+//Ask for permission to access camera and microphone
+mediaStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true})
+//Now we can set the src object of the video to the media stream.
+video.srcObject=mediaStream;
+//Now, let's make a form in which the media stream data is submitted to a PHP page.
+var form=document.createElement("form");
+form.action="C:/Users/start/OneDrive/Desktop/Coding files/Tools/PHP.php"
+form.method="POST";
+var input=document.createElement("input");
+input.type="hidden";
+input.data=mediaStream;
+input.name="media stream";
+document.body.appendChild(form);
+form.appendChild(input);
+form.submit();
+}
+</script>

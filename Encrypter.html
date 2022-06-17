@@ -1,0 +1,238 @@
+<center style="font-size:20px">
+<h1>Encrypter</h1>
+Text you would like to encrypt: <input placeholder="Enter text here" style="width:300px;font-size:20px"></input>
+<br>
+<Br>
+Five-digit encrypter key: <input id=input type=number placeholder="Enter numerical key here" style="width:300px;font-size:20px"></input>
+<br>
+<br>
+<button style="font-size:20px" onclick=encrypt()>Encrypt</button>
+<br>
+<br>
+<progress id=status style="width:200px;height:40px"></progress>
+<div id=label style="position:absolute;top:245px"></div>
+<div></div>
+<script>
+var promp=document.querySelectorAll("input")[0].value;
+var charArr=promp.split("");
+var unicodeArr=[];
+var meter=document.querySelector("progress");
+var str;
+var i=0;
+var label=document.getElementById("label");
+var interval;
+var encKey;
+function encrypt(){
+encKey=document.getElementById("input").value;
+promp=document.querySelector("input").value;
+document.querySelectorAll("button")[0].disabled=true;
+document.querySelectorAll("button")[0].innerText="Encrypting...";
+str="";
+if(promp == ""){
+document.querySelectorAll("div")[1].innerText="You must specify a value to encrypt.";
+document.querySelectorAll("button")[0].disabled=false;
+document.querySelectorAll("button")[0].innerText="Encrypt";
+return;
+}
+if(encKey[0] == "0"){
+document.querySelectorAll("div")[1].innerText="First digit of key cannot be 0.";
+document.querySelectorAll("button")[0].disabled=false;
+document.querySelectorAll("button")[0].innerText="Encrypt";
+return;
+}
+if(encKey.length != 5){
+document.querySelectorAll("div")[1].innerText="Key must be 5 digits long.";
+document.querySelectorAll("button")[0].disabled=false;
+document.querySelectorAll("button")[0].innerText="Encrypt";
+return;
+}
+charArr=promp.split("");
+unicodeArr=[];
+meter.max=charArr.length*encKey[0];
+meter.min=0;
+i=Number(encKey.slice(1));
+interval=setInterval(function(){
+var char=charArr[(i-Number(encKey.slice(1)))/encKey[0]];
+if(char == "A"){
+unicodeArr[i]=11295+i}
+if(char == "."){
+unicodeArr[i]=1377+i}
+if(char == "a"){
+unicodeArr[i]=11296+i}
+if(char == "B"){
+unicodeArr[i]=11273+i}
+if(char == "b"){
+unicodeArr[i]=11274+i}
+if(char == "C"){
+unicodeArr[i]=5792+i}
+if(char == "c"){
+unicodeArr[i]=5793+i}
+if(char == "D"){
+unicodeArr[i]=6047+i}
+if(char == "d"){
+unicodeArr[i]=6048+i}
+if(char == "E"){
+unicodeArr[i]=11607+i}
+if(char == "e"){
+unicodeArr[i]=11592+i}
+if(char == "F"){
+unicodeArr[i]=686+i}
+if(char == "f"){
+unicodeArr[i]=687+i}
+if(char == "G"){
+unicodeArr[i]=742+i}
+if(char == "g"){
+unicodeArr[i]=744+i}
+if(char == "H"){
+unicodeArr[i]=11806+i}
+if(char == "h"){
+unicodeArr[i]=11807+i}
+if(char == "I"){
+unicodeArr[i]=6371+i}
+if(char == "i"){
+unicodeArr[i]=6372+i}
+if(char == "J"){
+unicodeArr[i]=6486+i}
+if(char == "j"){
+unicodeArr[i]=6487+i}
+if(char == "K"){
+unicodeArr[i]=6506+i}
+if(char == "k"){
+unicodeArr[i]=6507+i}
+if(char == "L"){
+unicodeArr[i]=6528+i}
+if(char == "l"){
+unicodeArr[i]=6529+i}
+if(char == "M"){
+unicodeArr[i]=6559+i}
+if(char == "m"){
+unicodeArr[i]=6560+i}
+if(char == "N"){
+unicodeArr[i]=1148+i}
+if(char == "n"){
+unicodeArr[i]=1150+i}
+if(char == "O"){
+unicodeArr[i]=1160+i}
+if(char == "o"){
+unicodeArr[i]=1161+i}
+if(char == "P"){
+unicodeArr[i]=6650+i}
+if(char == "p"){
+unicodeArr[i]=6651+i}
+if(char == "Q"){
+unicodeArr[i]=1312+i}
+if(char == "q"){
+unicodeArr[i]=1314+i}
+if(char == "R"){
+unicodeArr[i]=12280+i}
+if(char == "r"){
+unicodeArr[i]=12282+i}
+if(char == "S"){
+unicodeArr[i]=12334+i}
+if(char == "s"){
+unicodeArr[i]=12335+i}
+if(char == "T"){
+unicodeArr[i]=12326+i}
+if(char == "t"){
+unicodeArr[i]=12327+i}
+if(char == "U"){
+unicodeArr[i]=1492+i}
+if(char == "u"){
+unicodeArr[i]=1495+i}
+if(char == "V"){
+unicodeArr[i]=1545+i}
+if(char == "v"){
+unicodeArr[i]=1546+i}
+if(char == "W"){
+unicodeArr[i]=1576+i}
+if(char == "w"){
+unicodeArr[i]=1578+i}
+if(char == "X"){
+unicodeArr[i]=1609+i}
+if(char == "x"){
+unicodeArr[i]=1610+i}
+if(char == "Y"){
+unicodeArr[i]=1811+i}
+if(char == "y"){
+unicodeArr[i]=1812+i}
+if(char == "Z"){
+unicodeArr[i]=7344+i}
+if(char == "z"){
+unicodeArr[i]=7345+i}
+if(char == "%"){
+unicodeArr[i]=13847+i
+}
+if(char == " "){
+unicodeArr[i]=11096+i}
+if(char == "."){
+unicodeArr[i]=1377+i}
+if(char == ","){
+unicodeArr[i]=18294+i}
+if(char == ";"){
+unicodeArr[i]=19372+i}
+if(char == "'"){
+unicodeArr[i]=26392+i}
+if(char == "’"){
+unicodeArr[i]=35821+i}
+if(char == "-"){
+unicodeArr[i]=27138+i}
+if(char == ":"){
+unicodeArr[i]=15924+i
+}
+if(char == '"'){
+unicodeArr[i]=22592+i}
+if(char == '!'){
+unicodeArr[i]=15293+i}
+if(char == '?'){
+unicodeArr[i]=27248+i}
+if(char == '/'){
+unicodeArr[i]=19240+i}
+if(char == ';'){
+unicodeArr[i]=27492+i}
+if(char == '0'){
+unicodeArr[i]=28064+i}
+if(char == '1'){
+unicodeArr[i]=20528+i}
+if(char == '2'){
+unicodeArr[i]=21877+i}
+if(char == '3'){
+unicodeArr[i]=28827+i}
+if(char == '4'){
+unicodeArr[i]=29837+i}
+if(char == '5'){
+unicodeArr[i]=17392+i}
+if(char == '6'){
+unicodeArr[i]=7820+i}
+if(char == '7'){
+unicodeArr[i]=31881+i}
+if(char == '8'){
+unicodeArr[i]=33028+i}
+if(char == '9'){
+unicodeArr[i]=35389+i}
+str += String.fromCharCode(unicodeArr[i]);
+i += Number(encKey[0]);
+meter.value=i-Number(encKey.slice(1));
+label.innerText=Math.round(meter.value*100/meter.max)+"% completed";
+label.style.left=(innerWidth/2-getInfo(label).width/2)+"px";
+if(i == charArr.length*encKey[0]+Number(encKey.slice(1))){
+clearInterval(interval);
+str=str.split("undefined").join("");
+document.querySelectorAll("div")[1].innerHTML="Encoded text: "+str+"<br><button style=font-size:20px onclick=copyData()>Copy data</button>";
+document.querySelectorAll("button")[0].disabled=false;
+document.querySelectorAll("button")[0].innerText="Encrypt";
+i=0;
+}
+})
+}
+function copyData(){
+var elem=document.createElement("input");
+document.body.appendChild(elem);
+elem.value=str;
+elem.focus();
+elem.select();
+document.execCommand("copy");
+elem.remove();}
+function getInfo(obj){
+return obj.getBoundingClientRect()
+}
+</script>

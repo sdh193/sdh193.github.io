@@ -1,0 +1,305 @@
+<center style="font-size:20px">
+<h1>Decrypter</h1>
+Text you would like to decrypt: <input placeholder="Enter text here" style="width:300px;font-size:20px"></input>
+<br>
+<Br>
+Five-digit decrypter key: <input id=input placeholder="Enter numerical key here" style="width:300px;font-size:20px"></input>
+<button style="font-size:20px" onclick=encrypt()>Decrypt</button>
+<br>
+<br>
+<progress id=status style="width:200px;height:40px"></progress>
+<div id=label style="position:absolute;top:195px"></div>
+<div></div>
+<script>
+var promp=document.querySelector("input").value;
+var charArr=promp.split("");
+var unicodeArr=[];
+var decryptedCharArr=[];
+var meter=document.querySelector("progress");
+var str;
+var i=0;
+var label=document.getElementById("label");
+var interval;
+var encKey;
+function encrypt(){
+promp=document.querySelector("input").value;
+document.querySelectorAll("button")[0].disabled=true;
+document.querySelectorAll("button")[0].innerText="Decrypting...";
+str="";
+encKey=document.getElementById("input").value;
+decryptedCharArr=[];
+if(promp == ""){
+document.querySelectorAll("div")[1].innerText="You must specify a value to decrypt.";
+document.querySelectorAll("button")[0].disabled=false;
+document.querySelectorAll("button")[0].innerText="Decrypt";
+return;
+}
+charArr=promp.split("");
+meter.max=charArr.length*encKey[0];
+
+meter.min=0;
+i=0;
+interval=setInterval(function(){
+var char=charArr[i/encKey[0]];
+var id=char.charCodeAt(0)-i-Number(encKey.slice(1));
+if(id == 11295){
+decryptedCharArr[i]="A";
+}
+if(id == 11296){
+decryptedCharArr[i]="a";
+}
+if(id == 11273){
+decryptedCharArr[i]="B";
+}
+if(id == 11274){
+decryptedCharArr[i]="b";
+}
+if(id == 5792){
+decryptedCharArr[i]="C";
+}
+if(id == 1377){
+decryptedCharArr[i]=".";
+}
+if(id == 18294){
+decryptedCharArr[i]=",";
+}
+if(id == 19372){
+decryptedCharArr[i]=";";
+}
+if(id == 26392){
+decryptedCharArr[i]="'";
+}
+if(id == 35821){
+decryptedCharArr[i]="’"
+}
+if(id == 22592){
+decryptedCharArr[i]='"';
+}
+if(id == 27138){
+decryptedCharArr[i]="-";
+}
+if(id == 15924){
+decryptedCharArr[i]=":";
+}
+if(id == 13847){
+decryptedCharArr[i]="%";
+}
+if(id == 28064){
+decryptedCharArr[i]="0";
+}
+if(id == 20528){
+decryptedCharArr[i]="1";
+}
+if(id == 21877){
+decryptedCharArr[i]="2";
+}
+if(id == 28827){
+decryptedCharArr[i]="3";
+}
+if(id == 29837){
+decryptedCharArr[i]="4";
+}
+if(id == 17392){
+decryptedCharArr[i]="5";
+}
+if(id == 7280){
+decryptedCharArr[i]="6";
+}
+if(id == 31881){
+decryptedCharArr[i]="7";
+}
+if(id == 33028){
+decryptedCharArr[i]="8";
+}
+if(id == 35389){
+decryptedCharArr[i]="9";
+}
+if(id == 5793){
+decryptedCharArr[i]="c";
+}
+if(id == 6047){
+decryptedCharArr[i]="D";
+}
+if(id == 6048){
+decryptedCharArr[i]="d";
+}
+if(id == 11607){
+decryptedCharArr[i]="E";
+}
+if(id == 11592){
+decryptedCharArr[i]="e";
+}
+if(id == 686){
+decryptedCharArr[i]="F";
+}
+if(id == 687){
+decryptedCharArr[i]="f";
+}
+if(id == 742){
+decryptedCharArr[i]="G";
+}
+if(id == 744){
+decryptedCharArr[i]="g";
+}
+if(id == 11806){
+decryptedCharArr[i]="H";
+}
+if(id == 11807){
+decryptedCharArr[i]="h";
+}
+if(id == 6371){
+decryptedCharArr[i]="I";
+}
+if(id == 6372){
+decryptedCharArr[i]="i";
+}
+if(id == 6486){
+decryptedCharArr[i]="J";
+}
+if(id == 6487){
+decryptedCharArr[i]="j";
+}
+if(id == 6506){
+decryptedCharArr[i]="K";
+}
+if(id == 6507){
+decryptedCharArr[i]="k";
+}
+if(id == 6528){
+decryptedCharArr[i]="L";
+}
+if(id == 6529){
+decryptedCharArr[i]="l";
+}
+if(id == 6559){
+decryptedCharArr[i]="M";
+}
+if(id == 6560){
+decryptedCharArr[i]="m";
+}
+if(id == 1148){
+decryptedCharArr[i]="N";
+}
+if(id == 1150){
+decryptedCharArr[i]="n";
+}
+if(id == 1160){
+decryptedCharArr[i]="O";
+}
+if(id == 1161){
+decryptedCharArr[i]="o";
+}
+if(id == 6650){
+decryptedCharArr[i]="P";
+}
+if(id == 6651){
+decryptedCharArr[i]="p";
+}
+if(id == 1312){
+decryptedCharArr[i]="Q";
+}
+if(id == 1314){
+decryptedCharArr[i]="q";
+}
+if(id == 12280){
+decryptedCharArr[i]="R";
+}
+if(id == 12282){
+decryptedCharArr[i]="r";
+}
+if(id == 12334){
+decryptedCharArr[i]="S";
+}
+if(id == 12335){
+decryptedCharArr[i]="s";
+}
+if(id == 12326){
+decryptedCharArr[i]="T";
+}
+if(id == 12327){
+decryptedCharArr[i]="t";
+}
+if(id == 1492){
+decryptedCharArr[i]="U";
+}
+if(id == 1495){
+decryptedCharArr[i]="u";
+}
+if(id == 1545){
+decryptedCharArr[i]="V";
+}
+if(id == 1546){
+decryptedCharArr[i]="v";
+}
+if(id == 1576){
+decryptedCharArr[i]="W";
+}
+if(id == 1578){
+decryptedCharArr[i]="w";
+}
+if(id == 1609){
+decryptedCharArr[i]="X";
+}
+if(id == 1610){
+decryptedCharArr[i]="x";
+}
+if(id == 1811){
+decryptedCharArr[i]="Y";
+}
+if(id == 1812){
+decryptedCharArr[i]="y";
+}
+if(id == 7344){
+decryptedCharArr[i]="Z";
+}
+if(id == 7345){
+decryptedCharArr[i]="z";
+}
+if(id == 11096){
+decryptedCharArr[i]=" "
+}
+if(id == 15293){
+decryptedCharArr[i]="!"
+}
+if(id == 27248){
+decryptedCharArr[i]="?"
+}
+if(id == 19240){
+decryptedCharArr[i]="/"
+}
+if(id == 27492){
+decryptedCharArr[i]=";"
+}
+if(decryptedCharArr[i] == undefined){
+location="400 bad request.html"
+document.body.innerHTML="<h1>400 Bad Request</h1><div>Either the encrypted data was malformed, or the decrypter key was entered in incorrectly.</div>"
+clearInterval(interval);
+error();
+}
+str += decryptedCharArr[i];
+i += Number(encKey[0]);
+meter.value=i;
+label.innerText=Math.round(meter.value*100/meter.max)+"% completed";
+label.style.left=(innerWidth/2-getInfo(label).width/2)+"px";
+if(i/encKey[0] == charArr.length){
+clearInterval(interval);
+str=str.split("undefined").join("");
+document.querySelectorAll("div")[1].innerHTML="Decoded text: "+str+"<br><button style=font-size:20px onclick=copyData()>Copy data</button>";
+document.querySelectorAll("button")[0].disabled=false;
+document.querySelectorAll("button")[0].innerText="Decrypt";
+i=0;
+}
+})
+}
+function copyData(){
+var elem=document.createElement("input");
+document.body.appendChild(elem);
+elem.value=str;
+elem.focus();
+elem.select();
+document.execCommand("copy");
+elem.remove();}
+function getInfo(obj){
+return obj.getBoundingClientRect()
+}
+</script>

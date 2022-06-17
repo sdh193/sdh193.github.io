@@ -272,9 +272,7 @@ decryptedCharArr[i]=";"
 }
 if(decryptedCharArr[i] == undefined){
 location="400 bad request.html"
-document.body.innerHTML="<h1>400 Bad Request</h1><div>Either the encrypted data was malformed, or the decrypter key was entered in incorrectly.</div>"
 clearInterval(interval);
-error();
 }
 str += decryptedCharArr[i];
 i += Number(encKey[0]);

@@ -14,6 +14,15 @@ Five-digit decrypter key: <input id=input placeholder="Enter numerical key here"
 var promp=document.querySelector("input").value;
 var charArr=promp.split("");
 var unicodeArr=[];
+if(localStorage.failedAttempts == undefined || localStorage.failedAttempts == null){localStorage.failedAttempts=0}
+var attempts=Number(localStorage.failedAttempts);
+if(attempts >= 10){
+setInterval(function(){document.body.innerHTML="<h1>Temporary ban</h1><div style=font-size:20px>Due to security reasons, we have banned you temporarily from accessing this site. The ban will expire in "+Math.ceil((Number(localStorage.bantimestamp)-Date.now()+900000)/60000)+" minutes.</div>"
+if(Number(localStorage.bantimestamp) <= Date.now()-900000){
+localStorage.failedAttempts = 0;
+location.reload(true);
+}},10)
+}
 var decryptedCharArr=[];
 var meter=document.querySelector("progress");
 var str;
@@ -272,7 +281,14 @@ decryptedCharArr[i]=";"
 }
 if(decryptedCharArr[i] == undefined){
 location="400 bad request.html"
+document.body.innerHTML="<h1>400 Bad Request</h1><div>Either the encrypted data was malformed, or the decrypter key was entered in incorrectly.</div>"
 clearInterval(interval);
+attempts ++;
+localStorage.failedAttempts=attempts;
+if(attempts >= 10){
+localStorage.bantimestamp=Date.now()
+}
+error();
 }
 str += decryptedCharArr[i];
 i += Number(encKey[0]);
@@ -300,4 +316,7 @@ elem.remove();}
 function getInfo(obj){
 return obj.getBoundingClientRect()
 }
+
+document.addEventListener("keydown",function(e){if(e.ctrlKey && e.shiftKey){e.preventDefault()}});
+document.addEventListener("contextmenu",function(e){e.preventDefault()})
 </script>

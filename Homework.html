@@ -1,0 +1,53 @@
+<h1>My Grammar Homework Response</h1>
+<div style=font-size:30px>p 13: A</div>
+<div style="font-size:20px;line-height:30px">
+<ol>
+<li>Ginny <u>plays</u> <uu>piano</uu> in a band.</li>
+<li>Hamsters <u>sleep</u> during the day.</li>
+<li>My parents both <u>work</u> for the same company.</li> 
+<li>Jordan <u>explored</u> the <uu>reefs</uu> for coral.</li>
+<li>I <u>finished</u> <uu>dinner</uu> before my brother. </li>
+<li>Joanie <u>found</u> a <uu>dollar</uu>. </li>
+<li>The cat <u>caught</u> the <uu>mouse</uu>. </li>
+<li>Delores <u>chased</u> the <uu>train</uu>. </li>
+<li>My parents <u>wrote</u> a <uu>note</uu>. </li>
+<li>Karen <u>put</u> the <uu>book</uu> back.</li>
+</ol>
+</div>
+<div style=font-size:30px>p 13: B</div>
+<div style="font-size:20px;line-height:30px">
+<ol>
+<li>We <u>play</u> <uu>ball</uu></li>
+<li>We <u>meet</u> <uu>others</uu> in the playground</li>
+<li>We <u>embrace</u> our <uu>talents</uu></li>
+<li>We <u>earn</u> good <uu>grades</uu></li>
+</ol>
+</div>
+<div style=font-size:30px>p 14: A</div>
+<div style="font-size:20px;line-height:30px">
+<ol>
+<li>I gave Maria a new <i>Pen</i>: Direct Object</li>
+<li>Did you write your <i>cousins</i> a letter?: Indirect Object</li>
+<li>Dave brought <i>Henrietta</i> some flowers: Indirect Object</li>
+<li>The band wrote three new <i>songs</i>: Direct Object</li>
+<li>Give <I>José</i> my share: Indirect Object</li>
+</ol>
+</div>
+<script>
+document.body.scrollTop=0;
+for(var i=0;i<document.querySelectorAll("uu").length;i++){
+var elem=document.querySelectorAll("uu")[i];
+var rect=elem.getBoundingClientRect();
+var div=document.createElement("DIV");
+div.style.position="absolute";
+div.style.height="1.5px";
+div.style.width=rect.width+"px"
+div.style.left=rect.left+"px";
+div.style.backgroundColor="black"
+div.style.top=rect.bottom+"px";
+var div2=div.cloneNode();
+div2.style.top=rect.bottom+3+"px";
+document.body.appendChild(div);
+document.body.appendChild(div2);
+}
+</script>

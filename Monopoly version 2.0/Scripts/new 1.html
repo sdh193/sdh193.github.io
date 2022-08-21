@@ -1,0 +1,9 @@
+<script>
+var str1=prompt("Choose a string");
+var result=0n;
+var str2=prompt("Choose another string");
+for(var i=0;i<str1.length;i++){
+result += BigInt(str1.charCodeAt(i)*(128**(str1.length-1-i)))}
+for(var i=0;i<str2.length;i++){
+result += BigInt(str2.charCodeAt(i)*(128**(str2.length-1-i)))}
+</script>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="border:2px solid black"  width="130" height="200">
+<text x="35" y="30" style="font-size:21px">Water</text>
+<text x="35" y="55" style="font-size:21px">Works</text>
+<image width="70" x="30" y=" 85" href="water.png"></image>
+<text x="18" y="180" style="font-size:21px">Price: $150</text>
+</svg>

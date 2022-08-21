@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<!-- Some aspects from http://www.freewebarcade.com/game/monopoly/ -->
+<div id=property></div>
+<style>
+/* This stylesheet from http://www.freewebarcade.com/game/monopoly/ */
+.deed {
+    border: 2px solid black;
+    width: 235px;
+    height: 275px;
+	text-align:center;
+    background-color: white;
+    z-index: 18;
+    -webkit-user-select: none;
+    user-select: none;
+}
+#deed-header {
+    width: 215px;
+    height: 48px;
+    border: 1px solid black;
+    margin: 9px;
+    background-color: yellow;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: Calibri, Arial;
+}
+#deed-table{
+margin: 9px;
+    width: 217px;
+    border-spacing: 1px;}
+	td {
+    font-size: 12px;
+    font-family: arial, sans-serif;
+    text-align: center;
+}
+#deed-special-footer {
+    margin: 0px 20px;
+    width: 195px;
+    position: absolute;
+    bottom: 20px;
+    font-size: 16px;
+}
+.square{
+border:2px solid black;
+width:130px;
+height:200px;
+margin-top:300px;
+margin-left:-5px;
+display:inline-block;
+}
+.largesquare{
+border:2px solid black;
+width:200px;
+height:200px;
+margin-top:300px;
+margin-left:-5px;
+display:inline-block;
+}
+.sidesquare{
+border:2px solid black;
+width:130px;
+height:200px;
+margin-top:300px;
+display:inline-block;
+transform:rotate(90deg);
+}
+.topsquare{
+border:2px solid black;
+width:130px;
+height:200px;
+display:inline-block;
+transform:rotate(180deg);
+}
+.siderightsquare{
+border:2px solid black;
+width:130px;
+height:200px;
+margin-top:300px;
+display:inline-block;
+transform:rotate(270deg);}
+.toplargesquare{
+border:2px solid black;
+width:200px;
+height:200px;
+margin-left:-5px;
+display:inline-block;
+transform:rotate(90deg);
+}
+.sidelargesquare{
+border:2px solid black;
+width:200px;
+height:200px;
+margin-left:-5px;
+display:inline-block;
+transform:rotate(180deg);
+}
+#bottomrow{
+margin-top:600px;margin-left:5px}
+body{
+overflow:auto;
+}
+.propmarker{
+width:85px;
+height:18.75px;
+background-image:url(http://www.freewebarcade.com/html5/monopoly/images/hori-bar.png);
+background-size:cover;
+}
+.diceslot{
+position:absolute;
+width:25px;
+height:25px;}
+input{font-size:18px}
+select{font-size:20px}
+</style>
+<script src=Scripts/init.js></script>
+<script src=Scripts/board_creation.js></script>
+<script src=Scripts/piece_class.js></script>
+<script src=Scripts/core.js></script>
+<noscript>Javascript is required to run this app.</noscript>
+<div id=init style="display:block;font-size:20px" align=center>
+<h2>Welcome to Monopoly!</h2>
+<div style=font-size:20px>To begin, select the tokens and colors for each player.
+<br>
+<br>
+ Click "Settings" for more options.</div>
+<form>
+ <br>
+ <br>
+ <div id=inputs>
+ Player 1: Name: <input placeholder="Name..." required></input>, Color: <input placeholder="Color..." required></input>, Token: <select required></select>
+ <br>
+  Player 2: Name: <input placeholder="Name..." required></input>, Color: <input placeholder="Color..." required></input>, Token: <select required></select>
+ </div>
+ <br>
+  <button style=font-size:20px onclick=addPlayer()>Add player</button>
+  <br>
+  <br>
+  <button style=font-size:20px onclick=openSettings()>Settings</button>
+  <br>
+  <br>
+  <button style=font-size:20px onclick="document.getElementById('fileinput').click()" accept=".monopolysave">Upload Game From File</button>
+  <br>
+<br>
+  <input type=file id=fileinput onchange='startSavedGame(this)' style="display:none"></input>
+  <button style=font-size:20px onclick="startGame()">Start Game</button>
+   </form>
+<br>
+Note: Your game will be autosaved every second. If you close and reopen this tab, you will be given a choice to load your save (to select press OK) or start a new game (to select press Cancel). 
+</div>
+<div id=properties style="zoom:.68; display:none" ></div>
+<div id=main style=display:none>
+<br>
+<div style="overflow:auto;margin-left:25px" id=board>
+<div id=siderow style=" zoom:.83; "></div>
+<div id=siderightrow style=" zoom:.83; "></div>
+<div id=toprow style="zoom:.83; user-select:none"></div>
+<div id=bottomrow style="zoom:.83; user-select:none">
+<div class=largesquare id=10 style="background-image:url(jailsquare.png)"></div>
+<div class=square id=9 style="background-image:url(p6.svg)"></div>
+<div class=square id=8 style="background-image:url(p5.svg)"></div>
+<div class=square id=7 style="background-image:url(c.png)"></div>
+<div class=square id=6 style="background-image:url(p4.svg)"></div>
+<div class=square id=5 style="background-image:url(railroad.png);"></div>
+<div class=square id=4 style="background-image:url(income.svg);"></div>
+<div class=square id=3 style="background-image:url(p2.svg)"></div>
+<div class=square id=2 style="background-image:url(cchest.png)"></div>
+<div class=square id=1 style="background-image:url(p1.svg)"></div>
+<div class=largesquare id=0 style="background-image:url(GO.svg); ">
+</div>
+</div>
+</div>
+<textarea style="width:300px;height:200px;position:absolute;left:550px;top:1200px" readonly></textarea>
+<button style="font-size:20px;position:absolute;left:615px;top:1420px" onclick="downloadSave()">Download a save</button>
+<div id="diceroll1" class="diceslot"></div>
+<div id="diceroll2" class="diceslot"></div>
+<div id="propertydialogue" style="position:fixed; z-index:5; text-align:center; display:none; top:150px; left:500px; width:400px; height:400px; background-color:lightgrey; border:2px solid black;"></div>
+<div id="playermoney1" style="position:fixed; display:none; top:0px; left:0px; width:100px; height:100px; background-color:blue; border:2px solid black">
+<div align=center>
+<img style="margin-left:-5px" width="65" height="65"></img></div>
+<div id="play1" align=center style="font-size:22px">$1500</div>
+</div>
+<div id="playermoney2" style="position:fixed;display:none; top:0px; right:0px; width:100px; height:100px; background-color:yellow; border:2px solid black">
+<div align=center>
+<img style="margin-left:-5px" width="65" height="65"></img></div>
+<div id="play2" align=center style="font-size:22px">$1500</div>
+</div>
+<div id="playermoney3" style="position:fixed; display:none;bottom:0px; left:0px; width:100px; height:100px; background-color:red; border:2px solid black">
+<div align=center>
+<img style="margin-left:-5px" width="65" height="65"></img></div>
+<div id="play3" align=center style="font-size:22px">$1500</div>
+</div>
+<div id="playermoney4" style="position:fixed; display:none;bottom:0px; right:0px; width:100px; height:100px; background-color:violet; border:2px solid black">
+<div align=center>
+<img style="margin-left:-5px" width="65" height="65"></img></div>
+<div id="play4" align=center style="font-size:22px">$1500</div>
+</div>
+<div id=news align=center style="font-size:40px; left:28%; opacity:0; color:#999; position:fixed; top:0px;">Battleship lost $200 from income tax</div>
+<div id=chancedialogue style="position:fixed; z-index:5;left:40%; top:40%; padding:5px; font-size:20px;display:none; border:2px solid black; background-color:red; text-align:center"></div>
+<button id=rollbtn onclick=roll() style="position:fixed;display:none;font-size:20px;bottom:0px">Roll dice</button>
+<br>
+<br>
+</div>

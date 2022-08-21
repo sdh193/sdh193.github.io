@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="border:2px solid black" width="200" height="200">
+<g rotate="45">
+<text x="0" y="100" style="word-break:break-word; font-size:35px" transform="translate(-50,-5) rotate(315)">Free</text>
+<image x="0" y="100" width="100" href="free.png" style="word-break:break-word; font-size:100px; fill:red; width:600px;" transform="translate(-50,20) rotate(315)"></image>
+<text x="0" y="100" style="word-break:break-word; font-size:35px" transform="translate(45,125) rotate(315)">Parking</text>
+</g>
+</svg>

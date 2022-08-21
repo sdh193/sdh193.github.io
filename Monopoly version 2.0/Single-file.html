@@ -1,0 +1,856 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<!-- Some aspects from http://www.freewebarcade.com/game/monopoly/ --><div align=center>
+<div id=property></div>
+<style>
+/* This stylesheet from http://www.freewebarcade.com/game/monopoly/ */
+.deed {
+    border: 2px solid black;
+    width: 235px;
+    height: 275px;
+	text-align:center;
+    background-color: white;
+    z-index: 18;
+    -webkit-user-select: none;
+    user-select: none;
+}
+#deed-header {
+    width: 215px;
+    height: 48px;
+    border: 1px solid black;
+    margin: 9px;
+    background-color: yellow;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: Calibri, Arial;
+}
+#deed-table{
+margin: 9px;
+    width: 217px;
+    border-spacing: 1px;}
+	td {
+    font-size: 12px;
+    font-family: arial, sans-serif;
+    text-align: center;
+}
+#deed-special-footer {
+    margin: 0px 20px;
+    width: 195px;
+    position: absolute;
+    bottom: 20px;
+    font-size: 16px;
+}
+.square{
+border:2px solid black;
+width:130px;
+height:200px;
+margin-top:300px;
+margin-left:-5px;
+display:inline-block;
+}
+.largesquare{
+border:2px solid black;
+width:200px;
+height:200px;
+margin-top:300px;
+margin-left:-5px;
+display:inline-block;
+}
+.sidesquare{
+border:2px solid black;
+width:130px;
+height:200px;
+margin-top:300px;
+display:inline-block;
+transform:rotate(90deg);
+}
+.topsquare{
+border:2px solid black;
+width:130px;
+height:200px;
+display:inline-block;
+transform:rotate(180deg);
+}
+.siderightsquare{
+border:2px solid black;
+width:130px;
+height:200px;
+margin-top:300px;
+display:inline-block;
+transform:rotate(270deg);}
+.toplargesquare{
+border:2px solid black;
+width:200px;
+height:200px;
+margin-left:-5px;
+display:inline-block;
+transform:rotate(90deg);
+}
+.sidelargesquare{
+border:2px solid black;
+width:200px;
+height:200px;
+margin-left:-5px;
+display:inline-block;
+transform:rotate(180deg);
+}
+#bottomrow{
+margin-top:600px;margin-left:5px}
+body{
+overflow:auto;
+}
+.propmarker{
+width:85px;
+height:18.75px;
+background-image:url(http://www.freewebarcade.com/html5/monopoly/images/hori-bar.png);
+background-size:cover;
+}
+
+.diceslot{
+position:absolute;
+width:25px;
+height:25px;}
+</style>
+
+
+
+<noscript>Javascript is required to run this app.</noscript>
+<div id=properties style="zoom:.68; display:none" ></div>
+<br>
+<div style="overflow:auto;margin-left:25px" id=board>
+<div id=siderow style=" zoom:.83; "></div>
+<div id=siderightrow style=" zoom:.83; "></div>
+<div id=toprow style="zoom:.83; user-select:none"></div>
+<div id=bottomrow style="zoom:.83; user-select:none">
+<div class=largesquare id=10 style="background-image:url(jailsquare.png)"></div>
+<div class=square id=9 style="background-image:url(p6.svg)"></div>
+<div class=square id=8 style="background-image:url(p5.svg)"></div>
+<div class=square id=7 style="background-image:url(c.png)"></div>
+<div class=square id=6 style="background-image:url(p4.svg)"></div>
+<div class=square id=5 style="background-image:url(railroad.png);"></div>
+<div class=square id=4 style="background-image:url(income.svg);"></div>
+<div class=square id=3 style="background-image:url(p2.svg)"></div>
+<div class=square id=2 style="background-image:url(cchest.png)"></div>
+<div class=square id=1 style="background-image:url(p1.svg)"></div>
+<div class=largesquare id=0 style="background-image:url(GO.svg); ">
+</div>
+</div>
+</div>
+<textarea style="width:300px;height:200px;position:absolute;left:550px;top:1200px" readonly></textarea>
+<div id="diceroll1" class="diceslot"></div>
+<div id="diceroll2" class="diceslot"></div>
+<div id="propertydialogue" style="position:absolute; text-align:center; display:none; top:1250px; left:500px; width:400px; height:400px; background-color:lightgrey; border:2px solid black;"></div>
+<div id="playermoney1" style="position:fixed; top:0px; left:0px; width:100px; height:100px; background-color:blue; border:2px solid black">
+<div align=center>
+<img src="https://html5.gamemonetize.co/rb9b7ctnmy1rjphxzuwlmy8c4b7mw9po/Battleship.png" style="margin-left:-5px" width="65" height="65"></img></div>
+<div id=battleshipmoney align=center style="font-size:22px">$1500</div>
+</div>
+<div id="playermoney2" style="position:fixed; top:0px; right:0px; width:100px; height:100px; background-color:yellow; border:2px solid black">
+<div align=center>
+<img src="https://html5.gamemonetize.co/rb9b7ctnmy1rjphxzuwlmy8c4b7mw9po/Car.png" style="margin-left:-5px" width="65" height="65"></img></div>
+<div id=racecarmoney align=center style="font-size:22px">$1500</div>
+</div>
+<div id=news align=center style="font-size:40px; left:28%; opacity:0; color:#999; position:fixed; top:0px;">Battleship lost $200 from income tax</div>
+<div id=chancedialogue style="position:fixed; left:40%; top:40%; padding:5px; font-size:20px;display:none; border:2px solid black; background-color:red; text-align:center"></div>
+<button id=rollbtn onclick=roll() style="position:fixed;display:none;font-size:20px;bottom:0px">Roll dice</button>
+<br>
+<br>
+<script>setTimeout(function(){scrollTo(0,document.body.offsetHeight)},25);
+var MONEY_INIT=1500;
+//This is to extract the individual properties from a long string. Source of properties: http://www.freewebarcade.com/game/monopoly/
+var string='<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(139, 69, 19);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="409422" _mstvisible="3">Mediterranean Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="4732">2</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9542">10</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="9906">30</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15899">90</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="15457">160</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="15860">250</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">30</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">50</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">50</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(139, 69, 19);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="198796" _mstvisible="3">Baltic Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="4732">4</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9542">20</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="9906">60</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15899">180</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="15457">320</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="15860">450</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">30</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">50</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">50</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(135, 206, 235);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="254774" _mstvisible="3">Oriental Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="4914">6</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9633">30</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="10179">90</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15886">270</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="15340">400</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="15951">550</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="9815">50</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">50</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">50</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(135, 206, 235);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="230958" _mstvisible="3">Vermont Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="4914">6</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9633">30</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="10179">90</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15886">270</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="15340">400</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="15951">550</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="9815">50</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">50</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">50</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(135, 206, 235);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="346996" _mstvisible="3">Connecticut Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="5096">8</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9724">40</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15067">100</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15249">300</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="15860">450</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="15522">600</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="9906">60</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">50</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">50</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 0, 128);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="266474" _mstvisible="3">St. Charles Place</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9451">10</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9815">50</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15587">150</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15860">450</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="16315">625</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="16133">750</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="9997">70</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15067">100</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15067">100</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 0, 128);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="202956" _mstvisible="3">States Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9451">10</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9815">50</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15587">150</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15860">450</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="16315">625</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="16133">750</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="9997">70</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15067">100</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15067">100</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 0, 128);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="253487" _mstvisible="3">Virginia Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9659">12</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9906">60</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15899">180</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15431">500</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="15613">700</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="15795">900</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="10088">80</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15067">100</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15067">100</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 165, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="211107" _mstvisible="3">St. James Place</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9867">14</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9997">70</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15158">200</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15951">550</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="16133">750</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="16315">950</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="10179">90</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15067">100</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15067">100</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 165, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="283608" _mstvisible="3">Tennessee Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9867">14</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9997">70</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15158">200</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15951">550</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="16133">750</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="16315">950</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="10179">90</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15067">100</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15067">100</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 165, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="227318" _mstvisible="3">New York Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="10075">16</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="10088">80</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15366">220</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15522">600</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="15704">800</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21307">1000</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15067">100</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15067">100</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15067">100</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 0, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="257998" _mstvisible="3">Kentucky Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="10283">18</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="10179">90</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15678">250</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15613">700</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="17017">875</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21892">1050</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15171">110</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15587">150</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15587">150</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 0, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="223340" _mstvisible="3">Indiana Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="10283">18</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="10179">90</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15678">250</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15613">700</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="17017">875</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21892">1050</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15171">110</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15587">150</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15587">150</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 0, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="256321" _mstvisible="3">Illinois Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9542">20</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="15067">100</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15249">300</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="16133">750</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="16588">925</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21411">1100</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15275">120</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15587">150</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15587">150</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 255, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="253253" _mstvisible="3">Atlantic Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9750">22</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="15171">110</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15561">330</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15704">800</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="17108">975</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21996">1150</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15379">130</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15587">150</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15587">150</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 255, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="231075" _mstvisible="3">Ventnor Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9750">22</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="15171">110</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15561">330</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15704">800</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="17108">975</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21996">1150</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15379">130</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15587">150</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15587">150</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(255, 255, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="227097" _mstvisible="3">Marvin Gardens</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9958">24</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="15275">120</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15873">360</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="16224">850</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="22191">1025</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21515">1200</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15483">140</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15587">150</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15587">150</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(0, 128, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="222781" _mstvisible="3">Pacific Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="10166">26</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="15379">130</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="16185">390</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15795">900</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="21411">1100</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="22984">1275</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15587">150</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">200</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">200</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(0, 128, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="406757" _mstvisible="3">North Carolina Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="10166">26</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="15379">130</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="16185">390</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15795">900</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="21411">1100</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="22984">1275</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15587">150</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">200</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">200</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(0, 128, 0);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="379964" _mstvisible="3">Pennsylvania Avenue</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="10374">28</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="15587">150</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15860">450</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="21307">1000</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="21515">1200</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21723">1400</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15691">160</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">200</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">200</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(0, 0, 255);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="127010" _mstvisible="3">Park Place</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="10153">35</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="16380">175</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15431">500</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="21411">1100</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="21619">1300</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21827">1500</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="16380">175</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">200</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">200</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>s0gh8oj5vy3<div id="deed" style="display: block; top: 345px; left: 364px;" _mstvisible="0">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="background-color: rgb(0, 0, 255);" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px; font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="123942" _msttexthash="133497" _mstvisible="3">Boardwalk</div>\n\t\t\t</div>\n\t\t\t<table id="deed-table" _mstvisible="2">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="9815">50</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 1 House</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$&nbsp;&nbsp;&nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="15158">200</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 2 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="15522">600</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 3 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="21723">1400</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685334" _msttexthash="173498" _mstvisible="5">With 4 Houses</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685464" _msttexthash="21671" _mstvisible="5"><span id="deed-rent4" _msthash="15457" _msttexthash="22035">1700</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t<div style="margin-bottom: 8px;" _msthash="944372" _msttexthash="164879" _mstvisible="6">With HOTEL $<span id="deed-rent5" _msthash="15860" _msttexthash="21398">2000</span>.</div>\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">200</span>.</div>\n\t\t\t\t\t\t<div _msthash="944658" _msttexthash="324142" _mstvisible="6">Houses cost $<span id="deed-houseprice" _msthash="15067" _msttexthash="15158">200</span>. each</div>\n\t\t\t\t\t\t<div _msthash="944801" _msttexthash="472160" _mstvisible="6">Hotels, $<span id="deed-hotelprice" _msthash="15068" _msttexthash="15158">200</span>. plus 4 houses</div>\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t<div id="deed-mortgaged" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-mortgaged-name" _msthash="387478" _msttexthash="230958" _mstvisible="2">Vermont Avenue</div>\n\t\t\t<p _msthash="353821" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div _msthash="418964" _msttexthash="93847" _mstvisible="2">MORTGAGED</div>\n\t\t\t<div _msthash="419107" _msttexthash="53911" _mstvisible="2"> for $<span id="deed-mortgaged-mortgage">50</span></div>\n\t\t\t<p _msthash="354172" _msttexthash="748566" _mstvisible="2">•</p>\n\t\t\t<div style="font-style: italic; font-size: 13px; margin: 10px;" _msthash="419393" _msttexthash="1984840" _mstvisible="2">Card must be turned this side up if property is mortgaged</div>\n\t\t</div>\n\n\t\t<div id="deed-special" style="display: none;" _mstvisible="1">\n\t\t\t<div id="deed-special-name" _msthash="321529" _msttexthash="132080" _mstvisible="2">Short Line</div>\n\t\t\t<div id="deed-special-text" _mstvisible="2" _msthash="331812" _msttexthash="8399248" style="text-align: left;"><div style="font-size: 14px; line-height: 1.5;"><font _mstmutation="1" _msthash="46552" _msttexthash="45916">Rent</font><span style="float: right;" _msthash="162295" _msttexthash="20657">$25.</span><br><font _mstmutation="1" _msthash="46553" _msttexthash="443287">If 2 Railroads are owned</font><span style="float: right;" _msthash="162607" _msttexthash="15197">50.</span><br><font _mstmutation="1" _msthash="46554" _msttexthash="37804">If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="162919" _msttexthash="21047">100.</span><br><font _mstmutation="1" _msthash="46555" _msttexthash="37921">If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "</font><span style="float: right;" _msthash="163231" _msttexthash="21138">200.</span></div></div>\n\t\t\t<div id="deed-special-footer" _mstvisible="2" style="text-align: left;"><font _mstmutation="1" _msthash="396890" _msttexthash="225758" _mstvisible="3">\n\t\t\t\tMortgage Value\n\t\t\t\t</font><span style="float: right; text-align: left;" _mstvisible="3">$<font _mstmutation="1" _msthash="646230" _msttexthash="21047" _mstvisible="4"><span id="deed-special-mortgage" _mstmutation="1" _msthash="10517" _msttexthash="10517">100</span>.</font></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>'
+var str=string.split("top: 345px; left: 364px;").join("").split('id="deed"').join('class="deed"');
+var array=str.split("s0gh8oj5vy3");
+array.push('<div class="deed" style="display: block; " _mstvisible="0" id="e">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="border:0px;background-color: white;" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px;font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="12942" _msttexthash="409422" _mstvisible="3" style="font-size:18px">Reading Railroad</div>\n<img style="height:75px" src="rails.png">\n\n\t\t\t</div>\n\t\t\t<br>\n<br>\n<br>\n<table id="deed-table" _mstvisible="2" style="border-spacing:5px">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="4732">25</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 2 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$ &nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9542">50</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 3 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="9906">$ 100</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 4 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15899">$ 200</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">100</span>.</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">Players may NOT buy houses or hotels on railroads.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t\n\n\t\t\n\t</div>')
+array.push('<div class="deed" style="display: block; " _mstvisible="0" id="e">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="border:0px;background-color: white;" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px;font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="12942" _msttexthash="409422" _mstvisible="3" style="font-size:18px">Pennsylvania Railroad</div>\n<img style="height:75px" src="rails.png">\n\n\t\t\t</div>\n\t\t\t<br>\n<br>\n<br>\n<table id="deed-table" _mstvisible="2" style="border-spacing:5px">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="4732">25</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 2 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$ &nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9542">50</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 3 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="9906">$ 100</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 4 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15899">$ 200</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">100</span>.</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">Players may NOT buy houses or hotels on railroads.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t\n\n\t\t\n\t</div>')
+array.push('<div class="deed" style="display: block; " _mstvisible="0" id="e">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="border:0px;background-color: white;" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px;font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="12942" _msttexthash="409422" _mstvisible="3" style="font-size:18px">B &amp; O Railroad</div>\n<img style="height:75px" src="rails.png">\n\n\t\t\t</div>\n\t\t\t<br>\n<br>\n<br>\n<table id="deed-table" _mstvisible="2" style="border-spacing:5px">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="4732">25</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 2 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$ &nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9542">50</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 3 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="9906">$ 100</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 4 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15899">$ 200</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">100</span>.</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">Players may NOT buy houses or hotels on railroads.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t\n\n\t\t\n\t</div>')
+array.push('<div class="deed" style="display: block; " _mstvisible="0" id="e">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="border:0px;background-color: white;" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px;font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="12942" _msttexthash="409422" _mstvisible="3" style="font-size:18px">Short Line</div>\n<img style="height:75px" src="rails.png">\n\n\t\t\t</div>\n\t\t\t<br>\n<br>\n<br>\n<table id="deed-table" _mstvisible="2" style="border-spacing:5px">\n\t\t\t\t<tbody _mstvisible="3"><tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _msthash="684554" _msttexthash="55406" _mstvisible="5">\n\t\t\t\t\t\tRENT&nbsp;$<span id="deed-baserent" _msthash="4732" _msttexthash="4732">25</span>.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">With 2 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5">$ &nbsp;<font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9542">50</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">With 3 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="9906">$ 100</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="685139" _msttexthash="173355" _mstvisible="5">With 4 Railroads</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685269" _msttexthash="15561" _mstvisible="5"><span id="deed-rent3" _msthash="15899" _msttexthash="15899">$ 200</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">100</span>.</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">Players may NOT buy houses or hotels on railroads.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t\n\n\t\t\n\t</div>')
+array.push('<div class="deed" style="display: block; " _mstvisible="0" id="e">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="border:0px;background-color: white;" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px;font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="12942" _msttexthash="409422" _mstvisible="3" style="font-size:18px">Electric Company</div>\n<img style="height:75px" src="electric.png">\n\n\t\t\t</div>\n\t\t\t<br>\n<br>\n<br>\n<table id="deed-table" _mstvisible="2" style="border-spacing:7px">\n\t\t\t\t<tbody _mstvisible="3">\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">Rent Sans Monopoly</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5"><font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9542">4 x Dice Roll</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">Rent If In Monopoly</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="9906">10 x Dice Roll</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">75</span>.</div><br>\n\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">Players may NOT buy houses or hotels on utilities.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t\n\n\t\t\n\t</div>')
+array.push('<div class="deed" style="display: block; " _mstvisible="0" id="e">\n\t\t<div id="deed-normal" style="display: block;" _mstvisible="1">\n\t\t\t<div id="deed-header" style="border:0px;background-color: white;" _mstvisible="2">\n\t\t\t\t<div style="margin: 5px;font-size: 11px;" _msthash="312000" _msttexthash="92898" _mstvisible="3">T I T L E&nbsp;&nbsp;D E E D</div>\n\t\t\t\t<div id="deed-name" _msthash="12942" _msttexthash="409422" _mstvisible="3" style="font-size:18px">Water Works</div>\n<img style="height:75px" src="water.png">\n\n\t\t\t</div>\n\t\t\t<br>\n<br>\n<br>\n<table id="deed-table" _mstvisible="2" style="border-spacing:7px">\n\t\t\t\t<tbody _mstvisible="3">\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684749" _msttexthash="147654" _mstvisible="5">Rent Sans Monopoly</td>\n\t\t\t\t\t<td style="text-align: left;" _mstvisible="5"><font _mstmutation="1" _msthash="684879" _msttexthash="14833" _mstvisible="6"><span id="deed-rent1" _mstmutation="1" _msthash="9542" _msttexthash="9542">4 x Dice Roll</span>.</font></td>\n\t\t\t\t</tr>\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td style="text-align: left;" _msthash="684944" _msttexthash="173212" _mstvisible="5">Rent If In Monopoly</td>\n\t\t\t\t\t<td style="text-align: left;" _msthash="685074" _msttexthash="15015" _mstvisible="5"><span id="deed-rent2" _msthash="9906" _msttexthash="9906">10 x Dice Roll</span>.</td>\n\t\t\t\t</tr>\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t<tr _mstvisible="4">\n\t\t\t\t\t<td colspan="2" _mstvisible="5">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div _msthash="944515" _msttexthash="276523" _mstvisible="6">Mortgage Value $<span id="deed-mortgage" _msthash="9815" _msttexthash="15158">75</span>.</div><br>\n\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div style="font-size: 9px; font-style: italic; margin-top: 5px;" _msthash="944944" _msttexthash="5488821" _mstvisible="6">Players may NOT buy houses or hotels on utilities.</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t</div>\n\n\t\t\n\n\t\t\n\t</div>')
+//new Transaction object
+var game=new Object();
+game.nodeRentToArray=function(node){
+return [Number(node.querySelector("#deed-baserent").innerText)*2,Number(node.querySelector("#deed-rent1").innerText),Number(node.querySelector("#deed-rent2").innerText),Number(node.querySelector("#deed-rent3").innerText),Number(node.querySelector("#deed-rent4").innerText),Number(node.querySelector("#deed-rent5").innerText)];
+}
+game.announce=function(str,ending){
+document.getElementById("news").innerText=capitalize(str);
+document.getElementById("news").style.opacity="1";
+document.getElementById("news").style.left=innerWidth/2-document.getElementById("news").offsetWidth/2+"px";
+document.querySelector("textarea").innerHTML += capitalize(str)+"\n";
+var counter=1;
+if(currentRequest != undefined){
+clearTimeout(currentRequest)
+}
+if(ending == undefined){document.getElementById("rollbtn").disabled=true};
+currentRequest=setTimeout(function(){var setinterval=setInterval(function(){counter += -.006;document.getElementById("news").style.opacity=counter;if(counter <= 0){clearInterval(setinterval);currentRequest=undefined;if(ending != undefined){ending()};if(ending == undefined){document.getElementById("rollbtn").disabled=undefined}}})},1000);
+}
+function capitalize(txt){
+var str=txt.split("");
+str[0]=str[0].toUpperCase();
+return str.join("");
+}
+game.move=function(token,stop,onend){
+var tmp=stop;
+if(token.getBottom() == -1130 && token.getLeft() == 35){
+token.setBottom(-1138);
+token.setLeft(123);
+}
+if(token.getBottom() == -1210 && token.getLeft() == 150){
+token.setBottom(-1138);
+token.setLeft(123);
+}
+if(token.prevSquare>(token.square+tmp) % 40){
+setTimeout(function(){passGo()},213*(40-token.square))
+}
+var interval=setInterval(function(){
+if(token.direction % 4 == 1){
+token.setLeft(token.getLeft()-2)
+if(token.getLeft() < 125){
+token.direction ++;
+}
+}
+if(token.direction % 4 == 2){
+token.setBottom(token.getBottom()+2);
+if(token.getBottom() > -25){
+token.direction ++;
+}
+}
+if(token.direction % 4 == 3){
+token.setLeft(token.getLeft()+2);
+if(token.getLeft()> 1225){
+token.direction ++;
+}
+}
+if(token.direction % 4 == 0){
+
+token.setBottom(token.getBottom()-2);
+if(token.getBottom()< -1150){
+token.direction ++;
+}
+}
+token.elem.style.transform="rotate("+Number(token.direction*90-90)+"deg)";
+stop -= Number((2/111.15));
+if(stop <= 0){
+clearInterval(interval);
+token.square += tmp;
+token.square= token.square % 40;
+if(token.square>0 && token.square<10){
+cp().setLeft(1110-110*(token.square-1))
+}
+if(token.square>20 && token.square<30){
+cp().setLeft(1110-110*(29-token.square))
+}
+if(onend != undefined){onend()};
+	var event=squareArray[cp().square];
+	event();
+	propEvent();
+	if(token.direction == 2 && token.square == 10){
+token.setBottom(-1130);
+token.setLeft(35);
+}
+if(token.direction == 1 && token.square == 10){
+token.setBottom(-1210);
+token.setLeft(150);
+}
+}})}
+//From https://stackoverflow.com
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+document.body.onload=function(){
+var ypos=0;
+for(var i=0; i<10; i++){
+var a=document.createElement("DIV");
+a.style.position="relative";
+a.className="sidesquare";
+a.style.zIndex=-1;
+a.id=i+11;
+a.style.top=1660-ypos+"px";
+a.style.left=35-ypos*1.007+"px";
+if(i == 9){
+a.className="sidelargesquare";
+a.style.top=1625-ypos+"px";
+a.style.left=5-ypos*1.007+"px";
+a.style.backgroundImage="url(freeparking.png)";
+}
+if(i==0){
+a.style.backgroundImage="url(p7.svg)";
+}
+if(i == 1){
+a.style.backgroundImage="url(ec.png)";}
+if(i==2){
+a.style.backgroundImage="url(p8.svg)";}
+if(i==3){
+a.style.backgroundImage="url(p9.svg)";}
+if(i==4){
+a.style.backgroundImage="url(p10.png)";}
+if(i == 5){
+a.style.backgroundImage="url(p11.svg)";}
+if(i == 6){
+a.style.backgroundImage="url(cchest.png)";}
+if(i == 7){
+a.style.backgroundImage="url(p12.svg)";}
+if(i == 8){
+a.style.backgroundImage="url(p13.svg)";}
+document.getElementById("siderow").appendChild(a);
+ypos += 133;
+}
+for(var i=0; i<10; i++){
+var a=document.createElement("DIV");
+a.style.position="relative";
+a.className="topsquare";
+a.style.zIndex=-1;
+a.style.top="-291px";
+a.style.left=201-i+"px";
+a.id=i+21;
+if(i == 9){
+a.className="toplargesquare";
+a.style.left="195px";
+a.style.backgroundImage="url(gotojail.svg)";
+}
+if(i==0){
+a.style.backgroundImage="url(p14.svg)";
+}
+if(i==1){
+a.style.backgroundImage="url(c.png)";
+}
+if(i==2){
+a.style.backgroundImage="url(p15.svg)";
+}
+if(i==3){
+a.style.backgroundImage="url(p16.svg)";
+}
+if(i==4){
+a.style.backgroundImage="url(p17.png)";
+}
+if(i==5){
+a.style.backgroundImage="url(p18.svg)";
+}
+if(i==6){
+a.style.backgroundImage="url(p19.svg)";
+}
+if(i==7){
+a.style.backgroundImage="url(ww.png)";
+}
+if(i==8){
+a.style.backgroundImage="url(p20.svg)";
+}
+document.getElementById("toprow").appendChild(a);
+
+}
+for(var i=0; i<9; i++){
+var a=document.createElement("DIV");
+a.style.zIndex=-1;
+a.style.position="relative";
+a.className="siderightsquare";
+a.style.top=2480-ypos+"px";
+a.id=i+31;
+a.style.left=2778-ypos*1.01+"px";
+if(i==8){
+a.style.backgroundImage="url(p21.svg)";
+}
+if(i==7){
+a.style.backgroundImage="url(p22.svg)";
+}
+if(i == 6){
+a.style.backgroundImage="url(cchest.png)";}
+if(i==5){
+a.style.backgroundImage="url(p23.svg)";
+}
+if(i==4){
+a.style.backgroundImage="url(p24.png)";
+}
+if(i==3){
+a.style.backgroundImage="url(c.png)";
+}
+if(i==2){
+a.style.backgroundImage="url(p25.svg)";
+}
+if(i == 1){
+a.style.backgroundImage="url(ltax.png)"}
+if(i==0){
+a.style.backgroundImage="url(p26.svg)";
+}
+document.getElementById("siderightrow").appendChild(a);
+ypos += 133;
+}
+startTurn();
+
+}
+class Token{
+	constructor(name,color,src){
+		this.name=name;
+		this.money=MONEY_INIT;
+		this.src=src;
+		this.color=color;
+		this.square=0;
+		this.prevSquare=undefined;
+		this.direction=1;
+		this.bankrupt=false;
+		this.propertiesOwned=[];
+		this.getLeft=function(){
+		return Number(this.elem.style.left.split("px")[0]);
+		}
+		this.getBottom=function(){
+		return Number(this.elem.style.bottom.split("px")[0]);
+		}
+		this.setLeft=function(val){
+		this.elem.style.left=val+"px"}
+		this.setBottom=function(val){
+		this.elem.style.bottom=val+"px"}
+		this.chargeRent=function(val){
+		var propOwner=val.ownedBy;
+		var rent=val.getCurrentRent();
+		propOwner.money += rent;
+		cp().money += -rent;
+		game.announce(cp().name+" paid $"+rent+" to "+propOwner.name+" for landing on "+val.name);
+		}
+		var elem=document.createElement("DIV");
+		elem.style.position="absolute";
+		elem.style.left="1225px";
+		elem.style.bottom="-1150px";
+		elem.style.width="50px";
+		elem.style.height="50px";
+		var elem1=document.createElement("IMG");
+		elem1.setAttribute("src",src)
+		elem1.setAttribute("width","50");
+		elem1.setAttribute("height","50");
+		elem.id=name;
+		document.body.appendChild(elem);
+		elem.appendChild(elem1);
+		this.elem=elem;
+}}
+class Property{
+	constructor(square,id){
+		var elem=document.createElement("DIV");
+		var data=array[id];
+		elem.innerHTML=data;
+		var node=elem.firstElementChild;
+		this.name=node.querySelector("#deed-name").innerText;
+		this.cost=Number(node.querySelector("#deed-mortgage").innerText)*2;
+		this.mortgageValue=this.cost/2;
+		this.houseprice=Number(node.querySelector("#deed-houseprice").innerText);
+		this.hotelprice=this.houseprice*5;
+		this.group=node.querySelector("#deed-header").style.backgroundColor;
+		this.baserent=Number(node.querySelector("#deed-baserent").innerText);
+		this.monopolyRentArray=game.nodeRentToArray(node);
+		this.isInMonopoly=false;
+		this.membersInGroup=null;
+		this.getCurrentRent=function(){
+			if(this.isInMonopoly){
+				return this.monopolyRentArray[this.houses];
+			}else{return this.monopolyRentArray[this.houses]/2}
+		}
+		this.houses=0;
+		this.addHouse=function(){
+		cp().money += -this.houseprice;
+		if(this.houses < 4){
+		var barProp=document.createElement("DIV");
+		barProp.style.width="24px";
+		barProp.style.height="24px";
+		barProp.style.backgroundColor='lightgreen';
+		barProp.style.position="absolute";
+		if(this.square>0 && this.square<10){
+barProp.style.left=(1088-110.4*(this.square-1)+27*this.houses)+"px";
+barProp.style.bottom="-1076px";
+}
+if(this.square>10 && this.square<20){
+barProp.style.transform="rotate(90deg)"
+barProp.style.left="172px";
+barProp.style.bottom=(-1045+110.4*(this.square-11)+27*this.houses)+"px";
+}
+if(this.square>20 && this.square<30){
+barProp.style.transform="rotate(180deg)"
+barProp.style.left=(1087-110.4*(29-this.square)+27*this.houses)+"px"
+barProp.style.bottom="-46px";
+}
+if(this.square>30 && this.square<40){
+barProp.style.transform="rotate(270deg)"
+barProp.style.left="1200px";
+barProp.style.bottom=(-1045+110.4*(39-this.square)+27*this.houses)+"px";
+}
+barProp.className="house"+this.square;
+document.body.appendChild(barProp);
+this.houses++;
+document.getElementById("rollbtn").disabled=true;
+game.announce(cp().name+" bought a house on "+this.name+" for $"+this.houseprice,function(){document.getElementById("rollbtn").disabled=undefined});
+		}else{
+			var houses=document.getElementsByClassName("house"+this.square);
+			console.log(houses);
+			houses[1].style.width="50px";
+			houses[1].style.backgroundColor="red";
+			houses[0].remove();
+			houses[1].remove();
+			houses[1].remove();
+			this.houses++;
+			game.announce(cp().name+" bought a hotel on "+this.name+" for $"+this.houseprice,function(){document.getElementById("rollbtn").disabled=undefined});
+		}
+		
+		}
+		this.square=square;
+		this.ownedBy="bank";
+		this.node=node;
+		this.playerCanBuy=function(token){
+			if(token.money >= this.cost && this.ownedBy == "bank" && !token.bankrupt){
+				return true
+			}else{return false}
+			}
+		}
+}
+class Railroad{
+	constructor(square,id){
+		var elem=document.createElement("DIV");
+		var data=array[id];
+		elem.innerHTML=data;
+		var node=elem.firstElementChild;
+		this.name=node.querySelector("#deed-name").innerText;
+		this.cost=Number(node.querySelector("#deed-mortgage").innerText)*2;
+		this.mortgageValue=this.cost/2;
+		this.group="Railroads";
+		this.baserent=25;
+		this.monopolyRentArray=[25,50,100,200];
+		this.isInMonopoly=false;
+		this.membersInGroup=null;
+		this.getCurrentRent=function(){
+			var otherProps=0;
+for(var i=0;i<this.ownedBy.propertiesOwned.length;i++){
+	if(this.ownedBy.propertiesOwned[i].group == "Railroads"){
+		otherProps ++;
+	}
+		}
+		return this.monopolyRentArray[otherProps-1];
+		}
+		this.houses=0;
+		this.square=square;
+		this.ownedBy="bank";
+		this.node=node;
+		this.playerCanBuy=function(token){
+			if(token.money >= this.cost && this.ownedBy == "bank" && !token.bankrupt){
+				return true
+			}else{return false}
+			}
+		}
+}
+class Utility{
+	constructor(square,id){
+		var elem=document.createElement("DIV");
+		var data=array[id];
+		elem.innerHTML=data;
+		var node=elem.firstElementChild;
+		this.name=node.querySelector("#deed-name").innerText;
+		this.cost=Number(node.querySelector("#deed-mortgage").innerText)*2;
+		this.mortgageValue=this.cost/2;
+		this.baserent=null;
+		this.group="Utilities";
+		this.monopolyRentArray=[25,50,100,200];
+		this.isInMonopoly=false;
+		this.membersInGroup=null;
+		this.getCurrentRent=function(){
+			var otherProps=0;
+for(var i=0;i<this.ownedBy.propertiesOwned.length;i++){
+	if(this.ownedBy.propertiesOwned[i].group == "Utilities"){
+		otherProps ++;
+	}
+		}
+if(otherProps == 1){
+return 4*currentDiceRoll;
+}
+if(otherProps == 2){
+return  10*currentDiceRoll;
+}
+		}
+		this.houses=0;
+		this.square=square;
+		this.ownedBy="bank";
+		this.node=node;
+		this.playerCanBuy=function(token){
+			if(token.money >= this.cost && this.ownedBy == "bank" && !token.bankrupt){
+				return true
+			}else{return false}
+			}
+		}
+}
+var propertyArray=[new Property(1,0),new Property(3,1),new Property(6,2),new Property(8,3),new Property(9,4),new Property(11,5),new Property(13,6),new Property(14,7),new Property(16,8),new Property(18,9),new Property(19,10),new Property(21,11),new Property(23,12),new Property(24,13),new Property(26,14),new Property(27,15),new Property(29,16),new Property(31,17),new Property(32,18),new Property(34,19),new Property(37,20),new Property(39,21),new Railroad(5,22),new Railroad(15,23),new Railroad(25,24),new Railroad(35,25),new Utility(12,26),new Utility(28,27)]
+var tokenArray=[new Token("Benjamin","blue","https://html5.gamemonetize.co/rb9b7ctnmy1rjphxzuwlmy8c4b7mw9po/Battleship.png"),new Token("Baba","yellow","https://html5.gamemonetize.co/rb9b7ctnmy1rjphxzuwlmy8c4b7mw9po/Car.png")]
+var squareArray;
+//Await loading of core.js
+setTimeout(function(){
+squareArray=["","",openCChestCard,"",incomeTax,"","",openChanceCard,"","","","","","","","","",openCChestCard,"","",collectFreeParkingMoney,"",openChanceCard,"","","","","","","",goToJail,"","",openCChestCard,"","",openChanceCard,"",luxuryTax,""];
+squareArray.forEach(function(val){if(val == ""){squareArray[squareArray.indexOf(val)] = function(){}}});
+},50)
+class CCCard{
+constructor(cardContent,payment,act){
+this.cardContent=cardContent;
+this.payment=payment;
+this.act=act;
+this.action=function(){
+document.getElementById("chancedialogue").style.display="inline-block";
+document.getElementById("chancedialogue").style.backgroundColor="lightblue";
+document.getElementById("chancedialogue").innerHTML=this.cardContent+"<br><br><button style=font-size:20px id=closebtn>OK</button><br>"
+document.getElementById("closebtn").onclick=function(){
+if(payment>0){
+game.announce(cp().name+" gained $"+payment+" from Community Chest");
+}
+if(payment<0){
+game.announce(cp().name+" lost $"+Math.abs(payment)+" from Community Chest")}
+cp().money += payment;
+
+
+document.getElementById("chancedialogue").style.display="none";
+if(act != undefined){act()};
+}}}}
+class ChanceCard{
+constructor(cardContent,payment,act){
+this.cardContent=cardContent;
+this.payment=payment;
+this.act=act;
+this.action=function(){
+document.getElementById("chancedialogue").style.display="inline-block";
+document.getElementById("chancedialogue").style.backgroundColor="red";
+document.getElementById("chancedialogue").innerHTML=this.cardContent+"<br><br><button style=font-size:20px id=closebtn>OK</button><br>"
+document.getElementById("closebtn").onclick=function(){
+if(payment>0){
+game.announce(cp().name+" gained $"+payment+" from Chance");
+}
+if(this.payment<0){
+game.announce(cp().name+" lost $"+Math.abs(payment)+" from Chance")}
+cp().money += payment;
+
+
+document.getElementById("chancedialogue").style.display="none";
+if(act != undefined){act()};
+}}}}
+function isPassingGo(){
+if(cp().getLeft()>1200 && cp().getBottom<-1075){
+console.log(true)}
+}
+var turn=0;
+var currentProperty=null;
+var potMoney=0;
+var CCCardIndex=0;
+var ChanceCardIndex=0;
+var currentDiceRoll=undefined;
+var currentRequest=undefined;
+var CCCardArray=[new CCCard("Life insurance matures.<br>Collect $100",100),new CCCard("Bank error in your favor.<br>Collect $200",200),new CCCard("Xmas fund matures.<br>Collect $100",100),new CCCard("Pay school tax of $150.",-150),new CCCard("Doctor's fee. Pay $50.",-50),new CCCard("Pay hospital $100",-100),new CCCard("Recieve for services $75",75),new CCCard("You won first prize in a beauty contest.<br>Collect $25",25),new CCCard("You are due for property tax.<br>Pay 10% of all your assets excluding your money",0,payPropertyTax),new CCCard("Advance to GO (Collect $200)",0,function(){game.move(cp(),40-cp().square)}),new CCCard("Advance to the nearest Chance square",0,advanceToNearestChance)]
+CCCardArray=shuffle(CCCardArray);
+var ChanceCardArray=[new ChanceCard("Your building and loan matures.<br>Collect $150",150),new ChanceCard("Take a walk on the boardwalk<br>Advance token to Boardwalk",0,function(){game.move(cp(),39-cp().square)}),new ChanceCard("Advance to Oriental Avenue",0,function(){game.move(cp(),46-cp().square)}),new ChanceCard("Bank pays you dividend of $50",50),new ChanceCard("Advance to St.Charles Place.",0,function(){if(cp().square > 11){game.move(cp(),51-cp().square)}else{game.move(cp(),11-cp().square)}}),new ChanceCard("Advance to GO (Collect $200)",0,function(){game.move(cp(),40-cp().square)}),new ChanceCard("Pay poor tax of 3% of ALL your assets",0,payPoorTax),new ChanceCard("Advance to Illinois Avenue",0,function(){game.move(cp(),(64-cp().square) % 40)}),new ChanceCard("Advance to the nearest Community Chest square",0,advanceToNearestCC)]
+ChanceCardArray=shuffle(ChanceCardArray);
+function advanceToNearestCC(){
+if(cp().square == 7){
+game.move(cp(),17-cp().square);
+}
+if(cp().square == 22){
+game.move(cp(),33-cp().square);
+}
+if(cp().square == 36){
+game.move(cp(),42-cp().square);
+}}
+function advanceToNearestChance(){
+if(cp().square == 2){
+game.move(cp(),7-cp().square);
+}
+if(cp().square == 17){
+game.move(cp(),5);
+}
+if(cp().square == 33){
+game.move(cp(),36-cp().square);
+}}
+function payPoorTax(){
+var totalPayment=0;
+for(var i=0;i<cp().propertiesOwned.length;i++){
+totalPayment += Math.floor(cp().propertiesOwned[i].cost*0.03);
+if(cp().propertiesOwned[i].constructor == Property){
+totalPayment += Math.floor(cp().propertiesOwned[i].houses*cp().propertiesOwned[i].houseprice*0.03)}
+}
+totalPayment += Math.floor(0.03*cp().money);
+cp().money += -totalPayment;
+game.announce(cp().name+" lost $"+totalPayment+" from Chance")
+}
+function startTurn(){
+game.announce(cp().name+" is starting its turn",function(){
+		document.getElementById("rollbtn").style.display="block";
+		document.getElementById("rollbtn").innerText="Roll dice";
+		document.getElementById("rollbtn").onclick=function(){roll()}});
+}
+setInterval(function(){
+	document.getElementById("rollbtn").style.left=innerWidth/2-document.getElementById("rollbtn").offsetWidth/2+"px";
+	document.getElementById("battleshipmoney").innerText="$"+tokenArray[0].money.toFixed();
+	document.getElementById("racecarmoney").innerText="$"+tokenArray[1].money.toFixed();},100)
+function roll(){
+var diceroll1=Math.ceil(Math.random()*6);
+var diceroll2=Math.ceil(Math.random()*6);
+var d1=document.getElementById("diceroll1");
+var d2=document.getElementById("diceroll2");
+var rb=document.getElementById("rollbtn");
+var img1=document.createElement("IMG");
+var img2=document.createElement("IMG");
+d2.innerHTML = "";
+d1.innerHTML = "";
+img1.setAttribute("src",diceroll1+".svg");
+img2.setAttribute("src",diceroll2+".svg");
+img1.style.width="25px";
+img2.style.width="25px";
+img1.style.height="25px";
+img2.style.height="25px";
+d2.appendChild(img2);
+d1.appendChild(img1);
+d2.style.top=800+Math.random()*600+"px";
+d1.style.top=800+Math.random()*600+"px";
+d2.style.left=200+Math.random()*900+"px";
+d1.style.left=200+Math.random()*900+"px";
+d2.style.border="1px solid black";
+d1.style.border="1px solid black";
+game.announce(cp().name + " rolled "+(diceroll1+diceroll2));
+rb.style.display="none";
+cp().prevSquare=cp().square;
+currentDiceRoll=diceroll1+diceroll2;
+game.move(cp(),(diceroll1+diceroll2),function(){
+	if(diceroll1 != diceroll2){
+	rb.style.display="block";
+	rb.innerText="End turn";
+	rb.onclick=function(){endTurn()}}else{	rb.style.display="block"}
+	});
+}
+function cp(){return tokenArray[turn]}
+function endTurn(){
+	turn++;
+	turn=turn % tokenArray.length;
+	startTurn();
+	document.getElementById("rollbtn").style.display="none"}
+function EOREvent(){}
+function passGo(){
+cp().money += 200;
+game.announce(cp().name+" earned $200 for passing GO");
+}
+function openCChestCard(){
+CCCardArray[CCCardIndex].action();
+CCCardIndex++;
+CCCardIndex=CCCardIndex % CCCardArray.length;
+}
+function openChanceCard(){
+ChanceCardArray[ChanceCardIndex].action();
+ChanceCardIndex++;
+ChanceCardIndex=ChanceCardIndex % ChanceCardArray.length;
+}
+function incomeTax(){cp().money += -200;potMoney += 200; game.announce(cp().name+" lost $200 from Income Tax")}
+function collectFreeParkingMoney(){
+game.announce(cp().name+" gained $"+potMoney+" from landing on Free Parking.");cp().money += potMoney;potMoney=0;
+}
+function goToJail(){}
+function luxuryTax(){
+cp().money += -75;potMoney += 75; game.announce(cp().name+" lost $75 from Luxury Tax")
+}
+function buyProperty(){
+if(currentProperty.playerCanBuy(cp())){
+tokenArray[turn].money += -currentProperty.cost;
+tokenArray[turn].propertiesOwned.push(currentProperty);
+currentProperty.ownedBy=cp();
+game.announce(cp().name+" bought "+currentProperty.name+ " for $"+currentProperty.cost,function(){document.getElementById("rollbtn").disabled=undefined});
+document.getElementById("propertydialogue").style.display="none";
+newPropBar(currentProperty);
+var j=0;
+var propsInSet;
+var mappedArray=cp().propertiesOwned.map(object => object.group)
+for(var i=0;i<cp().propertiesOwned.length;i++){
+if(currentProperty.group == cp().propertiesOwned[i].group){
+j++
+}
+}
+if(currentProperty.group == "rgb(139, 69, 19)" || currentProperty.group == "rgb(0, 0, 255)"){
+propsInSet=2
+}else{
+propsInSet=3
+}
+if(j >= propsInSet){
+currentProperty.isInMonopoly=true;
+console.log("Monopoly");
+for(var i=0;i<cp().propertiesOwned.length;i++){
+if(cp().propertiesOwned[i].group == currentProperty.group){
+cp().propertiesOwned[i].isInMonopoly=true;
+}
+}
+}else{
+currentProperty.isInMonopoly=false}
+}else{
+alert("You do not have sufficient funds to purchase this property.")
+}
+}
+function passProperty(){
+document.getElementById("propertydialogue").style.display="none";
+game.announce(cp().name+" passed on buying "+currentProperty.name,function(){document.getElementById("rollbtn").disabled=undefined});
+
+}
+function payPropertyTax(){
+var totalPayment=0;
+for(var i=0;i<cp().propertiesOwned.length;i++){
+totalPayment += Math.floor(cp().propertiesOwned[i].cost/10);
+if(cp().propertiesOwned[i].constructor == Property){
+totalPayment += Math.floor(cp().propertiesOwned[i].houses*cp().propertiesOwned[i].houseprice/10)}
+}
+cp().money += -totalPayment;
+game.announce(cp().name+" lost $"+totalPayment+" from Community Chest")
+}
+function propEvent(){
+	for(var i=0;i<propertyArray.length;i++){
+		if(propertyArray[i].square == cp().square){
+			if(propertyArray[i].ownedBy == "bank"){
+				currentProperty=propertyArray[i];
+				document.getElementById("propertydialogue").innerHTML = "<div style=font-size:20px align=center>Would you like to purchase "+propertyArray[i].name+" for $"+propertyArray[i].cost+"?</div><br><div align='center'>"+propertyArray[i].node.outerHTML+"</div><br><button style=font-size:20px onclick=buyProperty()>Buy</button><button style=font-size:20px onclick=passProperty()>Pass</button>"
+				document.getElementById("propertydialogue").style.display="block";
+				document.getElementById("rollbtn").disabled=true;
+			}else{
+				if(propertyArray[i].ownedBy.name != cp().name){
+					cp().chargeRent(propertyArray[i])}else{
+				if(propertyArray[i].houses<5 && cp().money>=propertyArray[i].houseprice){
+				if(confirm("Would you like to buy a house on "+propertyArray[i].name+" for $"+propertyArray[i].houseprice+"?")){propertyArray[i].addHouse()}
+				}
+				}
+	}
+}}}
+function newPropBar(prop){
+var elem=document.getElementById(prop.square);
+var barProp=document.createElement("DIV");
+barProp.className="propmarker";
+barProp.style.backgroundColor=cp().color;
+barProp.style.position="absolute";
+barProp.style.zIndex=-1;
+if(cp().square>0 && cp().square<10){
+barProp.style.left=(1095-110*(prop.square-1))+"px";
+barProp.style.bottom="-1235px";
+}
+if(cp().square>10 && cp().square<20){
+barProp.style.transform="rotate(90deg)"
+barProp.style.left="-20px";
+barProp.style.bottom=(-1003+110*(prop.square-11))+"px";
+}
+if(cp().square>20 && cp().square<30){
+barProp.style.transform="rotate(180deg)"
+barProp.style.left=1095-110*(29-prop.square)+"px"
+barProp.style.bottom="118px";
+}
+if(cp().square>30 && cp().square<40){
+barProp.style.transform="rotate(270deg)"
+barProp.style.left="1330px";
+barProp.style.bottom=(-1003+110*(39-prop.square))+"px";
+}
+document.body.appendChild(barProp);
+}
+</script>

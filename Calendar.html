@@ -60,7 +60,7 @@ var factor=2;
 var monthchanges=0;
 var counter=0;
 var shouldNotify=false;
-var margintop=50;
+var margintop=50;setTimeout(function(){window.scrollTo(0,540)},100)
 var currentdate=[date.getDay(),date.getMonth()+1,date.getDate(),date.getFullYear()]
 if(localStorage.getItem("scheduleInfo") == null || localStorage.getItem("scheduleInfo") == undefined){
 localStorage.setItem("scheduleInfo","")}
@@ -114,7 +114,7 @@ return "0"+val}else{return val}}
 function update(){
 try{
 var str=""; 
-document.title="Calendar: Events on "+document.getElementById("datestr").innerText;
+setTimeout(function(){document.title="Calendar: Events on "+document.getElementById("datestr").innerText},50);
 for(var i=1; i<list.split(";").length; i++){
 var title=JSON.parse(list.split(";")[i])[0]; 
 console.log(list.split(";")[i+1]);
@@ -160,8 +160,8 @@ nextbtn.style.left=Number(screen.width/2+datestr.offsetWidth/2+margin-nextbtn.of
 datestr.innerText=dayToWordForm(currentdate[0])+" "+monthToWordForm(currentdate[1])+" "+currentdate[2]+", "+currentdate[3]
 date=new Date();
 },50)
-function increaseDate(){ currentdate[0]=currentdate[0]+1;currentdate[2]=currentdate[2]+1; if(currentdate[2] > getDaysInMonth(currentdate[1])){currentdate[1]=currentdate[1]+1; currentdate[2]=1}; if(currentdate[1] > 12){currentdate[3]=currentdate[3]+1; currentdate[1]=1}update()}
-function decreaseDate(){currentdate[0]=currentdate[0]+6;currentdate[2]=currentdate[2]-1; if(currentdate[2] <= 0){currentdate[1]=currentdate[1]-1; currentdate[2]=getDaysInMonth(currentdate[1])}; if(currentdate[1] <= 0){currentdate[3]=currentdate[3]-1; currentdate[1]=12; currentdate[2]=getDaysInMonth(currentdate[1])}update()}
+function increaseDate(){ currentdate[0]=currentdate[0]+1;currentdate[2]=currentdate[2]+1; if(currentdate[2] > getDaysInMonth(currentdate[1])){currentdate[1]=currentdate[1]+1; currentdate[2]=1}; if(currentdate[1] > 12){currentdate[3]=currentdate[3]+1; currentdate[1]=1}update();window.scrollTo(0,540)}
+function decreaseDate(){currentdate[0]=currentdate[0]+6;currentdate[2]=currentdate[2]-1; if(currentdate[2] <= 0){currentdate[1]=currentdate[1]-1; currentdate[2]=getDaysInMonth(currentdate[1])}; if(currentdate[1] <= 0){currentdate[3]=currentdate[3]-1; currentdate[1]=12; currentdate[2]=getDaysInMonth(currentdate[1])}update();window.scrollTo(0,540)}
 function monthToWordForm(month){
 if(month == 1){return "January"}
 if(month == 2){return "Febuary"}
@@ -209,21 +209,30 @@ setTimeout(function(){document.title="Calendar: Events on "+document.getElementB
 setInterval(function(){update()},10000)
 function exportData(){
 if(list != ""){
-const el = document.createElement('textarea');
-el.value = list+"divider"+JSON.stringify(nonotificationArr);	//str is your string to copy
-document.body.appendChild(el);
-el.select();
-document.execCommand('copy');
-alert("Save copied to clipboard");
+var prom=prompt("Enter the name of your file")}
+if(list != "" && prom != null){
+var a=document.createElement("a");
+a.download=prom+".calendarsave";
+var blob=new Blob([list,"divider",JSON.stringify(nonotificationArr)]);
+a.href=URL.createObjectURL(blob);
+console.log(a.src, a.download);
+document.body.appendChild(a);
+a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
 }}
-function loadData(){
-var data=prompt("Copy your exported data here. Note that you will not be able to retrieve your current calendar after this. If you want to retrieve your current calendar after viewing the new calendar, click the 'Export Calendar' button and paste the data somewhere safe.")
+async function loadData(){
+var input=document.createElement("input");
+input.type="file";
+document.body.appendChild(input);
+input.click();
+input.onchange=async function(){var c=confirm("Do you want to replace your current calendar save with this save? If you click OK, your current calendar save will be overwritten.")
+if(c == true){
+var data=await input.files[0].text()
 var notifyArr=JSON.parse(data.split("divider")[1]);
 var mainData=data.split("divider")[0]
 list=mainData;
 localStorage.scheduleInfo=list;
 nonotificationArr=notifyArr;
-update();
-}
+update()}
+}}
 </script>
 </html>

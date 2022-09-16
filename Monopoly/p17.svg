@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" style="border:1px solid black" width="130" height="200">
-<text x="30" y="25" style="font-size:21px">B and O</text>
-<text x="30" y="50" style="font-size:21px">Railroad</text>
-<image href="rails.png" width="90" height="160" x="20" y="30"></image>
-<text x="20" y="180" style="font-size:21px">Price: $200</text>
-</svg> 

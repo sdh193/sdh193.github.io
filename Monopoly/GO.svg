@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-<g rotate="45">
-<text x="0" y="100" style="word-break:break-word" transform="translate(-50,-20) rotate(315)">Collect</text>
-<text x="0" y="100" style="word-break:break-word" transform="translate(-45,10) rotate(315)">$200.00 salary</text>
-<text x="0" y="100" style="word-break:break-word" transform="translate(-25,20) rotate(315)">As you pass</text>
-<text x="0" y="100" style="word-break:break-word; font-size:100px; fill:red" transform="translate(10,100) rotate(315)">GO</text>
-</g>
-</svg>

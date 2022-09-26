@@ -2,7 +2,9 @@
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 0%;
+  width: 100%;
+  font-size:15px;
+  table-layout: fixed;
 }
 
 td, th {
@@ -18,24 +20,29 @@ tr:nth-child(odd) {
 background-color: #eee;
 }
 </style>
+</body>
 <script>
 var str="";
-var times=55297;
-var arr=["","","","","","","","","","","","","","","",""];
-for(var i=0;i<10;i++){
+var times=65536;
+var cellWidth=innerWidth/40;
+var cellHeight=innerHeight/30;
+var arr=[];
+var nextStr="";
+var secondArr=[];
 var table=document.createElement("TABLE");
 table.style.position="absolute";
-table.style.left=145*i+2+"px";
-if(i>0){
-table.style.left=(146*i-5)+"px";}
-table.style.top="0px";
+table.style.left="0px";
+table.style.top=innerHeight*i+"px";
 document.body.appendChild(table);
+table.innerHTML = "<thead><tr>"+"<th>Id:</th><th>Char:</th>".repeat(15)+"</tr></thead>"
+for(var i=0;i<times/15;i++){
+var currentString="<tr>"
+for(var j=0;j<15;j++){
+currentString += "<td style='width:"+cellWidth+"px !important;height:"+cellHeight+"px'>"+Number(j+i*15)+"</td><td>"+String.fromCharCode(j+i*15)+"</td>"
 }
-for(var i=0;i<times;i++){
-arr[Math.floor(10*i/times)] += "<tr> <td>"+i+"</td><td>"+String.fromCharCode(i)+"</td></tr>"
+currentString +="</tr>";
+nextStr += currentString;
 }
-for(var i=0;i<10;i++){
-document.querySelectorAll("table")[i].innerHTML="<tr><th>Id:</th><th>Character:</th></tr>"+arr[i]
-}
+table.innerHTML += nextStr;
 </script>
 
